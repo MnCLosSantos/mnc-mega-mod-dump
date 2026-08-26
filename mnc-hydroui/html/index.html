@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mnc-hydroui</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!--
+    LAYOUT:
+
+    ┌──────────────────────────────┐
+    │  HYDRAULICS     ● MnC       │
+    ├──────────────────────────────┤
+    │  [FL]                [FR]   │
+    │           [ON]              │
+    │  [RL]                [RR]   │
+    ├──────────────────────────────┤
+    │   O ON     N1 MODE     N HIDE  │
+    └──────────────────────────────┘
+
+    Arrow keys light up the corner switches directly (no on-screen d-pad).
+    What they control depends on hydro mode, toggled with Numpad1:
+
+    Axle mode (default):
+      ↑ → whole front axle bounces      ↓ → whole rear axle bounces
+      ← → whole car tilts left          → → whole car tilts right
+
+    Corner mode (Numpad1 to switch in, again to switch back):
+      ↑ → FL only      → → FR only
+      ← → RL only       ↓ → RR only
+      Hold any arrow to raise just that wheel, or hold several together
+      for any combination. O still has to be engaged for arrows to move
+      anything — Numpad1 only changes what the arrows mean.
+-->
+
+<div id="hydroui" class="hidden">
+
+    <div class="panel">
+
+        <!-- Header strip -->
+        <div class="panel-header">
+            <span class="header-label">HYDRAULICS</span>
+            <span class="header-sub">MnC Los Santos</span>
+        </div>
+
+        <!-- Switch grid -->
+        <div class="switch-grid">
+
+            <div class="sw corner fl" id="sw-fl">
+                <div class="sw-body"><div class="sw-lever"></div></div>
+                <span class="sw-label">FL</span>
+            </div>
+
+            <!-- Centre ON toggle -->
+            <button class="switch-on" id="sw-on" title="O">ON</button>
+
+            <div class="sw corner fr" id="sw-fr">
+                <div class="sw-body"><div class="sw-lever"></div></div>
+                <span class="sw-label">FR</span>
+            </div>
+
+            <div class="sw corner rl" id="sw-rl">
+                <div class="sw-body"><div class="sw-lever"></div></div>
+                <span class="sw-label">RL</span>
+            </div>
+
+            <div class="sw corner rr" id="sw-rr">
+                <div class="sw-body"><div class="sw-lever"></div></div>
+                <span class="sw-label">RR</span>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="panel-footer">
+            <span class="key-hint"><kbd>O</kbd> ON</span>
+            <span class="key-hint mode-hint" id="hint-mode"><kbd>N1</kbd> MODE</span>
+            <span class="key-hint hide-hint"><kbd>N</kbd> HIDE</span>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

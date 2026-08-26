@@ -1,0 +1,320 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  overflow: hidden;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 8, 10, 0.55);
+}
+
+#app.hidden {
+  display: none;
+}
+
+/* ---- Panel switching: only one of select-panel / pinkslip shows at once ---- */
+.panel {
+  display: none;
+}
+
+.panel.active {
+  display: block;
+}
+
+.select-panel,
+.pinkslip {
+  width: 640px;
+  max-height: 92vh;
+  overflow-y: auto;
+  background: linear-gradient(160deg, #f7dfe4 0%, #f3cdd6 45%, #f6dbe1 100%);
+  border: 3px double #8a2b3d;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  padding: 26px 34px 22px;
+  color: #4a1521;
+  position: relative;
+}
+
+.select-panel::before,
+.pinkslip::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(138, 43, 61, 0.4);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.select-header,
+.pinkslip-header {
+  text-align: center;
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid rgba(138, 43, 61, 0.4);
+}
+
+.seal {
+  font-size: 26px;
+  color: #a8324a;
+}
+
+.select-header h1,
+.pinkslip-header h1 {
+  font-size: 24px;
+  letter-spacing: 1px;
+  color: #6e1a2a;
+  margin-top: 2px;
+}
+
+.select-header .subtitle,
+.pinkslip-header .subtitle {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8a2b3d;
+  margin-top: 4px;
+}
+
+/* ---- Vehicle selection list (page 1) ---- */
+.vehicle-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.vehicle-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.45);
+  border: 2px solid rgba(138, 43, 61, 0.35);
+  border-radius: 5px;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.vehicle-card:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: #6e1a2a;
+}
+
+.vehicle-card-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #4a1521;
+  letter-spacing: 0.3px;
+}
+
+.vehicle-card-status {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #8a2b3d;
+}
+
+.vehicle-card.unavailable {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.vehicle-card.unavailable .vehicle-card-status {
+  color: #b3001b;
+}
+
+/* ---- Pink slip (page 2) ---- */
+.section {
+  margin-bottom: 18px;
+}
+
+.section h2 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #8a2b3d;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(138, 43, 61, 0.25);
+  padding-bottom: 4px;
+}
+
+.vehicle-name {
+  background: rgba(255, 255, 255, 0.45);
+  border: 2px solid rgba(138, 43, 61, 0.35);
+  border-radius: 5px;
+  padding: 14px 12px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  color: #4a1521;
+}
+
+.field-row label {
+  display: block;
+  font-size: 12px;
+  color: #8a2b3d;
+  margin-bottom: 6px;
+}
+
+.field-row input,
+#typedSignature {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-bottom: 1px solid rgba(138, 43, 61, 0.5);
+  background: rgba(255, 255, 255, 0.4);
+  font-family: inherit;
+  font-size: 15px;
+  color: #4a1521;
+  border-radius: 3px 3px 0 0;
+}
+
+.field-row input:focus,
+#typedSignature:focus {
+  outline: none;
+  border-bottom: 1px solid #6e1a2a;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.sig-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.sig-tab {
+  flex: 1;
+  padding: 7px 0;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(138, 43, 61, 0.35);
+  border-radius: 4px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #8a2b3d;
+  cursor: pointer;
+}
+
+.sig-tab.active {
+  background: #8a2b3d;
+  color: #f7dfe4;
+  border-color: #6e1a2a;
+}
+
+.sig-pane {
+  display: none;
+}
+
+.sig-pane.active {
+  display: block;
+}
+
+#sigCanvas {
+  width: 100%;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(138, 43, 61, 0.35);
+  border-radius: 4px;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.sig-line {
+  border-top: 1px solid rgba(138, 43, 61, 0.5);
+  margin-top: 6px;
+}
+
+.typed-preview {
+  min-height: 46px;
+  font-family: 'Brush Script MT', 'Segoe Script', cursive;
+  font-size: 30px;
+  color: #4a1521;
+  padding: 6px 4px 0;
+}
+
+.link-btn {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  color: #8a2b3d;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.footer {
+  border-top: 2px solid rgba(138, 43, 61, 0.4);
+  padding-top: 14px;
+}
+
+.fine-print {
+  font-size: 11px;
+  font-style: italic;
+  color: #6e1a2a;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.error-msg {
+  font-size: 12px;
+  color: #b3001b;
+  font-weight: bold;
+  min-height: 14px;
+  margin-bottom: 8px;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.4);
+  color: #6e1a2a;
+  border: 1px solid rgba(138, 43, 61, 0.4);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.btn-primary {
+  background: #8a2b3d;
+  color: #f7dfe4;
+}
+
+.btn-primary:hover {
+  background: #6e1a2a;
+}

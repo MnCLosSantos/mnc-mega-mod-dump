@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Starter Vehicle Pink Slip</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app" class="hidden">
+
+  <div id="selectPanel" class="panel select-panel active">
+    <div class="select-header">
+      <div class="seal">&#9733;</div>
+      <h1>Starter Vehicle Showroom</h1>
+      <p class="subtitle">Select a vehicle to begin your registration</p>
+    </div>
+
+    <div id="vehicleList" class="vehicle-list"></div>
+
+    <div class="footer">
+      <p id="selectErrorMsg" class="error-msg"></p>
+      <div class="btn-row">
+        <button id="selectCloseBtn" class="btn btn-secondary">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pinkslip" class="panel pinkslip">
+    <div class="pinkslip-header">
+      <div class="seal">&#9733;</div>
+      <h1>Certificate of Vehicle Ownership</h1>
+      <p class="subtitle">San Andreas Department of Motor Vehicles</p>
+    </div>
+
+    <div class="section">
+      <h2>1. Vehicle</h2>
+      <div id="vehicleName" class="vehicle-name">--</div>
+    </div>
+
+    <div class="section">
+      <h2>2. Owner Information</h2>
+      <div class="field-row">
+        <label for="ownerName">Registered Owner Name</label>
+        <input type="text" id="ownerName" maxlength="32" placeholder="Enter your full name" />
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>3. Signature</h2>
+      <div class="sig-tabs">
+        <button type="button" class="sig-tab active" data-tab="draw">Draw Signature</button>
+        <button type="button" class="sig-tab" data-tab="type">Type Signature</button>
+      </div>
+
+      <div id="drawPane" class="sig-pane active">
+        <canvas id="sigCanvas" width="520" height="140"></canvas>
+        <div class="sig-line"></div>
+        <button type="button" id="clearSig" class="link-btn">Clear Signature</button>
+      </div>
+
+      <div id="typePane" class="sig-pane">
+        <input type="text" id="typedSignature" maxlength="32" placeholder="Type your name as your signature" />
+        <div class="sig-line"></div>
+        <div id="typedPreview" class="typed-preview"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p class="fine-print">By signing this document, I certify that the vehicle described above is registered in my name and I accept full responsibility for it.</p>
+      <p id="errorMsg" class="error-msg"></p>
+      <div class="btn-row">
+        <button id="backBtn" class="btn btn-secondary">Back</button>
+        <button id="cancelBtn" class="btn btn-secondary">Cancel</button>
+        <button id="confirmBtn" class="btn btn-primary">Sign &amp; Claim Vehicle</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>
