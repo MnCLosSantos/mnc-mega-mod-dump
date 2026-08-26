@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: transparent;
+}
+
+.hidden {
+    display: none;
+}
+
+#container {
+    position: absolute;
+    top: 40%;
+    left: 10%;
+    transform: translateX(-50%);
+}
+
+.card {
+    background: rgba(20, 20, 20, 0.85);
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.6);
+    min-width: 200px;
+    min-height: 50px;
+
+    /* Glow + Pulse */
+    animation: pulseGlow 2s infinite;
+}
+
+/* Title styling */
+#title {
+    font-size: 1.0rem;
+    margin-bottom: 10px;
+}
+
+/* Cooldown text */
+#cooldown {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: #8ab4f8;
+}
+
+/* Glow + Pulse animation */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 8px #8ab4f8, 0 0 12px rgba(138, 180, 248, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 20px #8ab4f8, 0 0 35px rgba(138, 180, 248, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 8px #8ab4f8, 0 0 12px rgba(138, 180, 248, 0.6);
+    }
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Gruppe 6 Route Card</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="tablet-backdrop" class="hidden" aria-hidden="true">
+    <div id="tablet" role="dialog" aria-modal="true">
+      
+      <!-- LOCK SCREEN -->
+      <div id="lock-screen" class="active">
+        <div id="lock-content">
+          <div id="lock-time"></div>
+          <div id="lock-date"></div>
+          <div id="lock-message">Secure Access Required</div>
+          <button id="fingerprint-btn" aria-label="Unlock with fingerprint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/>
+            </svg>
+          </button>
+          <div id="lock-hint">Press to authenticate</div>
+        </div>
+      </div>
+
+      <!-- MAIN TABLET INTERFACE -->
+      <div id="tablet-main" class="locked">
+        <div id="tablet-top">
+          <div id="g6-logo">
+            <img src="sechslogo.png" alt="G6" />
+          </div>
+          <div id="tablet-header-info">
+            <div id="tablet-title">GRUPPE 6 – ROUTE SHEET</div>
+            <div id="player-name">Employee: Loading...</div>
+          </div>
+          <button id="close-btn" title="Close" aria-label="Close">✕</button>
+        </div>
+
+        <div id="tablet-body">
+          <div id="route-columns">
+            <div class="route-pane">
+              <div class="pane-title">Loan Route</div>
+              <div id="loan-list" class="route-list"></div>
+            </div>
+
+            <div class="route-pane">
+              <div class="pane-title">Cash Route</div>
+              <div id="cash-list" class="route-list"></div>
+            </div>
+          </div>
+
+          <div id="tablet-footer">
+            <div id="hint">Tip: Click waypoint buttons to set GPS markers</div>
+          </div>
+        </div>
+
+        <div id="g6-watermark">
+          <img src="sechs.png" alt="GRUPPE 6" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

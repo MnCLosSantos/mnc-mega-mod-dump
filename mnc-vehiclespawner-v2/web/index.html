@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ── Main Dashboard ── -->
+    <div class="modal-overlay">
+        <div class="dashboard-container">
+            <div class="dashboard-header">
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Search vehicles...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="header-buttons">
+                    <button class="close-btn" onclick="closeUI()"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="dashboard-content">
+                <div class="dashboard-sidebar">
+                    <div class="sidebar-header">
+                        <div class="sidebar-title"><i class="fas fa-list"></i> Categories</div>
+                    </div>
+                    <div class="category-items" id="category-list"></div>
+                </div>
+                <div class="dashboard-main">
+                    <div class="main-header">
+                        <h2 id="current-category"><i class="fas fa-layer-group"></i><span>Vehicle Spawner</span></h2>
+                        <span class="results-count" id="results-count">0 vehicles available</span>
+                    </div>
+                    <div class="vehicle-grid" id="vehicle-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Spawn Options Modal ── -->
+    <div class="spawn-modal hidden" id="spawnModal">
+        <div class="spawn-modal-content">
+            <h3>Spawn Options</h3>
+
+            <!-- Spawn Modal Tabs -->
+            <div class="mod-tabs" style="margin-bottom:1rem">
+                <button class="mod-tab active" id="spawn-tab-options" onclick="switchSpawnTab('options')">
+                    <i class="fas fa-sliders-h"></i> Options
+                </button>
+                <button class="mod-tab" id="spawn-tab-plate" onclick="switchSpawnTab('plate')">
+                    <i class="fas fa-id-card"></i> Plate
+                </button>
+            </div>
+
+            <!-- Options tab -->
+            <div id="spawn-options-tab">
+                <!-- Colour button -->
+                <div class="option-section">
+                    <p class="option-label"><i class="fas fa-palette"></i> Colours</p>
+                    <button class="colour-open-btn" onclick="openColourModal()">
+                        <i class="fas fa-palette"></i> Change Colours
+                    </button>
+                </div>
+
+                <!-- Mods button -->
+                <!-- <div class="option-section"> -->
+                    <!-- <p class="option-label"><i class="fas fa-wrench"></i> Mods</p> -->
+                    <!-- <button class="mods-open-btn" onclick="openModsModal()"> -->
+                        <!-- <i class="fas fa-wrench"></i> Change Mods -->
+                    <!-- </button> -->
+                <!-- </div> -->
+
+                <!-- Toggles -->
+                <div class="spawn-options">
+                    <div class="toggle-option">
+                        <span><i class="fas fa-bolt"></i> Add Max Performance Mods (no armour)</span>
+                        <label class="switch">
+                            <input type="checkbox" id="performanceMods">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-option">
+                        <span><i class="fas fa-dice"></i> Random Visual Mods</span>
+                        <label class="switch">
+                            <input type="checkbox" id="randomVisualMods">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="toggle-option">
+                        <span><i class="fas fa-car"></i> Add to My Garage</span>
+                        <label class="switch">
+                            <input type="checkbox" id="ownVehicle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plate tab -->
+            <div id="spawn-plate-tab" style="display:none">
+                <div class="option-section">
+                    <p class="option-label"><i class="fas fa-id-card"></i> Custom Plate <span class="optional-tag">optional</span></p>
+                    <input type="text" id="customPlate" class="plate-input" maxlength="8"
+                           placeholder="Leave blank for random plate" autocomplete="off" spellcheck="false">
+                    <p class="plate-hint">Max 8 characters. Must not already be in use.</p>
+                </div>
+                <div class="option-section">
+                    <p class="option-label"><i class="fas fa-th-large"></i> Plate Style</p>
+                    <select id="spawnPlateIndexSelect" class="colour-select">
+                        <option value="0">Blue on White 1</option>
+                        <option value="1">Yellow on Black</option>
+                        <option value="2">Yellow on Blue</option>
+                        <option value="3">Blue on White 2</option>
+                        <option value="4">Blue on White 3</option>
+                        <option value="5">Yankton</option>
+                        <option value="6">eCola</option>
+                        <option value="7">Las Venturas</option>
+                        <option value="8">Liberty City</option>
+                        <option value="9">LS Car Meet</option>
+                        <option value="10">Panic</option>
+                        <option value="11">Pounders</option>
+                        <option value="12">Sprunk</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="confirm-btn" onclick="confirmSpawn()">
+                    <i class="fas fa-car"></i> Spawn Vehicle
+                </button>
+                <button class="modal-close-btn" onclick="closeSpawnModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Colour Modal ── -->
+    <div class="colour-modal hidden" id="colourModal">
+        <div class="colour-modal-content">
+            <div class="colour-modal-header">
+                <h3><i class="fas fa-palette"></i> Vehicle Colours</h3>
+                <button class="colour-modal-close" onclick="closeColourModal()"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="colour-grid-layout">
+
+                <!-- Primary -->
+                <div class="colour-section">
+                    <label class="colour-section-label">Primary Colour</label>
+                    <select id="primarySelect" class="colour-select">
+                        <!-- populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Secondary -->
+                <div class="colour-section">
+                    <label class="colour-section-label">Secondary Colour</label>
+                    <select id="secondarySelect" class="colour-select">
+                        <!-- populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Pearlescent -->
+                <div class="colour-section">
+                    <label class="colour-section-label">Pearlescent</label>
+                    <select id="pearlescentSelect" class="colour-select">
+                        <!-- populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Wheel -->
+                <div class="colour-section">
+                    <label class="colour-section-label">Wheel Colour</label>
+                    <select id="wheelSelect" class="colour-select">
+                        <!-- populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Livery (single combined box) — hidden until real data arrives -->
+                <div class="colour-section" id="liverySection" style="display:none">
+                    <label class="colour-section-label">Livery</label>
+                    <select id="liverySelect" class="colour-select">
+                        <option value="none">None / Stock</option>
+                    </select>
+                </div>
+
+                <!-- Hidden legacy field kept for save logic compatibility -->
+                <select id="liveryMod48Select" style="display:none">
+                    <option value="-1">None / Stock</option>
+                </select>
+
+                <!-- Interior -->
+                <div class="colour-section">
+                    <label class="colour-section-label">Interior Colour <span class="optional-tag">if available</span></label>
+                    <select id="interiorSelect" class="colour-select">
+                        <option value="-1">Stock</option>
+                    </select>
+                </div>
+
+                <!-- Dashboard -->
+                <div class="colour-section">
+                    <label class="colour-section-label">Dashboard Colour <span class="optional-tag">if available</span></label>
+                    <select id="dashboardSelect" class="colour-select">
+                        <option value="-1">Stock</option>
+                    </select>
+                </div>
+
+                <!-- Window Tint -->
+                <div class="colour-section">
+                    <label class="colour-section-label">Window Tint</label>
+                    <select id="windowTintSelect" class="colour-select">
+                        <option value="0">None</option>
+                        <option value="1">Pure Black</option>
+                        <option value="2">Dark Smoke</option>
+                        <option value="3">Light Smoke</option>
+                        <option value="4">Stock</option>
+                        <option value="5">Limo</option>
+                        <option value="6">Green</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="colour-modal-actions">
+                <button class="confirm-btn" onclick="saveColours()">
+                    <i class="fas fa-check"></i> Apply Colours
+                </button>
+                <button class="modal-close-btn" onclick="closeColourModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Mods Modal ── -->
+    <div class="colour-modal hidden" id="modsModal">
+        <div class="colour-modal-content">
+            <div class="colour-modal-header">
+                <h3><i class="fas fa-wrench"></i> Vehicle Mods</h3>
+                <button class="colour-modal-close" onclick="closeModsModal()"><i class="fas fa-times"></i></button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mod-tabs">
+                <button class="mod-tab active" id="mod-tab-perf" onclick="switchModTab('perf')">
+                    <i class="fas fa-bolt"></i> Performance
+                </button>
+                <button class="mod-tab" id="mod-tab-visual" onclick="switchModTab('visual')">
+                    <i class="fas fa-paint-brush"></i> Visual
+                </button>
+                <button class="mod-tab" id="mod-tab-wheels" onclick="switchModTab('wheels')">
+                    <i class="fas fa-circle"></i> Wheels &amp; Tyres
+                </button>
+            </div>
+
+            <div class="colour-grid-layout" id="mod-perf-dropdowns">
+                <p class="mod-none-msg">Loading...</p>
+            </div>
+            <div class="colour-grid-layout" id="mod-visual-dropdowns" style="display:none">
+                <p class="mod-none-msg">Loading...</p>
+            </div>
+
+            <!-- Wheels & Tyres tab -->
+            <div class="colour-grid-layout" id="mod-wheels-tab" style="display:none">
+
+                <!-- Wheel Type -->
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label">Wheel Type</label>
+                    <select id="spawn-wheelTypeSelect" class="colour-select" onchange="spawnUpdateWheelIndexOptions()">
+                        <option value="0">Sport</option>
+                        <option value="1">Muscle</option>
+                        <option value="2">Lowrider</option>
+                        <option value="3">SUV</option>
+                        <option value="4">Offroad</option>
+                        <option value="5">Tuner</option>
+                        <option value="6">Bike Front Wheel</option>
+                        <option value="7">Hi-End</option>
+                        <option value="8">Benny's Original</option>
+                        <option value="9">Benny's Bespoke</option>
+                        <option value="10">Open Wheel</option>
+                        <option value="11">Street</option>
+                        <option value="12">Track</option>
+                    </select>
+                </div>
+                <div class="colour-section">
+                    <label class="colour-section-label" id="spawn-frontRimLabel">Front Rim</label>
+                    <select id="spawn-frontWheelSelect" class="colour-select">
+                        <option value="-1">Stock</option>
+                    </select>
+                </div>
+                <!-- For cars: rear rim (hidden for bikes since bikes share one wheel type) -->
+                <div class="colour-section" id="spawn-backWheelSection">
+                    <label class="colour-section-label">Rear Rim <span class="optional-tag">if available</span></label>
+                    <select id="spawn-backWheelSelect" class="colour-select">
+                        <option value="-1">Stock</option>
+                    </select>
+                </div>
+
+                <!-- Bulletproof Tyres -->
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label"><i class="fas fa-shield-alt"></i> Bulletproof Tyres</label>
+                    <div class="toggle-option" style="margin:0">
+                        <span>Enable Bulletproof Tyres</span>
+                        <label class="switch">
+                            <input type="checkbox" id="spawn-bulletproofTyres">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Tyre Smoke -->
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label"><i class="fas fa-smog"></i> Tyre Smoke</label>
+                    <div class="toggle-option" style="margin-bottom:0.75rem">
+                        <span>Enable Tyre Smoke</span>
+                        <label class="switch">
+                            <input type="checkbox" id="spawn-tyreSmokeEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <select id="spawn-smokeColorSelect" class="colour-select">
+                        <option value="254,254,254">White Smoke</option>
+                        <option value="1,1,1">Black Smoke</option>
+                        <option value="0,150,255">Blue Smoke</option>
+                        <option value="255,255,50">Yellow Smoke</option>
+                        <option value="255,153,51">Orange Smoke</option>
+                        <option value="255,10,10">Red Smoke</option>
+                        <option value="10,255,10">Green Smoke</option>
+                        <option value="153,10,153">Purple Smoke</option>
+                        <option value="255,102,178">Pink Smoke</option>
+                        <option value="128,128,128">Gray Smoke</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="colour-modal-actions">
+                <button class="confirm-btn" onclick="saveMods()">
+                    <i class="fas fa-check"></i> Apply Mods
+                </button>
+                <button class="modal-close-btn" onclick="closeModsModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Standalone Vehicle Mods Modal ── -->
+    <div class="colour-modal hidden" id="standaloneModsModal">
+        <div class="colour-modal-content" style="width:680px;max-height:80vh;">
+            <div class="colour-modal-header">
+                <h3><i class="fas fa-wrench"></i> Vehicle Mods</h3>
+                <button class="colour-modal-close" onclick="closeStandaloneModsUI()"><i class="fas fa-times"></i></button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mod-tabs">
+                <button class="mod-tab active" id="sa-tab-perf"    onclick="switchSATab('perf')"><i class="fas fa-bolt"></i> Performance</button>
+                <button class="mod-tab"         id="sa-tab-visual"  onclick="switchSATab('visual')"><i class="fas fa-paint-brush"></i> Visual</button>
+                <button class="mod-tab"         id="sa-tab-colours" onclick="switchSATab('colours')"><i class="fas fa-palette"></i> Colours</button>
+                <button class="mod-tab"         id="sa-tab-wheels"  onclick="switchSATab('wheels')"><i class="fas fa-circle"></i> Wheels</button>
+                <button class="mod-tab"         id="sa-tab-extras"  onclick="switchSATab('extras')"><i class="fas fa-star"></i> Extras</button>
+            </div>
+
+            <!-- Performance tab -->
+            <div class="colour-grid-layout" id="sa-mod-perf-dropdowns">
+                <p class="mod-none-msg"><i class="fas fa-spinner fa-spin"></i> Loading...</p>
+            </div>
+
+            <!-- Visual tab -->
+            <div class="colour-grid-layout" id="sa-mod-visual-dropdowns" style="display:none">
+                <p class="mod-none-msg"><i class="fas fa-spinner fa-spin"></i> Loading...</p>
+            </div>
+
+            <!-- Colours tab -->
+            <div class="colour-grid-layout" id="sa-colours-tab" style="display:none">
+                <div class="colour-section">
+                    <label class="colour-section-label">Primary Colour</label>
+                    <select id="sa-primarySelect" class="colour-select"></select>
+                </div>
+                <div class="colour-section">
+                    <label class="colour-section-label">Secondary Colour</label>
+                    <select id="sa-secondarySelect" class="colour-select"></select>
+                </div>
+                <div class="colour-section">
+                    <label class="colour-section-label">Pearlescent</label>
+                    <select id="sa-pearlescentSelect" class="colour-select"></select>
+                </div>
+                <div class="colour-section">
+                    <label class="colour-section-label">Wheel Colour</label>
+                    <select id="sa-wheelColourSelect" class="colour-select"></select>
+                </div>
+                <div class="colour-section" id="sa-liverySection" style="display:none">
+                    <label class="colour-section-label">Livery</label>
+                    <select id="sa-liverySelect" class="colour-select">
+                        <option value="none">None / Stock</option>
+                    </select>
+                </div>
+                <select id="sa-liveryMod48Select" style="display:none"><option value="-1">None / Stock</option></select>
+                <div class="colour-section">
+                    <label class="colour-section-label">Window Tint</label>
+                    <select id="sa-windowTintSelect" class="colour-select">
+                        <option value="0">None</option>
+                        <option value="1">Pure Black</option>
+                        <option value="2">Dark Smoke</option>
+                        <option value="3">Light Smoke</option>
+                        <option value="4">Stock</option>
+                        <option value="5">Limo</option>
+                        <option value="6">Green</option>
+                    </select>
+                </div>
+                <div class="colour-section">
+                    <label class="colour-section-label">Plate Style</label>
+                    <select id="sa-plateIndexSelect" class="colour-select">
+                        <option value="0">Blue on White 1</option>
+                        <option value="1">Yellow on Black</option>
+                        <option value="2">Yellow on Blue</option>
+                        <option value="3">Blue on White 2</option>
+                        <option value="4">Blue on White 3</option>
+                        <option value="5">Yankton</option>
+                        <option value="6">eCola</option>
+                        <option value="7">Las Venturas</option>
+                        <option value="8">Liberty City</option>
+                        <option value="9">LS Car Meet</option>
+                        <option value="10">Panic</option>
+                        <option value="11">Pounders</option>
+                        <option value="12">Sprunk</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Wheels tab -->
+            <div class="colour-grid-layout" id="sa-wheels-tab" style="display:none">
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label">Wheel Type</label>
+                    <select id="sa-wheelTypeSelect" class="colour-select" onchange="saUpdateWheelIndexOptions()">
+                        <option value="0">Sport</option>
+                        <option value="1">Muscle</option>
+                        <option value="2">Lowrider</option>
+                        <option value="3">SUV</option>
+                        <option value="4">Offroad</option>
+                        <option value="5">Tuner</option>
+                        <option value="6">Bike Front Wheel</option>
+                        <option value="7">Hi-End</option>
+                        <option value="8">Benny's Original</option>
+                        <option value="9">Benny's Bespoke</option>
+                        <option value="10">Open Wheel</option>
+                        <option value="11">Street</option>
+                        <option value="12">Track</option>
+                    </select>
+                </div>
+                <div class="colour-section">
+                    <label class="colour-section-label" id="sa-frontRimLabel">Front Rim</label>
+                    <select id="sa-frontWheelSelect" class="colour-select">
+                        <option value="-1">Stock</option>
+                    </select>
+                </div>
+                <div class="colour-section" id="sa-backWheelSection">
+                    <label class="colour-section-label">Rear Rim <span class="optional-tag">if available</span></label>
+                    <select id="sa-backWheelSelect" class="colour-select">
+                        <option value="-1">Stock</option>
+                    </select>
+                </div>
+
+                <!-- Bulletproof Tyres -->
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label"><i class="fas fa-shield-alt"></i> Bulletproof Tyres</label>
+                    <div class="toggle-option" style="margin:0">
+                        <span>Enable Bulletproof Tyres</span>
+                        <label class="switch">
+                            <input type="checkbox" id="sa-bulletproofTyres">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Tyre Smoke (moved here from Extras) -->
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label"><i class="fas fa-smog"></i> Tyre Smoke</label>
+                    <div class="toggle-option" style="margin-bottom:0.75rem">
+                        <span>Enable Tyre Smoke</span>
+                        <label class="switch">
+                            <input type="checkbox" id="sa-tyreSmokeEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <select id="sa-smokeColorSelect" class="colour-select">
+                        <option value="254,254,254">White Smoke</option>
+                        <option value="1,1,1">Black Smoke</option>
+                        <option value="0,150,255">Blue Smoke</option>
+                        <option value="255,255,50">Yellow Smoke</option>
+                        <option value="255,153,51">Orange Smoke</option>
+                        <option value="255,10,10">Red Smoke</option>
+                        <option value="10,255,10">Green Smoke</option>
+                        <option value="153,10,153">Purple Smoke</option>
+                        <option value="255,102,178">Pink Smoke</option>
+                        <option value="128,128,128">Gray Smoke</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Extras tab: Xenon, Neons -->
+            <div class="colour-grid-layout" id="sa-extras-tab" style="display:none">
+
+                <!-- Xenon -->
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label"><i class="fas fa-lightbulb"></i> Xenon Lights</label>
+                    <div class="toggle-option" style="margin-bottom:0.75rem">
+                        <span>Enable Xenon Headlights</span>
+                        <label class="switch">
+                            <input type="checkbox" id="sa-xenonEnabled">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <select id="sa-xenonColorSelect" class="colour-select">
+                        <option value="-1">Default (White)</option>
+                        <option value="0">White</option>
+                        <option value="1">Blue</option>
+                        <option value="2">Electric Blue</option>
+                        <option value="3">Mint Green</option>
+                        <option value="4">Lime Green</option>
+                        <option value="5">Yellow</option>
+                        <option value="6">Golden Shower</option>
+                        <option value="7">Orange</option>
+                        <option value="8">Red</option>
+                        <option value="9">Pony Pink</option>
+                        <option value="10">Hot Pink</option>
+                        <option value="11">Purple</option>
+                        <option value="12">Blacklight</option>
+                    </select>
+                </div>
+
+                <!-- Neons -->
+                <div class="colour-section" style="grid-column:1/-1">
+                    <label class="colour-section-label"><i class="fas fa-sun"></i> Neon Lights</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.75rem">
+                        <div class="toggle-option" style="margin:0">
+                            <span>Left</span>
+                            <label class="switch"><input type="checkbox" id="sa-neonL"><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-option" style="margin:0">
+                            <span>Right</span>
+                            <label class="switch"><input type="checkbox" id="sa-neonR"><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-option" style="margin:0">
+                            <span>Front</span>
+                            <label class="switch"><input type="checkbox" id="sa-neonF"><span class="slider"></span></label>
+                        </div>
+                        <div class="toggle-option" style="margin:0">
+                            <span>Back</span>
+                            <label class="switch"><input type="checkbox" id="sa-neonB"><span class="slider"></span></label>
+                        </div>
+                    </div>
+                    <label class="colour-section-label" style="margin-bottom:0.4rem">Neon Colour</label>
+                    <select id="sa-neonColorSelect" class="colour-select">
+                        <option value="222,222,255">White</option>
+                        <option value="2,21,255">Blue</option>
+                        <option value="3,83,255">Electric Blue</option>
+                        <option value="0,255,140">Mint Green</option>
+                        <option value="94,255,1">Lime Green</option>
+                        <option value="255,255,0">Yellow</option>
+                        <option value="255,150,0">Golden Shower</option>
+                        <option value="255,62,0">Orange</option>
+                        <option value="255,1,1">Red</option>
+                        <option value="255,50,100">Pony Pink</option>
+                        <option value="255,5,190">Hot Pink</option>
+                        <option value="35,1,255">Purple</option>
+                        <option value="15,3,255">Blacklight</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="colour-modal-actions">
+                <button class="confirm-btn" onclick="applyStandaloneMods()">
+                    <i class="fas fa-check"></i> Apply to Vehicle
+                </button>
+                <button class="modal-close-btn" onclick="closeStandaloneModsUI()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Image Lightbox ── -->
+    <div class="img-lightbox hidden" id="imgLightbox" onclick="closeLightboxOnBackdrop(event)">
+        <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+        <div class="lightbox-controls">
+            <button onclick="lightboxZoom(0.25)"><i class="fas fa-search-plus"></i></button>
+            <button onclick="lightboxZoom(-0.25)"><i class="fas fa-search-minus"></i></button>
+            <button onclick="lightboxReset()"><i class="fas fa-compress-arrows-alt"></i></button>
+            <span id="lightboxZoomLabel">100%</span>
+        </div>
+        <div class="lightbox-stage" id="lightboxStage">
+            <img id="lightboxImg" src="" alt="" draggable="false">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

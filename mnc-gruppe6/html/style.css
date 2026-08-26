@@ -1,0 +1,461 @@
+/* Futuristic G6 tablet – Style C with Lock Screen */
+
+:root {
+    --bg: #ffffff;
+    --accent: #19a85a;
+    --accent-dark: #148f49;
+    --muted: #7b7b7b;
+    --panel-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    --tablet-w: 880px;
+    --tablet-h: 520px;
+    --bezel: #1b1b1d;
+    --complete: #19a85a;
+    --pending: #f59e0b;
+}
+
+/* Base page */
+html, body {
+    height: 100%;
+    margin: 0;
+    background: transparent;
+    font-family: Inter, Roboto, Arial, sans-serif;
+}
+
+/* Backdrop */
+#tablet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Tablet starts invisible */
+#tablet {
+    width: var(--tablet-w);
+    height: var(--tablet-h);
+    border-radius: 24px;
+    background: linear-gradient(180deg, var(--bezel), #0f0f10);
+    padding: 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: var(--panel-shadow);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(40px);
+}
+
+/* Slide animation */
+.slide-in {
+    animation: slideIn .25s ease-out forwards;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========== LOCK SCREEN ========== */
+#lock-screen {
+    position: absolute;
+    inset: 18px;
+    border-radius: 14px;
+    background: url('lockscreen.png') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+#lock-screen.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#lock-screen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6), rgba(0,0,0,0.8));
+    border-radius: 14px;
+}
+
+#lock-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+#lock-time {
+    font-size: 64px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+#lock-date {
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.8);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+#lock-message {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    margin-top: 20px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+#fingerprint-btn {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    border: 4px solid rgba(255,255,255,0.3);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(25, 168, 90, 0.4);
+}
+
+#fingerprint-btn svg {
+    width: 50px;
+    height: 50px;
+}
+
+#fingerprint-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 32px rgba(25, 168, 90, 0.6);
+    border-color: rgba(255,255,255,0.5);
+}
+
+#fingerprint-btn:active {
+    transform: scale(0.95);
+}
+
+#fingerprint-btn.scanning {
+    animation: pulse 1.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 8px 24px rgba(25, 168, 90, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 24px rgba(25, 168, 90, 0.8), 0 0 40px rgba(25, 168, 90, 0.6);
+    }
+}
+
+#lock-hint {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 8px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* ========== MAIN INTERFACE ========== */
+#tablet-main {
+    position: absolute;
+    inset: 18px;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.4s ease;
+}
+
+#tablet-main.locked {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Header */
+#tablet-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 12px;
+}
+
+#g6-logo {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-dark));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+#g6-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#tablet-header-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#tablet-title {
+    color: white;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+#player-name {
+    color: #a0a0a0;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+#close-btn {
+    background: transparent;
+    border: 0;
+    color: #fff;
+    font-size: 18px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Body panel */
+#tablet-body {
+    background: var(--bg);
+    border-radius: 14px;
+    margin-top: 12px;
+    padding: 16px;
+    height: calc(100% - 110px);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Route columns */
+#route-columns {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.route-pane {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.pane-title {
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
+    font-size: 16px;
+}
+
+.route-list {
+    background: #fbfbfb;
+    border-radius: 10px;
+    padding: 12px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    border: 1px solid rgba(17,17,17,0.04);
+}
+
+/* Custom scrollbar */
+.route-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.route-list::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.route-list::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 10px;
+}
+
+.route-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-dark);
+}
+
+/* List entries */
+.route-item {
+    background: linear-gradient(180deg, #fff, #fafafa);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(0,0,0,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.route-item.complete {
+    opacity: 0.7;
+    background: linear-gradient(180deg, #f0fff5, #e8f9ed);
+    border-color: var(--complete);
+}
+
+.route-item .left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.route-item .idx {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: background 0.3s ease;
+}
+
+.route-item.complete .idx {
+    background: var(--complete);
+}
+
+.route-item .info {
+    flex: 1;
+    min-width: 0;
+}
+
+.route-item .label {
+    font-weight: 600;
+    color: #222;
+    font-size: 14px;
+}
+
+.route-item .coord {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+
+.route-item .status {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.route-item .status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.route-item .status.complete {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.waypoint-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.waypoint-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+}
+
+.waypoint-btn:active {
+    transform: scale(0.95);
+}
+
+.route-item.complete .waypoint-btn {
+    background: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.route-item.complete .waypoint-btn:hover {
+    background: #9ca3af;
+    transform: none;
+}
+
+/* Footer */
+#tablet-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+#hint {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+}
+
+/* Watermark */
+#g6-watermark {
+    position: absolute;
+    right: 18px;
+    bottom: 18px;
+    width: 200px;
+    height: auto;
+    opacity: 0.06;
+    transform: rotate(-10deg);
+    pointer-events: none;
+}
+
+#g6-watermark img {
+    width: 100%;
+    height: auto;
+}
