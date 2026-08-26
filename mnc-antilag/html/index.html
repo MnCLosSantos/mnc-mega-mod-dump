@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="display:none;">
+<script>
+    // Pool of Audio objects per sound file to allow rapid overlapping pops
+    const pools  = {};
+    const POOL_SIZE = 10;
+
+    function getPool(src) {
+        if (!pools[src]) {
+            pools[src] = { instances: [], index: 0 };
+            for (let i = 0; i < POOL_SIZE; i++) {
+                const a   = new Audio(src);
+                a.preload = 'auto';
+                pools[src].instances.push(a);
+            }
+        }
+        return pools[src];
+    }
+
+    function playOne(src, volume) {
+        const pool  = getPool(src);
+        const audio = pool.instances[pool.index % POOL_SIZE];
+        pool.index++;
+        audio.volume     = Math.min(1.0, Math.max(0.0, volume));
+        audio.currentTime = 0;
+        audio.play().catch(() => {});
+    }
+
+    window.addEventListener('message', function(event) {
+        const d = event.data;
+        if (d.type !== 'mnc_antilag_pop') return;
+
+        const src     = `sounds/${d.file}`;
+        const delays  = d.delays  || [0];
+        const volumes = d.volumes || [d.volume || 1.0];
+
+        // Schedule each pop independently using its own delay offset
+        for (let i = 0; i < delays.length; i++) {
+            const vol = volumes[i] !== undefined ? volumes[i] : (volumes[0] || 1.0);
+            setTimeout(() => playOne(src, vol), delays[i]);
+        }
+    });
+</script>
+</body>
+</html>

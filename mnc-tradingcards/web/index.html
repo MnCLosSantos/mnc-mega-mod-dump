@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNC Trading Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- PACK OPENING UI -->
+<div id="screen-pack-open" class="screen hidden">
+    <div class="pack-open-container">
+        <div class="pack-open-title" id="packOpenTitle">OPEN PACK</div>
+        <div class="pack-open-hint" id="packOpenHint">Drag the top upward to tear open</div>
+        <div class="pack-wrapper" id="packWrapper">
+            <div class="pack-body">
+                <div class="pack-flap" id="packFlap"></div>
+                <div class="pack-perf"></div>
+                <div class="pack-tear-zone" id="packTearZone">
+                    <div class="pack-tear-indicator">TEAR HERE</div>
+                </div>
+                <div class="pack-label">
+                    <span class="pack-label-icon" id="packLabelIcon">🃏</span>
+                    <div class="pack-label-name" id="packLabelName">CARD PACK</div>
+                    <div class="pack-label-type" id="packLabelType">COLLECTOR SERIES</div>
+                </div>
+                <canvas class="pack-drag-progress" id="packProgress" width="44" height="44"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PACK REVEAL -->
+<div id="screen-reveal" class="screen hidden">
+    <div class="reveal-bg"></div>
+    <div class="reveal-container">
+        <div class="reveal-title">PACK REVEAL</div>
+        <div class="reveal-subtitle">Click each card to reveal</div>
+        <div class="reveal-cards" id="revealCards"></div>
+        <button class="btn-primary" id="btnRevealClose">Close</button>
+    </div>
+</div>
+
+<!-- SINGLE CARD VIEW -->
+<div id="screen-card" class="screen hidden">
+    <div class="card-view-bg"></div>
+    <div class="card-view-container">
+        <div class="card-view-inner" id="singleCardContainer"></div>
+        <div id="cardViewDiscard"></div>
+        <button class="btn-secondary" id="btnCardClose">&#x2715; Close</button>
+    </div>
+</div>
+
+<!-- BINDER -->
+<div id="screen-binder" class="screen hidden">
+    <div class="binder-book">
+        <div class="binder-spine">
+            <div class="binder-ring"></div>
+            <div class="binder-ring"></div>
+            <div class="binder-spine-title">CARD BINDER</div>
+            <div class="binder-ring"></div>
+            <div class="binder-ring"></div>
+        </div>
+        <div class="binder-contents">
+            <div class="binder-contents-header">
+                <div class="binder-contents-title">📒 Contents</div>
+                <div class="binder-contents-subtitle">Select a set to view</div>
+            </div>
+            <div class="binder-sets" id="binderSetList"></div>
+        </div>
+        <div class="binder-page" id="binderPage">
+            <div class="binder-remove-zone" id="binderRemoveZone">↑ DRAG HERE TO REMOVE</div>
+            <div class="binder-page-header">
+                <div>
+                    <div class="binder-set-title" id="binderSetTitle">Select a Set</div>
+                    <div class="binder-progress" id="binderProgress"></div>
+                </div>
+                <button class="binder-close-btn" id="btnBinderClose">&#x2715;</button>
+            </div>
+            <div class="binder-page-tab" id="binderPageTab">SET</div>
+            <div class="binder-grid" id="binderGrid"></div>
+        </div>
+    </div>
+</div>
+
+<!-- SHOP -->
+<div id="screen-shop" class="screen hidden">
+    <div class="shop-container">
+        <div class="shop-header">
+            <div class="shop-title">🃏 CARD DEALER</div>
+            <div class="shop-subtitle">Select cards to sell, or sell an entire set</div>
+            <button class="binder-close-btn" id="btnShopClose">&#x2715;</button>
+        </div>
+        <div class="shop-toolbar">
+            <button class="btn-secondary" id="btnShopSelectAll">Select All</button>
+            <div class="shop-total-row">
+                <span class="shop-total-label">Total:</span>
+                <span class="shop-total-val" id="shopTotal">$0</span>
+            </div>
+            <button class="btn-primary" id="btnShopSell" disabled>Sell Selected</button>
+        </div>
+        <div class="shop-grid" id="shopGrid"></div>
+    </div>
+</div>
+
+<!-- CARD CREATOR (admin only, /cardcreator) -->
+<div id="screen-cardcreator" class="screen hidden">
+    <div class="cc-container">
+        <div class="cc-header">
+            <div>
+                <div class="cc-title">🛠 CARD CREATOR</div>
+                <div class="cc-subtitle">Create and manage custom card sets</div>
+            </div>
+            <button class="binder-close-btn" id="btnCCClose">&#x2715;</button>
+        </div>
+        <div class="cc-body">
+            <div class="cc-sidebar">
+                <div class="cc-tabs">
+                    <button class="cc-maintab active" id="ccMainTabSetup" type="button">1. Setup</button>
+                    <button class="cc-maintab" id="ccMainTabEdit" type="button">2. Edit Sets</button>
+                </div>
+
+                <!-- SETUP TAB: create a brand new set -->
+                <div class="cc-tabpane" id="ccPaneSetup">
+                    <div class="cc-fieldset">
+                        <div class="cc-fieldset-title">New Set</div>
+
+                        <div class="cc-field">
+                            <label class="cc-label" for="ccNewSetId">Set ID</label>
+                            <input class="cc-input" id="ccNewSetId" placeholder="e.g. muscle_cars" maxlength="40">
+                        </div>
+
+                        <div class="cc-field">
+                            <label class="cc-label">Icon</label>
+                            <div class="cc-icon-picker">
+                                <div class="cc-icon-current" id="ccIconCurrent">
+                                    <span class="cc-icon-current-glyph" id="ccIconCurrentGlyph"></span>
+                                    <span class="cc-icon-current-label" id="ccIconCurrentLabel">Choose an icon below</span>
+                                </div>
+                                <input class="cc-input cc-icon-search" id="ccIconSearch" placeholder="Search icons…">
+                                <div class="cc-icon-grid" id="ccIconGrid"></div>
+                                <input class="cc-input" id="ccIconCustom" placeholder="Or type your own emoji / FontAwesome classes, e.g. fa-solid fa-car" maxlength="60">
+                            </div>
+                        </div>
+
+                        <div class="cc-field">
+                            <label class="cc-label" for="ccNewSetLabel">Display Label</label>
+                            <input class="cc-input" id="ccNewSetLabel" placeholder="e.g. Muscle Car Collection" maxlength="60">
+                        </div>
+
+                        <button class="btn-primary cc-btn-block" id="btnCCCreateSet">Create Set</button>
+                    </div>
+                    <div class="cc-sidebar-hint" id="ccSetupActiveHint">Once created, add cards to it on the right. You can come back to it any time under the Edit Sets tab.</div>
+                </div>
+
+                <!-- EDIT SETS TAB: pick an existing SQL-backed set (built-in / config.lua sets are not shown here) -->
+                <div class="cc-tabpane hidden" id="ccPaneEdit">
+                    <div class="cc-fieldset-title">Custom Sets (from SQL)</div>
+                    <div class="cc-sidebar-hint">Built-in sets from config.lua aren't editable here.</div>
+                    <div class="cc-set-list" id="ccSetList"></div>
+                </div>
+            </div>
+
+            <div class="cc-panel" id="ccPanel">
+                <div class="cc-panel-empty" id="ccPanelEmpty">Create a new set, or pick one under Edit Sets.</div>
+                <div class="cc-panel-content hidden" id="ccPanelContent">
+                    <div class="cc-panel-head">
+                        <div>
+                            <div class="cc-panel-title" id="ccPanelTitle"></div>
+                            <div class="cc-panel-sub" id="ccPanelSub"></div>
+                        </div>
+                        <button class="cc-btn-danger" id="btnCCRemoveSet">Delete Set</button>
+                    </div>
+
+                    <div class="cc-fieldset cc-editset-fieldset" id="ccEditSetFieldset">
+                        <div class="cc-fieldset-title">Set Details</div>
+                        <div class="cc-field">
+                            <label class="cc-label" for="ccEditSetLabel">Display Label</label>
+                            <input class="cc-input" id="ccEditSetLabel" placeholder="e.g. Muscle Car Collection" maxlength="60">
+                        </div>
+                        <div class="cc-field">
+                            <label class="cc-label">Icon</label>
+                            <div class="cc-icon-picker">
+                                <div class="cc-icon-current" id="ccEditIconCurrent">
+                                    <span class="cc-icon-current-glyph" id="ccEditIconCurrentGlyph"></span>
+                                    <span class="cc-icon-current-label" id="ccEditIconCurrentLabel">Choose an icon below</span>
+                                </div>
+                                <input class="cc-input cc-icon-search" id="ccEditIconSearch" placeholder="Search icons…">
+                                <div class="cc-icon-grid" id="ccEditIconGrid"></div>
+                                <input class="cc-input" id="ccEditIconCustom" placeholder="Or type your own emoji / FontAwesome classes, e.g. fa-solid fa-car" maxlength="60">
+                            </div>
+                        </div>
+                        <button class="btn-primary cc-btn-block" id="btnCCSaveSet">Save Set Details</button>
+                    </div>
+
+                    <div class="cc-card-list" id="ccCardList"></div>
+
+                    <div class="cc-addcard-form" id="ccAddCardForm">
+                        <div class="cc-fieldset-title" id="ccAddCardFormTitle">+ Add Card</div>
+                        <div class="cc-addcard-layout">
+                            <div class="cc-addcard-fields">
+
+                                <div class="cc-fieldset">
+                                    <div class="cc-fieldset-subtitle">Card Info</div>
+                                    <div class="cc-form-grid">
+                                        <div class="cc-field">
+                                            <label class="cc-label" for="ccCardNumber">Number</label>
+                                            <input class="cc-input" id="ccCardNumber" type="number" min="1" placeholder="#">
+                                        </div>
+                                        <div class="cc-field cc-span2">
+                                            <label class="cc-label" for="ccCardName">Name</label>
+                                            <input class="cc-input" id="ccCardName" placeholder="Card name">
+                                        </div>
+                                        <div class="cc-field">
+                                            <label class="cc-label" for="ccCardRarity">Rarity</label>
+                                            <select class="cc-input" id="ccCardRarity">
+                                                <option value="common">Common</option>
+                                                <option value="uncommon">Uncommon</option>
+                                                <option value="rare">Rare</option>
+                                                <option value="ultraRare">Ultra Rare</option>
+                                            </select>
+                                        </div>
+                                        <div class="cc-field">
+                                            <label class="cc-label" for="ccCardValue">Value ($)</label>
+                                            <input class="cc-input" id="ccCardValue" type="number" min="0" placeholder="Auto by rarity">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="cc-fieldset">
+                                    <div class="cc-fieldset-subtitle">Card Image</div>
+                                    <div class="cc-form-tabs">
+                                        <button class="cc-tab active" id="ccTabModel" data-mode="model" type="button">Vehicle Model</button>
+                                        <button class="cc-tab" id="ccTabImage" data-mode="image" type="button">Custom Image</button>
+                                    </div>
+
+                                    <div id="ccModelFields">
+                                        <div class="cc-field">
+                                            <label class="cc-label">Vehicle Image Source</label>
+                                            <div class="cc-source-toggle" id="ccImageSourceToggle">
+                                                <button type="button" class="cc-source-pill active" data-source="fivem">FiveM Docs</button>
+                                                <button type="button" class="cc-source-pill" data-source="github1">GitHub Storage 1</button>
+                                                <button type="button" class="cc-source-pill" data-source="github2">GitHub Storage 2</button>
+                                            </div>
+                                            <div class="cc-source-hint" id="ccSourceHint">Browsing the default FiveM vehicle list. Card images automatically fall back through every configured source (FiveM Docs → GitHub Storage 1 → GitHub Storage 2) wherever this card is shown.</div>
+                                        </div>
+                                        <div class="cc-field">
+                                            <label class="cc-label" for="ccCardModelTrigger">Vehicle</label>
+                                            <button type="button" class="cc-combo-trigger" id="ccCardModelTrigger">
+                                                <span class="cc-combo-trigger-label" id="ccCardModelTriggerLabel">— Select a vehicle —</span>
+                                                <span class="cc-combo-caret">▾</span>
+                                            </button>
+                                            <input class="cc-input hidden" id="ccCardModel" placeholder="Type the exact spawn model">
+                                        </div>
+                                    </div>
+
+                                    <div class="cc-form-col hidden" id="ccImageFields">
+                                        <div class="cc-field">
+                                            <label class="cc-label" for="ccCardImage">Image — URL, or a hardcoded file path (.png, .jpg/.jpeg, .gif, .webp all work)</label>
+                                            <input class="cc-input" id="ccCardImage" placeholder="https://example.com/card.jpg or images/mycard.png">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="cc-fieldset">
+                                    <div class="cc-fieldset-subtitle">Card Back</div>
+                                    <div class="cc-field">
+                                        <label class="cc-label" for="ccCardBackground">Background</label>
+                                        <select class="cc-input" id="ccCardBackground">
+                                            <option value="">None</option>
+                                            <option value="images/card1back.png">Background 1 — card1back.png</option>
+                                            <option value="images/card2back.png">Background 2 — card2back.png</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="cc-addcard-btnrow">
+                                    <button class="btn-primary cc-btn-block" id="btnCCAddCard">Add Card</button>
+                                    <button class="btn-secondary cc-btn-block hidden" id="btnCCCancelEdit" type="button">Cancel Edit</button>
+                                </div>
+                            </div>
+                            <div class="cc-addcard-preview">
+                                <div class="cc-preview-label">Live Preview</div>
+                                <div id="ccCardPreview"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cc-status" id="ccStatus"></div>
+    </div>
+</div>
+
+<!-- Combo dropdown popup (vehicle picker) -- kept outside the card
+     creator panel so position:fixed can't be clipped by its
+     overflow:hidden / overflow:auto ancestors. The icon picker used to
+     live here too, but is now an always-visible grid inline in the
+     panel instead of a dropdown -- see .cc-icon-grid. -->
+<div class="cc-combo-popup hidden" id="ccModelPopup">
+    <input class="cc-combo-filter" id="ccModelFilter" placeholder="Search vehicles…">
+    <div class="cc-combo-list" id="ccModelList"></div>
+</div>
+
+<!-- Vehicle image gallery -- a dedicated page that opens over the Card
+     Creator when browsing a GitHub image source instead of the plain
+     FiveM Docs text list (see ccOpenModelGallery in app.js). One
+     thumbnail tile per known vehicle model, loaded straight from the
+     selected GitHub repo; clicking a tile selects that vehicle the
+     same way clicking a row in the text list does. -->
+<div class="cc-gallery-overlay hidden" id="ccModelGallery">
+    <div class="cc-gallery-panel">
+        <div class="cc-gallery-header">
+            <div>
+                <div class="cc-gallery-title" id="ccGalleryTitle">Browse Vehicle Images</div>
+                <div class="cc-gallery-subtitle" id="ccGallerySubtitle">Loading thumbnails…</div>
+            </div>
+            <div class="cc-gallery-header-actions">
+                <button type="button" class="cc-gallery-refresh" id="btnCCGalleryRefresh" title="Re-check GitHub for new images">&#x21bb; Refresh</button>
+                <button type="button" class="cc-gallery-close" id="btnCCGalleryClose">&#x2715;</button>
+            </div>
+        </div>
+        <input class="cc-input cc-gallery-filter" id="ccGalleryFilter" placeholder="Search vehicles…">
+        <div class="cc-gallery-grid" id="ccModelGalleryGrid"></div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

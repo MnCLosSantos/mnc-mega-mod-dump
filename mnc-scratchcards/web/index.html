@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Scratch Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="scratch-screen" class="screen hidden">
+
+    <div class="card" id="scratch-card">
+
+        <!-- Top bar: card name + rule -->
+        <div class="card-top">
+            <div class="card-name" id="scratch-title">SCRATCH CARD</div>
+            <div class="card-rule" id="card-rule">Match 3 💰 to win</div>
+        </div>
+
+        <!-- Scratch grid + canvas overlay -->
+        <div class="scratch-area" id="scratch-area">
+            <div id="scratch-grid" class="scratch-grid"></div>
+            <canvas id="scratch-canvas"></canvas>
+        </div>
+
+        <!-- Bottom bar: always same height, content swaps -->
+        <div class="card-bottom">
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+
+            <!-- Shown while scratching -->
+            <div class="hint" id="scratch-hint">Scratch every panel to reveal</div>
+
+            <!-- Shown after scratching — invisible until done, takes up same space -->
+            <div class="result-row hidden" id="result-row">
+                <div class="result-text" id="result-text">
+                    <span id="result-icon">🎉</span>
+                    <span id="result-msg">YOU WON $0!</span>
+                </div>
+                <button class="btn-collect" id="btn-close-scratch">Collect</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+<script>window.addEventListener('load', initSounds);</script>
+</body>
+</html>
