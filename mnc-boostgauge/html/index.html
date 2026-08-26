@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'self' https://cdnjs.cloudflare.com; style-src 'unsafe-inline' 'self' https://cdnjs.cloudflare.com; font-src https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src 'self';">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MNC Boost Gauge</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Main Gauge Wrapper -->
+  <div id="gaugeWrapper" class="gauge style-1 bezel-1 hidden" data-style="1" data-bezel="1" data-rpm-high="false">
+    <div id="bezel" class="gauge-bezel"></div>
+    <div id="gauge" class="gauge-inner">
+      <div class="gauge-face">
+        <!-- Tick Marks -->
+        <div class="gauge-ticks" id="gaugeTicks"></div>
+        
+        <!-- Center Cap -->
+        <div class="gauge-center"></div>
+		
+		<!-- Warning Icon -->
+        <div id="warningIcon" class="warning-icon hidden">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        
+        <!-- Needle -->
+        <div id="needle" class="needle"></div>
+        
+        <!-- PSI Display -->
+        <div id="psiText" class="psi-text">0.0 PSI</div>
+        
+        <!-- PSI Label -->
+        <div id="maxText" class="max-text">PSI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>

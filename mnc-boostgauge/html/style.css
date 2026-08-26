@@ -1,0 +1,1352 @@
+:root {
+  --gauge-size: 240px;
+  --needle-width: 3px;
+  --center-size: 20px;
+  --font-family: 'Rajdhani', 'Orbitron', 'Segoe UI', sans-serif;
+  --glow-intensity: 0.8;
+}
+
+/* === BASE STRUCTURE === */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  margin: 0; 
+  background: transparent; 
+  overflow: hidden;
+  font-family: var(--font-family);
+}
+
+.gauge { 
+  position: absolute; 
+  left: 50%; 
+  top: 50%; 
+  transform: translate(-50%, -50%); 
+  width: var(--gauge-size); 
+  height: var(--gauge-size); 
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* === TICK MARKS (DYNAMIC) === */
+.gauge-ticks {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.gauge-tick {
+  position: absolute;
+  width: 10px;
+  height: 3px; /* Thicker ticks */
+  background: rgba(255, 255, 255, 0.7);
+  transform-origin: 50% 120px;
+  left: 50%;
+  top: 50%;
+  transition: background 0.2s ease;
+}
+
+.major-tick {
+  width: 14px; /* Longer major ticks */
+  height: 14px; /* Thicker major ticks */
+  background: rgba(255, 255, 255, 1.0);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8); /* Glow for major ticks */
+}
+
+.tick-label {
+  position: absolute;
+  color: rgba(255, 255, 255, 1.0);
+  font-size: 12px;
+  font-family: var(--font-family);
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.8); /* Glow for labels */
+  pointer-events: none;
+}
+
+.gauge[data-rpm-high="true"] .major-tick {
+  background: rgba(255, 50, 50, 1.0); /* Red major ticks at high RPM */
+  box-shadow: 0 0 6px rgba(255, 50, 50, 0.8); /* Red glow for major ticks */
+}
+
+.gauge[data-rpm-high="true"] .tick-label {
+  color: rgba(255, 50, 50, 1.0); /* Red labels at high RPM */
+  text-shadow: 0 0 4px rgba(255, 50, 50, 0.8); /* Red glow for labels */
+}
+
+/* === LIGHTING EFFECTS === */
+/* Regular lights on - subtle glow */
+.gauge[data-lights-on="true"] {
+  filter: brightness(1.15) drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+}
+
+.gauge[data-lights-on="true"] .gauge-face {
+  box-shadow: 
+    0 0 18px rgba(255, 255, 255, 0.4),
+    inset 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.gauge[data-lights-on="true"] .psi-text,
+.gauge[data-lights-on="true"] .max-text {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.gauge[data-lights-on="true"] .needle {
+  filter: brightness(1.1) drop-shadow(0 0 6px rgba(255, 255, 255, 0.5));
+}
+
+/* High beams on - intense glow */
+.gauge[data-highbeams-on="true"] {
+  filter: brightness(1.35) drop-shadow(0 0 15px rgba(255, 255, 255, 0.6));
+}
+
+.gauge[data-highbeams-on="true"] .gauge-face {
+  box-shadow: 
+    0 0 25px rgba(255, 255, 255, 0.6),
+    inset 0 0 18px rgba(255, 255, 255, 0.3);
+}
+
+.gauge[data-highbeams-on="true"] .psi-text,
+.gauge[data-highbeams-on="true"] .max-text {
+  text-shadow: 0 0 15px currentColor, 0 0 25px currentColor;
+}
+
+.gauge[data-highbeams-on="true"] .needle {
+  filter: brightness(1.5) drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+}
+
+.gauge[data-highbeams-on="true"] .major-tick {
+  box-shadow: 0 0 10px currentColor;
+}
+
+.gauge[data-highbeams-on="true"] .tick-label {
+  text-shadow: 0 0 8px currentColor, 0 0 12px currentColor;
+}
+
+/* === WARNING ICON === */
+.warning-icon {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: #ffbf00; /* Amber color */
+  text-shadow: 0 0 8px rgba(255, 191, 0, 0.8);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.warning-icon.visible {
+  opacity: 1;
+  animation: flash-amber 0.5s ease-in-out infinite;
+}
+
+.warning-icon.hidden {
+  opacity: 0;
+}
+
+/* Flashing animation for warning icon */
+@keyframes flash-amber {
+  0% { opacity: 1; text-shadow: 0 0 8px rgba(255, 191, 0, 0.8); }
+  50% { opacity: 0.5; text-shadow: 0 0 4px rgba(255, 191, 0, 0.4); }
+  100% { opacity: 1; text-shadow: 0 0 8px rgba(255, 191, 0, 0.8); }
+}
+
+/* Pulse glow for needle */
+@keyframes pulse-glow {
+  0% { box-shadow: 0 0 8px rgba(255, 165, 0, 0.8); }
+  50% { box-shadow: 0 0 12px rgba(255, 165, 0, 1.0); }
+  100% { box-shadow: 0 0 8px rgba(255, 165, 0, 0.8); }
+}
+
+/* === DIGITAL GAUGE STYLING === */
+.gauge[data-style="36"] .psi-text,
+.gauge[data-style="37"] .psi-text,
+.gauge[data-style="38"] .psi-text,
+.gauge[data-style="39"] .psi-text,
+.gauge[data-style="40"] .psi-text {
+  font-size: 72px; /* Doubled PSI text size for digital styles */
+  top: 50%; /* Centered vertically */
+  transform: translate(-50%, -50%); /* Center horizontally and vertically */
+  left: 50%;
+}
+
+.gauge[data-style="36"] .max-text,
+.gauge[data-style="37"] .max-text,
+.gauge[data-style="38"] .max-text,
+.gauge[data-style="39"] .max-text,
+.gauge[data-style="40"] .max-text {
+  font-size: 18px; /* Max text size unchanged */
+  top: 65%; /* Positioned below PSI text */
+  transform: translate(-50%, -50%); /* Center horizontally */
+  left: 50%;
+}
+
+/* === BEZEL STYLES === */
+.gauge-bezel {
+  position: absolute;
+  width: calc(100% + var(--bezel-thickness) * 2);
+  height: calc(100% + var(--bezel-thickness) * 2);
+  top: calc(-1 * var(--bezel-thickness));
+  left: calc(-1 * var(--bezel-thickness));
+  border-radius: 50%;
+  z-index: -99999;
+  opacity: 1; /* Ensure 100% opacity */
+}
+
+/* Chrome Bezel */
+.gauge.bezel-1 .gauge-bezel {
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f0f0f0 30%, #d0d0d0 60%, #b0b0b0 85%, #8a8a8a 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #ffffff;
+  box-shadow: 
+    0 0 15px rgba(255, 255, 255, 0.6),
+    inset 0 0 12px rgba(255, 255, 255, 0.5),
+    inset 0 0 6px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Satin Black Bezel */
+.gauge.bezel-2 .gauge-bezel {
+  background: linear-gradient(135deg, #282828 0%, #1c1c1c 50%, #121212 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #2a2a2a;
+  box-shadow: 
+    0 0 10px rgba(0, 0, 0, 0.9),
+    inset 0 0 8px rgba(0, 0, 0, 1.0),
+    inset 0 0 4px rgba(40, 40, 40, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Carbon Fiber Bezel */
+.gauge.bezel-3 .gauge-bezel {
+  background: linear-gradient(135deg, #333333 0%, #1c1c1c 50%, #0a0a0a 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #2a2a2a;
+  box-shadow: 
+    0 0 15px rgba(51, 51, 51, 0.8),
+    inset 0 0 10px rgba(51, 51, 51, 0.6),
+    inset 0 0 8px rgba(26, 26, 26, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Neon Amber Bezel */
+.gauge.bezel-4 .gauge-bezel {
+  background: linear-gradient(135deg, #ffbf00 0%, #ff8c00 50%, #cc7000 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #ff9f00;
+  box-shadow: 
+    0 0 15px rgba(255, 191, 0, 0.8),
+    inset 0 0 10px rgba(255, 140, 0, 0.6),
+    inset 0 0 8px rgba(255, 140, 0, 0.8),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Neon Green Bezel */
+.gauge.bezel-5 .gauge-bezel {
+  background: linear-gradient(135deg, #00ff00 0%, #00cc00 50%, #009900 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #00e600;
+  box-shadow: 
+    0 0 15px rgba(0, 255, 0, 0.8),
+    inset 0 0 8px rgba(0, 204, 0, 0.7),
+    inset 0 0 4px rgba(0, 153, 0, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Neon Blue Bezel */
+.gauge.bezel-6 .gauge-bezel {
+  background: linear-gradient(135deg, #1e90ff 0%, #0066cc 50%, #004099 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #1e90ff;
+  box-shadow: 
+    0 0 15px rgba(30, 144, 255, 0.8),
+    inset 0 0 8px rgba(0, 102, 204, 0.7),
+    inset 0 0 4px rgba(0, 64, 153, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Neon Magenta Bezel */
+.gauge.bezel-7 .gauge-bezel {
+  background: linear-gradient(135deg, #ff00ff 0%, #cc00cc 50%, #990099 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #ff00ff;
+  box-shadow: 
+    0 0 15px rgba(255, 0, 255, 0.8),
+    inset 0 0 8px rgba(204, 0, 204, 0.7),
+    inset 0 0 4px rgba(153, 0, 153, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Neon Red Bezel */
+.gauge.bezel-8 .gauge-bezel {
+  background: linear-gradient(135deg, #ff0000 0%, #cc0000 50%, #990000 100%);
+  border: calc(100% + var(--bezel-thickness) * 2) solid #ff0000;
+  box-shadow: 
+    0 0 15px rgba(255, 0, 0, 0.8),
+    inset 0 0 8px rgba(204, 0, 0, 0.7),
+    inset 0 0 4px rgba(153, 0, 0, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Bezel 9: Retro Synthwave */
+.gauge.bezel-9 .gauge-bezel {
+  background: linear-gradient(135deg, #ff00ff 0%, #00f7ff 50%, #ff00ff 100%);
+  box-shadow: 
+    0 0 15px rgba(255, 0, 255, 0.8),
+    inset 0 0 20px rgba(0, 247, 255, 0.6),
+    0 0 30px rgba(255, 0, 255, 0.4);
+  border: 2px solid #1a1a1a;
+  animation: synthwave-glow 3s ease-in-out infinite;
+}
+@keyframes synthwave-glow {
+  0% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.8), inset 0 0 20px rgba(0, 247, 255, 0.6), 0 0 30px rgba(255, 0, 255, 0.4); }
+  50% { box-shadow: 0 0 25px rgba(255, 0, 255, 1.0), inset 0 0 30px rgba(0, 247, 255, 0.8), 0 0 40px rgba(255, 0, 255, 0.6); }
+  100% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.8), inset 0 0 20px rgba(0, 247, 255, 0.6), 0 0 30px rgba(255, 0, 255, 0.4); }
+}
+
+/* Bezel 10: Rainbow */
+.gauge.bezel-10 .gauge-bezel {
+  background: linear-gradient(
+    45deg,
+    #ff0000 0%,
+    #ff9900 20%,
+    #33cc33 40%,
+    #00ccff 60%,
+    #cc00ff 80%,
+    #ff0000 100%
+  );
+  background-size: 400%;
+  box-shadow: 
+    0 0 20px rgba(255, 255, 255, 0.7),
+    inset 0 0 15px rgba(255, 255, 255, 0.5),
+    0 0 40px rgba(255, 255, 255, 0.3);
+  border: 2px solid #000000;
+  animation: rainbow-shift 8s linear infinite;
+}
+@keyframes rainbow-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+/* === NEW BEZELS (ALL ANIMATED) === */
+.gauge.bezel-11 .gauge-bezel { /* Holographic Pulse */
+  background: linear-gradient(45deg, #00e0ff, #ff00ff, #00ff00, #ffff00); 
+  background-size: 400%; 
+  box-shadow: 0 0 20px rgba(0, 224, 255, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.4); 
+  animation: holo-shift 6s linear infinite; 
+}
+@keyframes holo-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+.gauge.bezel-12 .gauge-bezel { /* Neon Prism */
+  background: linear-gradient(45deg, #ff1744, #00e676, #2979ff, #f50057); 
+  background-size: 400%; 
+  box-shadow: 0 0 25px rgba(255, 23, 68, 0.8), inset 0 0 12px rgba(0, 230, 118, 0.5); 
+  animation: prism-flow 5s linear infinite; 
+}
+@keyframes prism-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+.gauge.bezel-13 .gauge-bezel { /* Cosmic Dust */
+  background: #000033; 
+  box-shadow: 0 0 20px rgba(0, 0, 51, 0.8); 
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px); 
+  background-size: 6px 6px; 
+  animation: cosmic-twinkle 3s ease-in-out infinite; 
+}
+@keyframes cosmic-twinkle {
+  0% { background-position: 0 0; opacity: 0.8; }
+  50% { background-position: 3px 3px; opacity: 1.0; }
+  100% { background-position: 0 0; opacity: 0.8; }
+}
+
+.gauge.bezel-14 .gauge-bezel { /* Lava Glow */
+  background: linear-gradient(45deg, #ff4500, #8b0000, #ff8c00); 
+  background-size: 300%; 
+  box-shadow: 0 0 25px rgba(255, 69, 0, 0.8), inset 0 0 12px rgba(139, 0, 0, 0.5); 
+  animation: lava-flow 4s linear infinite; 
+}
+@keyframes lava-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.gauge.bezel-15 .gauge-bezel { /* Aurora Shift */
+  background: linear-gradient(45deg, #26a69a, #00e676, #0288d1); 
+  background-size: 400%; 
+  box-shadow: 0 0 25px rgba(38, 166, 154, 0.8), inset 0 0 12px rgba(0, 230, 118, 0.5); 
+  animation: aurora-shift 7s linear infinite; 
+}
+@keyframes aurora-shift {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+.gauge.bezel-16 .gauge-bezel { /* Pulsar Wave */
+  background: #4b0082; 
+  box-shadow: 0 0 25px rgba(75, 0, 130, 0.9), inset 0 0 12px rgba(75, 0, 130, 0.5); 
+  animation: pulsar-wave 1.5s ease-in-out infinite; 
+}
+@keyframes pulsar-wave {
+  0% { box-shadow: 0 0 25px rgba(75, 0, 130, 0.9), inset 0 0 12px rgba(75, 0, 130, 0.5); }
+  50% { box-shadow: 0 0 35px rgba(75, 0, 130, 1.0), inset 0 0 15px rgba(75, 0, 130, 0.6); }
+  100% { box-shadow: 0 0 25px rgba(75, 0, 130, 0.9), inset 0 0 12px rgba(75, 0, 130, 0.5); }
+}
+
+.gauge.bezel-17 .gauge-bezel { /* Chameleon Flux */
+  background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff00ff, #ffff00); 
+  background-size: 500%; 
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), inset 0 0 12px rgba(255, 255, 255, 0.4); 
+  animation: chameleon-flux 8s linear infinite; 
+}
+@keyframes chameleon-flux {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 500% 50%; }
+}
+
+.gauge.bezel-18 .gauge-bezel { /* Mirror Edge */
+  background: linear-gradient(45deg, #e0e0e0, #ffffff, #b0b0b0); 
+  background-size: 300%; 
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), inset 0 0 10px rgba(0, 0, 0, 0.3); 
+  animation: mirror-glint 5s linear infinite; 
+}
+@keyframes mirror-glint {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.gauge.bezel-19 .gauge-bezel { /* Plasma Surge */
+  background: linear-gradient(45deg, #00ffcc, #ff00cc, #00ccff); 
+  background-size: 400%; 
+  box-shadow: 0 0 25px rgba(0, 255, 204, 0.8), inset 0 0 12px rgba(255, 0, 204, 0.5); 
+  animation: plasma-surge 6s linear infinite; 
+}
+@keyframes plasma-surge {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+.gauge.bezel-20 .gauge-bezel { /* Quantum Ring */
+  background: linear-gradient(45deg, #00e676, #6200ea, #0288d1); 
+  background-size: 400%; 
+  box-shadow: 0 0 25px rgba(0, 230, 118, 0.8), inset 0 0 12px rgba(98, 0, 234, 0.5); 
+  animation: quantum-ring 5s linear infinite; 
+}
+@keyframes quantum-ring {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
+}
+
+/* === GAUGE INNER === */
+.gauge-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  z-index: 7;
+  justify-content: center;
+}
+
+.gauge-face {
+  position: relative;
+  width: calc(100% - 8px);
+  height: calc(100% - 8px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1c2526 0%, #0a0e0f 100%);
+  border: 4px solid #ffffff;
+  z-index: 5;
+  box-shadow: 
+    0 0 12px rgba(255, 255, 255, 0.3),
+    inset 0 0 8px rgba(0, 0, 0, 0.5);
+}
+
+/* === NEEDLE === */
+.needle {
+  position: absolute;
+  width: var(--needle-width);
+  height: 40%;
+  top: 10%;
+  left: calc(50% - var(--needle-width) / 2);
+  background: linear-gradient(90deg, #ffffff 0%, #b0b0b0 100%);
+  transform-origin: 50% 100%;
+  transform: rotate(-100deg); /* Start at top */
+  transition: none;
+  z-index: 15;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* === CENTER CAP === */
+.gauge-center {
+  position: absolute;
+  width: var(--center-size);
+  height: var(--center-size);
+  border-radius: 50%;
+  z-index: 20;
+  background: radial-gradient(circle, #ffffff, #b0b0b0);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+}
+
+/* === TEXT ELEMENTS === */
+.psi-text {
+  position: fixed;
+  left: 50%;
+  top: 54%;
+  transform: translateX(-50%);
+  font-family: var(--font-family);
+  font-size: 24px;
+  font-weight: 700;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  z-index: 10;
+  letter-spacing: 1.2px;
+}
+
+.max-text {
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  transform: translateX(-50%);
+  font-family: var(--font-family);
+  font-size: 32px;
+  font-weight: 700;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9);
+  z-index: 10;
+  letter-spacing: 1.2px;
+}
+
+/* === VISIBILITY STATES === */
+.gauge.visible {
+  opacity: 1;
+}
+
+.gauge.hidden {
+  opacity: 0;
+}
+
+/* === STYLE VARIANTS === */
+/* Style 1: Classic Analog Chrome */
+.gauge.style-1 .gauge-face { 
+  background: linear-gradient(135deg, #3c3f41 0%, #1c2526 100%); 
+  border: 4px solid #ffffff; 
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3); 
+}
+.gauge.style-1 .gauge-center { 
+  background: radial-gradient(circle, #ffffff, #b0b0b0); 
+}
+.gauge.style-1 .needle { 
+  background: linear-gradient(90deg, #ffffff 0%, #b0b0b0 100%); 
+}
+.gauge.style-1 .psi-text { color: #ffffff; }
+.gauge.style-1 .max-text { color: #cccccc; }
+
+/* Style 2: Digital HUD (Cyan) */
+.gauge.style-2 .gauge-face { 
+  background: linear-gradient(135deg, #0a1e2e 0%, #020a14 100%); 
+  border: 4px solid #00f7ff; 
+  box-shadow: 0 0 18px rgba(0, 247, 255, 0.4); 
+}
+.gauge.style-2 .gauge-center { 
+  background: radial-gradient(circle, #00f7ff, #00888f); 
+  box-shadow: 0 0 10px rgba(0, 247, 255, 0.7); 
+}
+.gauge.style-2 .needle { 
+  background: linear-gradient(90deg, #a0f7ff 0%, #00f7ff 100%); 
+  box-shadow: 0 2px 8px rgba(0, 247, 255, 0.6); 
+}
+.gauge.style-2 .psi-text { color: #00f7ff; text-shadow: 0 0 8px rgba(0, 247, 255, 0.6); }
+.gauge.style-2 .max-text { color: #80fbff; }
+
+/* Style 3: Retro Orange JDM */
+.gauge.style-3 .gauge-face { 
+  background: linear-gradient(135deg, #2e1a0a 0%, #140a02 100%); 
+  border: 4px solid #ff8c00; 
+  box-shadow: 0 0 18px rgba(255, 140, 0, 0.4); 
+}
+.gauge.style-3 .gauge-center { 
+  background: radial-gradient(circle, #ff8c00, #994c00); 
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.7); 
+}
+.gauge.style-3 .needle { 
+  background: linear-gradient(90deg, #ffd8a8 0%, #ff8c00 100%); 
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.6); 
+}
+.gauge.style-3 .psi-text { color: #ff8c00; text-shadow: 0 0 8px rgba(255, 140, 0, 0.6); }
+.gauge.style-3 .max-text { color: #ffbf00; }
+
+/* Style 4: Frost green
+.gauge.style-4 .gauge-face { 
+  background: linear-gradient(135deg, #0a1a0a 0%, #031003 100%); /* Dark green base */
+  border: 4px solid #00ff00; /* Neon green border */
+  box-shadow: 0 0 18px rgba(0, 255, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+.gauge.style-4 .gauge-face::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAAXNSR0IArs4c6QAAAB5JREFUCB1jZGBgYGBhZmBgYGBgYGBgYGBgYGBgYGBgYGBgYAAAAAElFTkSuQmCC'); /* Simple digital rain pattern */
+  background-size: 20px 20px;
+  opacity: 0.3;
+  animation: matrix-rain 10s linear infinite;
+}
+@keyframes matrix-rain {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+.gauge.style-4 .gauge-center { 
+  background: #00cc00; /* Darker neon green */
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.7); 
+}
+.gauge.style-4 .needle { 
+  background: linear-gradient(90deg, #99ff99 0%, #00ff00 100%); /* Neon green gradient */
+  box-shadow: 0 2px 8px rgba(0, 255, 0, 0.6); 
+}
+.gauge.style-4 .psi-text { 
+  color: #00ff00; 
+  text-shadow: 0 0 8px rgba(0, 255, 0, 0.7); 
+}
+.gauge.style-4 .max-text { 
+  color: #99ff99; 
+}
+
+/* Style 5: Neon Green Matrix */
+.gauge.style-5 .gauge-face { 
+  background: linear-gradient(135deg, #0a2e0a 0%, #021402 100%); 
+  border: 4px solid #00ff00; 
+  box-shadow: 0 0 18px rgba(0, 255, 0, 0.4); 
+}
+.gauge.style-5 .gauge-center { 
+  background: radial-gradient(circle, #00ff00, #008800); 
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.7); 
+}
+.gauge.style-5 .needle { 
+  background: linear-gradient(90deg, #99ff99 0%, #00ff00 100%); 
+  box-shadow: 0 2px 8px rgba(0, 255, 0, 0.6); 
+}
+.gauge.style-5 .psi-text { color: #00ff00; text-shadow: 0 0 8px rgba(0, 255, 0, 0.6); }
+.gauge.style-5 .max-text { color: #80ff80; }
+
+/* Style 6: Carbon Fiber Sport */
+.gauge.style-6 .gauge-face { 
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" preserveAspectRatio="none"><defs><pattern id="carbon" patternUnits="userSpaceOnUse" width="10" height="10"><rect width="10" height="10" fill="#1c2526"/><rect width="5" height="5" fill="#2e2e2e"/><rect x="5" y="5" width="5" height="5" fill="#2e2e2e"/></pattern></defs><rect width="100%" height="100%" fill="url(#carbon)"/></svg>'); 
+  border: 4px solid #333333; 
+  box-shadow: 0 0 12px rgba(51, 51, 51, 0.4); 
+}
+.gauge.style-6 .gauge-center { 
+  background: radial-gradient(circle, #4d4d4d, #2e2e2e); 
+  box-shadow: 0 0 8px rgba(51, 51, 51, 0.7); 
+}
+.gauge.style-6 .needle { 
+  background: linear-gradient(90deg, #ffffff 0%, #4d4d4d 100%); 
+  box-shadow: 0 2px 8px rgba(51, 51, 51, 0.6); 
+}
+.gauge.style-6 .psi-text { color: #ffffff; text-shadow: 0 0 6px rgba(255, 255, 255, 0.6); }
+.gauge.style-6 .max-text { color: #cccccc; }
+
+/* Style 7: Red Racing */
+.gauge.style-7 .gauge-face { 
+  background: linear-gradient(135deg, #2e0a0a 0%, #140202 100%); 
+  border: 4px solid #ff0000; 
+  box-shadow: 0 0 18px rgba(255, 0, 0, 0.4); 
+}
+.gauge.style-7 .gauge-center { 
+  background: radial-gradient(circle, #ff0000, #990000); 
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.7); 
+}
+.gauge.style-7 .needle { 
+  background: linear-gradient(90deg, #ff9999 0%, #ff0000 100%); 
+  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.6); 
+}
+.gauge.style-7 .psi-text { color: #ff0000; text-shadow: 0 0 8px rgba(255, 0, 0, 0.6); }
+.gauge.style-7 .max-text { color: #ff6666; }
+
+/* Style 8: Blue Glass */
+.gauge.style-8 .gauge-face { 
+  background: linear-gradient(135deg, #0a1a2e 0%, #020a14 100%); 
+  border: 4px solid #1e90ff; 
+  box-shadow: 0 0 18px rgba(30, 144, 255, 0.4); 
+}
+.gauge.style-8 .gauge-center { 
+  background: radial-gradient(circle, #1e90ff, #004d99); 
+  box-shadow: 0 0 10px rgba(30, 144, 255, 0.7); 
+}
+.gauge.style-8 .needle { 
+  background: linear-gradient(90deg, #99ccff 0%, #1e90ff 100%); 
+  box-shadow: 0 2px 8px rgba(30, 144, 255, 0.6); 
+}
+.gauge.style-8 .psi-text { color: #1e90ff; text-shadow: 0 0 8px rgba(30, 144, 255, 0.6); }
+.gauge.style-8 .max-text { color: #66b2ff; }
+
+/* Style 9: Purple Phantom */
+.gauge.style-9 .gauge-face { 
+  background: linear-gradient(135deg, #2e0a2e 0%, #140214 100%); 
+  border: 4px solid #800080; 
+  box-shadow: 0 0 18px rgba(128, 0, 128, 0.4); 
+}
+.gauge.style-9 .gauge-center { 
+  background: radial-gradient(circle, #800080, #4d004d); 
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.7); 
+}
+.gauge.style-9 .needle { 
+  background: linear-gradient(90deg, #cc99cc 0%, #800080 100%); 
+  box-shadow: 0 2px 8px rgba(128, 0, 128, 0.6); 
+}
+.gauge.style-9 .psi-text { color: #800080; text-shadow: 0 0 8px rgba(128, 0, 128, 0.6); }
+.gauge.style-9 .max-text { color: #b266b2; }
+
+/* Style 10: Emerald Glow */
+.gauge.style-10 .gauge-face { 
+  background: linear-gradient(135deg, #0a2e1a 0%, #02140a 100%); 
+  border: 4px solid #2e7d32; 
+  box-shadow: 0 0 18px rgba(46, 125, 50, 0.4); 
+}
+.gauge.style-10 .gauge-center { 
+  background: radial-gradient(circle, #2e7d32, #1b4d1e); 
+  box-shadow: 0 0 10px rgba(46, 125, 50, 0.7); 
+}
+.gauge.style-10 .needle { 
+  background: linear-gradient(90deg, #99cc99 0%, #2e7d32 100%); 
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.6); 
+}
+.gauge.style-10 .psi-text { color: #2e7d32; text-shadow: 0 0 8px rgba(46, 125, 50, 0.6); }
+.gauge.style-10 .max-text { color: #66b266; }
+
+/* Style 11: Amber Sunset */
+.gauge.style-11 .gauge-face { 
+  background: linear-gradient(135deg, #2e1a0a 0%, #140a02 100%); 
+  border: 4px solid #ff8c00; 
+  box-shadow: 0 0 18px rgba(255, 140, 0, 0.4); 
+}
+.gauge.style-11 .gauge-center { 
+  background: radial-gradient(circle, #ff8c00, #994c00); 
+  box-shadow: 0 0 10px rgba(255, 140, 0, 0.7); 
+}
+.gauge.style-11 .needle { 
+  background: linear-gradient(90deg, #ffd8a8 0%, #ff8c00 100%); 
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.6); 
+}
+.gauge.style-11 .psi-text { color: #ff8c00; text-shadow: 0 0 8px rgba(255, 140, 0, 0.6); }
+.gauge.style-11 .max-text { color: #ffbf00; }
+
+/* Style 12: Sky Blue Track */
+.gauge.style-12 .gauge-face { 
+  background: linear-gradient(135deg, #0a1e2e 0%, #020a14 100%); 
+  border: 4px solid #0288d1; 
+  box-shadow: 0 0 18px rgba(2, 136, 209, 0.4); 
+}
+.gauge.style-12 .gauge-center { 
+  background: radial-gradient(circle, #0288d1, #015570); 
+  box-shadow: 0 0 10px rgba(2, 136, 209, 0.7); 
+}
+.gauge.style-12 .needle { 
+  background: linear-gradient(90deg, #80d8ff 0%, #0288d1 100%); 
+  box-shadow: 0 2px 8px rgba(2, 136, 209, 0.6); 
+}
+.gauge.style-12 .psi-text { color: #0288d1; text-shadow: 0 0 8px rgba(2, 136, 209, 0.6); }
+.gauge.style-12 .max-text { color: #4fc3f7; }
+
+/* Style 13: Pink Drift */
+.gauge.style-13 .gauge-face { 
+  background: linear-gradient(135deg, #2e0a1e 0%, #14020a 100%); 
+  border: 4px solid #ff4081; 
+  box-shadow: 0 0 18px rgba(255, 64, 129, 0.4); 
+}
+.gauge.style-13 .gauge-center { 
+  background: radial-gradient(circle, #ff4081, #99004d); 
+  box-shadow: 0 0 10px rgba(255, 64, 129, 0.7); 
+}
+.gauge.style-13 .needle { 
+  background: linear-gradient(90deg, #ff80ab 0%, #ff4081 100%); 
+  box-shadow: 0 2px 8px rgba(255, 64, 129, 0.6); 
+}
+.gauge.style-13 .psi-text { color: #ff4081; text-shadow: 0 0 8px rgba(255, 64, 129, 0.6); }
+.gauge.style-13 .max-text { color: #ff80ab; }
+
+/* Style 14: Lime Electric */
+.gauge.style-14 .gauge-face { 
+  background: linear-gradient(135deg, #1a2e0a 0%, #0a1402 100%); 
+  border: 4px solid #00e676; 
+  box-shadow: 0 0 18px rgba(0, 230, 118, 0.4); 
+}
+.gauge.style-14 .gauge-center { 
+  background: radial-gradient(circle, #00e676, #008f39); 
+  box-shadow: 0 0 10px rgba(0, 230, 118, 0.7); 
+}
+.gauge.style-14 .needle { 
+  background: linear-gradient(90deg, #b2ff59 0%, #00e676 100%); 
+  box-shadow: 0 2px 8px rgba(0, 230, 118, 0.6); 
+}
+.gauge.style-14 .psi-text { color: #00e676; text-shadow: 0 0 8px rgba(0, 230, 118, 0.6); }
+.gauge.style-14 .max-text { color: #69f0ae; }
+
+/* Style 15: Gold Luxury */
+.gauge.style-15 .gauge-face { 
+  background: linear-gradient(135deg, #2e2a0a 0%, #141002 100%); 
+  border: 4px solid #ffd700; 
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.4); 
+}
+.gauge.style-15 .gauge-center { 
+  background: radial-gradient(circle, #ffd700, #998100); 
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.7); 
+}
+.gauge.style-15 .needle { 
+  background: linear-gradient(90deg, #ffee58 0%, #ffd700 100%); 
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6); 
+}
+.gauge.style-15 .psi-text { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
+.gauge.style-15 .max-text { color: #ffeb3b; }
+
+/* Style 16: Teal Wave */
+.gauge.style-16 .gauge-face { 
+  background: linear-gradient(135deg, #0a2e2e 0%, #021414 100%); 
+  border: 4px solid #26a69a; 
+  box-shadow: 0 0 18px rgba(38, 166, 154, 0.4); 
+}
+.gauge.style-16 .gauge-center { 
+  background: radial-gradient(circle, #26a69a, #17655e); 
+  box-shadow: 0 0 10px rgba(38, 166, 154, 0.7); 
+}
+.gauge.style-16 .needle { 
+  background: linear-gradient(90deg, #80cbc4 0%, #26a69a 100%); 
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.6); 
+}
+.gauge.style-16 .psi-text { color: #26a69a; text-shadow: 0 0 8px rgba(38, 166, 154, 0.6); }
+.gauge.style-16 .max-text { color: #4db6ac; }
+
+/* Style 17: Violet Storm */
+.gauge.style-17 .gauge-face { 
+  background: linear-gradient(135deg, #2e0a2e 0%, #140214 100%); 
+  border: 4px solid #8e24aa; 
+  box-shadow: 0 0 18px rgba(142, 36, 170, 0.4); 
+}
+.gauge.style-17 .gauge-center { 
+  background: radial-gradient(circle, #8e24aa, #551666); 
+  box-shadow: 0 0 10px rgba(142, 36, 170, 0.7); 
+}
+.gauge.style-17 .needle { 
+  background: linear-gradient(90deg, #ce93d8 0%, #8e24aa 100%); 
+  box-shadow: 0 2px 8px rgba(142, 36, 170, 0.6); 
+}
+.gauge.style-17 .psi-text { color: #8e24aa; text-shadow: 0 0 8px rgba(142, 36, 170, 0.6); }
+.gauge.style-17 .max-text { color: #ba68c8; }
+
+/* Style 18: Mint Fresh */
+.gauge.style-18 .gauge-face { 
+  background: linear-gradient(135deg, #0a2e1e 0%, #02140a 100%); 
+  border: 4px solid #26a69a; 
+  box-shadow: 0 0 18px rgba(38, 166, 154, 0.4); 
+}
+.gauge.style-18 .gauge-center { 
+  background: radial-gradient(circle, #26a69a, #17655e); 
+  box-shadow: 0 0 10px rgba(38, 166, 154, 0.7); 
+}
+.gauge.style-18 .needle { 
+  background: linear-gradient(90deg, #80cbc4 0%, #26a69a 100%); 
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.6); 
+}
+.gauge.style-18 .psi-text { color: #26a69a; text-shadow: 0 0 8px rgba(38, 166, 154, 0.6); }
+.gauge.style-18 .max-text { color: #4db6ac; }
+
+/* Style 19: Bronze Muscle */
+.gauge.style-19 .gauge-face { 
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" preserveAspectRatio="none"><defs><pattern id="bronze" patternUnits="userSpaceOnUse" width="10" height="10"><rect width="10" height="10" fill="#3c2f2f"/><rect width="5" height="5" fill="#4a3727"/><rect x="5" y="5" width="5" height="5" fill="#4a3727"/></pattern></defs><rect width="100%" height="100%" fill="url(#bronze)"/></svg>'); 
+}
+.gauge.style-19 .gauge-center { 
+  background: radial-gradient(circle, #ff9f43, #bf6000); 
+  box-shadow: 0 0 10px rgba(191, 96, 0, 0.7); 
+}
+.gauge.style-19 .needle { 
+  background: linear-gradient(90deg, #ffe5b4 0%, #bf6000 100%); 
+  box-shadow: 0 2px 8px rgba(191, 96, 0, 0.6); 
+}
+.gauge.style-19 .psi-text { color: #ff9f43; text-shadow: 0 0 8px rgba(191, 96, 0, 0.6); }
+.gauge.style-19 .max-text { color: #ffb366; }
+
+/* Style 20: Azure Pro */
+.gauge.style-20 .gauge-face { 
+  background: linear-gradient(135deg, #0a1e2e 0%, #020a14 100%); 
+  border: 4px solid #2196f3; 
+  box-shadow: 0 0 18px rgba(33, 150, 243, 0.4); 
+}
+.gauge.style-20 .gauge-center { 
+  background: #64b5f6; 
+  box-shadow: 0 0 10px rgba(100, 181, 246, 0.7); 
+}
+.gauge.style-20 .needle { 
+  background: linear-gradient(90deg, #bbdefb 0%, #2196f3 100%); 
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.6); 
+}
+.gauge.style-20 .psi-text { color: #64b5f6; text-shadow: 0 0 8px rgba(100, 181, 246, 0.6); }
+.gauge.style-20 .max-text { color: #90caf9; }
+
+/* Style 21: Crimson Fury */
+.gauge.style-21 .gauge-face { 
+  background: linear-gradient(135deg, #2e0a0a 0%, #140202 100%); 
+  border: 4px solid #d32f2f; 
+  box-shadow: 0 0 18px rgba(211, 47, 47, 0.4); 
+}
+.gauge.style-21 .gauge-center { 
+  background: #ef5350; 
+  box-shadow: 0 0 10px rgba(239, 83, 80, 0.7); 
+}
+.gauge.style-21 .needle { 
+  background: linear-gradient(90deg, #ffcdd2 0%, #d32f2f 100%); 
+  box-shadow: 0 2px 8px rgba(211, 47, 47, 0.6); 
+}
+.gauge.style-21 .psi-text { color: #ef5350; text-shadow: 0 0 8px rgba(239, 83, 80, 0.6); }
+.gauge.style-21 .max-text { color: #e57373; }
+
+/* Style 22: Aqua Turbo */
+.gauge.style-22 .gauge-face { 
+  background: linear-gradient(135deg, #0a2e26 0%, #021814 100%); 
+  border: 4px solid #00bfa5; 
+  box-shadow: 0 0 18px rgba(0, 191, 165, 0.4); 
+}
+.gauge.style-22 .gauge-center { 
+  background: #1de9b6; 
+  box-shadow: 0 0 10px rgba(29, 233, 182, 0.7); 
+}
+.gauge.style-22 .needle { 
+  background: linear-gradient(90deg, #a7ffeb 0%, #00bfa5 100%); 
+  box-shadow: 0 2px 8px rgba(0, 191, 165, 0.6); 
+}
+.gauge.style-22 .psi-text { color: #1de9b6; text-shadow: 0 0 8px rgba(29, 233, 182, 0.7); }
+.gauge.style-22 .max-text { color: #64ffda; }
+
+/* Style 23: Orchid Night */
+.gauge.style-23 .gauge-face { 
+  background: linear-gradient(135deg, #1e0a2e 0%, #0a0214 100%); 
+  border: 4px solid #7b1fa2; 
+  box-shadow: 0 0 18px rgba(123, 31, 162, 0.4); 
+}
+.gauge.style-23 .gauge-center { 
+  background: #ab47bc; 
+  box-shadow: 0 0 10px rgba(171, 71, 188, 0.7); 
+}
+.gauge.style-23 .needle { 
+  background: linear-gradient(90deg, #e1bee7 0%, #7b1fa2 100%); 
+  box-shadow: 0 2px 8px rgba(123, 31, 162, 0.6); 
+}
+.gauge.style-23 .psi-text { color: #ab47bc; text-shadow: 0 0 8px rgba(171, 71, 188, 0.6); }
+.gauge.style-23 .max-text { color: #ba68c8; }
+
+/* Style 24: Chartreuse Flash */
+.gauge.style-24 .gauge-face { 
+  background: linear-gradient(135deg, #1a2e0a 0%, #0a1402 100%); 
+  border: 4px solid #aeea00; 
+  box-shadow: 0 0 18px rgba(174, 234, 0, 0.4); 
+}
+.gauge.style-24 .gauge-center { 
+  background: #c6ff00; 
+  box-shadow: 0 0 10px rgba(198, 255, 0, 0.7); 
+}
+.gauge.style-24 .needle { 
+  background: linear-gradient(90deg, #f4ff81 0%, #aeea00 100%); 
+  box-shadow: 0 2px 8px rgba(174, 234, 0, 0.6); 
+}
+.gauge.style-24 .psi-text { color: #c6ff00; text-shadow: 0 0 8px rgba(198, 255, 0, 0.7); }
+.gauge.style-24 .max-text { color: #e6ff80; }
+
+/* Style 25: Ice Blue Arctic */
+.gauge.style-25 .gauge-face { 
+  background: linear-gradient(135deg, #0a1a2e 0%, #020a14 100%); 
+  border: 4px solid #00e5ff; 
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.4); 
+}
+.gauge.style-25 .gauge-center { 
+  background: #18ffff; 
+  box-shadow: 0 0 10px rgba(24, 255, 255, 0.7); 
+}
+.gauge.style-25 .needle { 
+  background: linear-gradient(90deg, #e0f7fa 0%, #00e5ff 100%); 
+  box-shadow: 0 2px 8px rgba(0, 229, 255, 0.6); 
+}
+.gauge.style-25 .psi-text { color: #18ffff; text-shadow: 0 0 8px rgba(24, 255, 255, 0.7); }
+.gauge.style-25 .max-text { color: #84ffff; }
+
+/* Style 26: Stealth Blackout (Analog) */
+.gauge.style-26 .gauge-face { 
+  background: linear-gradient(135deg, #0a0a0a 0%, #000000 100%); 
+  border: 4px solid #212121; 
+  box-shadow: 0 0 12px rgba(33, 33, 33, 0.6); 
+}
+.gauge.style-26 .gauge-center { 
+  background: #424242; 
+  box-shadow: 0 0 8px rgba(66, 66, 66, 0.7); 
+}
+.gauge.style-26 .needle { 
+  background: linear-gradient(90deg, #616161 0%, #212121 100%); 
+  box-shadow: 0 2px 6px rgba(33, 33, 33, 0.6); 
+}
+.gauge.style-26 .psi-text { 
+  color: #424242; 
+  text-shadow: 0 0 6px rgba(66, 66, 66, 0.7); 
+}
+.gauge.style-26 .max-text { 
+  color: #757575; 
+}
+
+/* Style 27: Cosmic Nebula (Analog) */
+.gauge.style-27 .gauge-face { 
+  background: linear-gradient(135deg, #1a0033 0%, #0a001a 100%); 
+  border: 4px solid #6200ea; 
+  box-shadow: 0 0 18px rgba(98, 0, 234, 0.5); 
+}
+.gauge.style-27 .gauge-center { 
+  background: #b388ff; 
+  box-shadow: 0 0 10px rgba(179, 136, 255, 0.7); 
+}
+.gauge.style-27 .needle { 
+  background: linear-gradient(90deg, #ede7f6 0%, #6200ea 100%); 
+  box-shadow: 0 2px 8px rgba(98, 0, 234, 0.6); 
+}
+.gauge.style-27 .psi-text { 
+  color: #b388ff; 
+  text-shadow: 0 0 8px rgba(179, 136, 255, 0.7); 
+}
+.gauge.style-27 .max-text { 
+  color: #d1c4e9; 
+}
+
+/* Style 28: Inferno Blaze (Analog) */
+.gauge.style-28 .gauge-face { 
+  background: linear-gradient(135deg, #3d0a00 0%, #1a0400 100%); 
+  border: 4px solid #ff5722; 
+  box-shadow: 0 0 18px rgba(255, 87, 34, 0.5); 
+}
+.gauge.style-28 .gauge-center { 
+  background: #ff8a65; 
+  box-shadow: 0 0 10px rgba(255, 138, 101, 0.7); 
+}
+.gauge.style-28 .needle { 
+  background: linear-gradient(90deg, #ffccbc 0%, #ff5722 100%); 
+  box-shadow: 0 2px 8px rgba(255, 87, 34, 0.6); 
+}
+.gauge.style-28 .psi-text { 
+  color: #ff8a65; 
+  text-shadow: 0 0 8px rgba(255, 138, 101, 0.7); 
+}
+.gauge.style-28 .max-text { 
+  color: #ffab91; 
+}
+
+/* Style 29: Aurora Borealis (Analog) */
+.gauge.style-29 .gauge-face { 
+  background: linear-gradient(135deg, #00251a 0%, #00120a 100%); 
+  border: 4px solid #26a69a; 
+  box-shadow: 0 0 18px rgba(38, 166, 154, 0.5); 
+}
+.gauge.style-29 .gauge-center { 
+  background: #4db6ac; 
+  box-shadow: 0 0 10px rgba(77, 182, 172, 0.7); 
+}
+.gauge.style-29 .needle { 
+  background: linear-gradient(90deg, #b2dfdb 0%, #26a69a 100%); 
+  box-shadow: 0 2px 8px rgba(38, 166, 154, 0.6); 
+}
+.gauge.style-29 .psi-text { 
+  color: #4db6ac; 
+  text-shadow: 0 0 8px rgba(77, 182, 172, 0.7); 
+}
+.gauge.style-29 .max-text { 
+  color: #80cbc4; 
+}
+
+/* Style 30: Vaporwave Aesthetic (Analog) */
+.gauge.style-30 .gauge-face { 
+  background: linear-gradient(135deg, #ff4081 0%, #7c4dff 100%); 
+  border: 4px solid #f06292; 
+  box-shadow: 0 0 18px rgba(240, 98, 146, 0.5); 
+}
+.gauge.style-30 .gauge-center { 
+  background: #ce93d8; 
+  box-shadow: 0 0 10px rgba(206, 147, 216, 0.7); 
+}
+.gauge.style-30 .needle { 
+  background: linear-gradient(90deg, #f8bbd0 0%, #f06292 100%); 
+  box-shadow: 0 2px 8px rgba(240, 98, 146, 0.6); 
+}
+.gauge.style-30 .psi-text { 
+  color: #ce93d8; 
+  text-shadow: 0 0 8px rgba(206, 147, 216, 0.7); 
+}
+.gauge.style-30 .max-text { 
+  color: #f48fb1; 
+}
+
+/* Style 31: Cyberpunk Neon (Analog) */
+.gauge.style-31 .gauge-face { 
+  background: linear-gradient(135deg, #1a1a2e 0%, #0a0a14 100%); 
+  border: 4px solid #ff1744; 
+  box-shadow: 0 0 18px rgba(255, 23, 68, 0.5); 
+}
+.gauge.style-31 .gauge-center { 
+  background: #ff4081; 
+  box-shadow: 0 0 10px rgba(255, 64, 129, 0.7); 
+}
+.gauge.style-31 .needle { 
+  background: linear-gradient(90deg, #ffc1cc 0%, #ff1744 100%); 
+  box-shadow: 0 2px 8px rgba(255, 23, 68, 0.6); 
+}
+.gauge.style-31 .psi-text { 
+  color: #ff4081; 
+  text-shadow: 0 0 8px rgba(255, 64, 129, 0.7); 
+}
+.gauge.style-31 .max-text { 
+  color: #ff8a80; 
+}
+
+/* Style 32: Crystal Prism (Analog) */
+.gauge.style-32 .gauge-face { 
+  background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); 
+  border: 4px solid #00bcd4; 
+  box-shadow: 0 0 18px rgba(0, 188, 212, 0.5); 
+}
+.gauge.style-32 .gauge-center { 
+  background: #26c6da; 
+  box-shadow: 0 0 10px rgba(38, 198, 218, 0.7); 
+}
+.gauge.style-32 .needle { 
+  background: linear-gradient(90deg, #b2ebf2 0%, #00bcd4 100%); 
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.6); 
+}
+.gauge.style-32 .psi-text { 
+  color: #26c6da; 
+  text-shadow: 0 0 8px rgba(38, 198, 218, 0.7); 
+}
+.gauge.style-32 .max-text { 
+  color: #80deea; 
+}
+
+/* Style 33: Magma Flow (Analog) */
+.gauge.style-33 .gauge-face { 
+  background: linear-gradient(135deg, #3f0a00 0%, #1f0500 100%); 
+  border: 4px solid #e64a19; 
+  box-shadow: 0 0 18px rgba(230, 74, 25, 0.5); 
+}
+.gauge.style-33 .gauge-center { 
+  background: #ff7043; 
+  box-shadow: 0 0 10px rgba(255, 112, 67, 0.7); 
+}
+.gauge.style-33 .needle { 
+  background: linear-gradient(90deg, #ffccbc 0%, #e64a19 100%); 
+  box-shadow: 0 2px 8px rgba(230, 74, 25, 0.6); 
+}
+.gauge.style-33 .psi-text { 
+  color: #ff7043; 
+  text-shadow: 0 0 8px rgba(255, 112, 67, 0.7); 
+}
+.gauge.style-33 .max-text { 
+  color: #ffab91; 
+}
+
+/* Style 34: Solar Eclipse (Analog) */
+.gauge.style-34 .gauge-face { 
+  background: linear-gradient(135deg, #000000 0%, #1c2526 100%); 
+  border: 4px solid #ffd700; 
+  box-shadow: 0 0 18px rgba(255, 215, 0, 0.5); 
+}
+.gauge.style-34 .gauge-center { 
+  background: #ffeb3b; 
+  box-shadow: 0 0 10px rgba(255, 235, 59, 0.7); 
+}
+.gauge.style-34 .needle { 
+  background: linear-gradient(90deg, #fff9c4 0%, #ffd700 100%); 
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.6); 
+}
+.gauge.style-34 .psi-text { 
+  color: #ffeb3b; 
+  text-shadow: 0 0 8px rgba(255, 235, 59, 0.7); 
+}
+.gauge.style-34 .max-text { 
+  color: #fff176; 
+}
+
+/* Style 35: Zenith Horizon (Analog) */
+.gauge.style-35 .gauge-face { 
+  background: linear-gradient(135deg, #0a2e3a 0%, #02141a 100%); 
+  border: 4px solid #0288d1; 
+  box-shadow: 0 0 18px rgba(2, 136, 209, 0.5); 
+}
+.gauge.style-35 .gauge-center { 
+  background: #03a9f4; 
+  box-shadow: 0 0 10px rgba(3, 169, 244, 0.7); 
+}
+.gauge.style-35 .needle { 
+  background: linear-gradient(90deg, #b3e5fc 0%, #0288d1 100%); 
+  box-shadow: 0 2px 8px rgba(2, 136, 209, 0.6); 
+}
+.gauge.style-35 .psi-text { 
+  color: #03a9f4; 
+  text-shadow: 0 0 8px rgba(3, 169, 244, 0.7); 
+}
+.gauge.style-35 .max-text { 
+  color: #4fc3f7; 
+}
+
+/* Style 36: Holographic Digital (No Needle) */
+.gauge.style-36 .gauge-face { 
+  background: linear-gradient(135deg, #0a1c2e 0%, #001020 100%); 
+  border: 4px solid #00e0ff; 
+  box-shadow: 0 0 25px rgba(0, 224, 255, 0.6), inset 0 0 15px rgba(0, 224, 255, 0.4); 
+  animation: holo-pulse 3s ease-in-out infinite; 
+}
+.gauge.style-36 .gauge-center { 
+  display: none; 
+}
+.gauge.style-36 .needle { 
+  display: none; 
+}
+.gauge.style-36 .psi-text { 
+  color: #00e0ff; 
+  font-family: 'Orbitron', sans-serif; 
+  text-shadow: 0 0 12px rgba(0, 224, 255, 0.9); 
+  animation: digital-flicker 2s infinite; 
+}
+.gauge.style-36 .max-text { 
+  color: #80f0ff; 
+}
+.gauge.style-36 .gauge-ticks { 
+  display: none; 
+}
+@keyframes holo-pulse {
+  0% { box-shadow: 0 0 25px rgba(0, 224, 255, 0.6), inset 0 0 15px rgba(0, 224, 255, 0.4); }
+  50% { box-shadow: 0 0 35px rgba(0, 224, 255, 0.8), inset 0 0 20px rgba(0, 224, 255, 0.5); }
+  100% { box-shadow: 0 0 25px rgba(0, 224, 255, 0.6), inset 0 0 15px rgba(0, 224, 255, 0.4); }
+}
+@keyframes digital-flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.95; }
+}
+
+/* Style 37: 80s Retro Synthwave Digital (No Needle) */
+.gauge.style-37 .gauge-face { 
+  background: linear-gradient(135deg, #2a0a3a 0%, #100018 100%); 
+  border: 4px solid #ff007a; 
+  box-shadow: 0 0 25px rgba(255, 0, 122, 0.7), inset 0 0 15px rgba(255, 0, 122, 0.4); 
+  animation: synth-pulse 2s ease-in-out infinite; 
+}
+.gauge.style-37 .gauge-center { 
+  display: none; 
+}
+.gauge.style-37 .needle { 
+  display: none; 
+}
+.gauge.style-37 .psi-text { 
+  color: #ff007a; 
+  font-family: 'VCR OSD Mono', monospace; 
+  text-shadow: 0 0 15px rgba(255, 0, 122, 0.9), 0 0 25px rgba(255, 0, 122, 0.5); 
+  animation: synth-flicker 1.5s infinite; 
+}
+.gauge.style-37 .max-text { 
+  color: #ff66b2; 
+}
+.gauge.style-37 .gauge-ticks { 
+  display: none; 
+}
+@keyframes synth-pulse {
+  0% { box-shadow: 0 0 25px rgba(255, 0, 122, 0.7), inset 0 0 15px rgba(255, 0, 122, 0.4); }
+  50% { box-shadow: 0 0 35px rgba(255, 0, 122, 0.9), inset 0 0 20px rgba(255, 0, 122, 0.5); }
+  100% { box-shadow: 0 0 25px rgba(255, 0, 122, 0.7), inset 0 0 15px rgba(255, 0, 122, 0.4); }
+}
+@keyframes synth-flicker {
+  0%, 100% { opacity: 1; }
+  20%, 80% { opacity: 0.9; }
+  50% { opacity: 0.85; }
+}
+
+/* Style 38: Modern Digital (No Needle) */
+.gauge.style-38 .gauge-face { 
+  background: linear-gradient(135deg, #1c2526 0%, #0a0f10 100%); 
+  border: 4px solid #00c4b4; 
+  box-shadow: 0 0 25px rgba(0, 196, 180, 0.6), inset 0 0 15px rgba(0, 196, 180, 0.4); 
+  animation: modern-pulse 2.5s ease-in-out infinite; 
+}
+.gauge.style-38 .gauge-center { 
+  display: none; 
+}
+.gauge.style-38 .needle { 
+  display: none; 
+}
+.gauge.style-38 .psi-text { 
+  color: #00c4b4; 
+  font-family: 'Orbitron', sans-serif; 
+  text-shadow: 0 0 12px rgba(0, 196, 180, 0.9); 
+  animation: digital-flicker 2s infinite; 
+}
+.gauge.style-38 .max-text { 
+  color: #4dd0e1; 
+}
+.gauge.style-38 .gauge-ticks { 
+  display: none; 
+}
+@keyframes modern-pulse {
+  0% { box-shadow: 0 0 25px rgba(0, 196, 180, 0.6), inset 0 0 15px rgba(0, 196, 180, 0.4); }
+  50% { box-shadow: 0 0 35px rgba(0, 196, 180, 0.8), inset 0 0 20px rgba(0, 196, 180, 0.5); }
+  100% { box-shadow: 0 0 25px rgba(0, 196, 180, 0.6), inset 0 0 15px rgba(0, 196, 180, 0.4); }
+}
+
+/* Style 39: Supernova Digital (No Needle) */
+.gauge.style-39 .gauge-face { 
+  background: linear-gradient(135deg, #3a0a1a 0%, #1a040a 100%); 
+  border: 4px solid #f50057; 
+  box-shadow: 0 0 25px rgba(245, 0, 87, 0.6), inset 0 0 15px rgba(245, 0, 87, 0.4); 
+  animation: nova-pulse 2s ease-in-out infinite; 
+}
+.gauge.style-39 .gauge-center { 
+  display: none; 
+}
+.gauge.style-39 .needle { 
+  display: none; 
+}
+.gauge.style-39 .psi-text { 
+  color: #ff4081; 
+  font-family: 'Orbitron', sans-serif; 
+  text-shadow: 0 0 12px rgba(255, 64, 129, 0.9); 
+  animation: digital-flicker 2s infinite; 
+}
+.gauge.style-39 .max-text { 
+  color: #ff80ab; 
+}
+.gauge.style-39 .gauge-ticks { 
+  display: none; 
+}
+@keyframes nova-pulse {
+  0% { box-shadow: 0 0 25px rgba(245, 0, 87, 0.6), inset 0 0 15px rgba(245, 0, 87, 0.4); }
+  50% { box-shadow: 0 0 35px rgba(245, 0, 87, 0.8), inset 0 0 20px rgba(245, 0, 87, 0.5); }
+  100% { box-shadow: 0 0 25px rgba(245, 0, 87, 0.6), inset 0 0 15px rgba(245, 0, 87, 0.4); }
+}
+
+/* Style 40: Quantum Flux Digital (No Needle) */
+.gauge.style-40 .gauge-face { 
+  background: linear-gradient(135deg, #0a2e0a 0%, #021402 100%); 
+  border: 4px solid #00e676; 
+  box-shadow: 0 0 25px rgba(0, 230, 118, 0.6), inset 0 0 15px rgba(0, 230, 118, 0.4); 
+  animation: quantum-pulse 2s ease-in-out infinite; 
+}
+.gauge.style-40 .gauge-center { 
+  display: none; 
+}
+.gauge.style-40 .needle { 
+  display: none; 
+}
+.gauge.style-40 .psi-text { 
+  color: #00ff8d; 
+  font-family: 'Orbitron', sans-serif; 
+  text-shadow: 0 0 12px rgba(0, 255, 141, 0.9); 
+  animation: digital-flicker 2s infinite; 
+}
+.gauge.style-40 .max-text { 
+  color: #69f0ae; 
+}
+.gauge.style-40 .gauge-ticks { 
+  display: none; 
+}
+@keyframes quantum-pulse {
+  0% { box-shadow: 0 0 25px rgba(0, 230, 118, 0.6), inset 0 0 15px rgba(0, 230, 118, 0.4); }
+  50% { box-shadow: 0 0 35px rgba(0, 230, 118, 0.8), inset 0 0 20px rgba(0, 230, 118, 0.5); }
+  100% { box-shadow: 0 0 25px rgba(0, 230, 118, 0.6), inset 0 0 15px rgba(0, 230, 118, 0.4); }
+}

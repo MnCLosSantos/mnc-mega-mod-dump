@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drift Zones</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="zonePopup" class="zone-popup">
+    <div class="zone-popup-flag">&#127937;</div>
+    <div class="zone-popup-text">
+      <div class="zone-popup-label">Drift Zone</div>
+      <div class="zone-popup-name" id="zoneName">Zone Name</div>
+    </div>
+  </div>
+
+  <div id="setupCrosshair" class="setup-crosshair"></div>
+
+  <div id="setupPanel" class="setup-panel">
+    <div class="setup-panel-header">
+      <div class="setup-panel-label" id="setupPanelLabel">Building Drift Zone</div>
+      <div class="setup-panel-name" id="setupZoneName">Zone Name</div>
+    </div>
+
+    <div class="setup-panel-count" id="setupPointCount">0 points</div>
+
+    <ol class="setup-panel-list" id="setupPointsList"></ol>
+
+    <div class="setup-panel-hints">
+      <div class="setup-hint"><span class="key">LMB</span><span>Add point</span></div>
+      <div class="setup-hint"><span class="key">BKSP</span><span>Undo last</span></div>
+      <div class="setup-hint"><span class="key">ENTER</span><span>Save zone</span></div>
+      <div class="setup-hint"><span class="key">ESC</span><span>Cancel</span></div>
+      <div class="setup-hint"><span class="key">SHIFT</span><span>Fly faster</span></div>
+      <div class="setup-hint"><span class="key">ALT</span><span>Fly slower</span></div>
+    </div>
+  </div>
+
+  <!-- /driftzones management UI: list + create/edit/delete for zones -->
+  <div id="managementPanel" class="mgmt-panel">
+    <div class="mgmt-header">
+      <div class="mgmt-title">Drift Zones Management</div>
+      <button type="button" id="mgmtClose" class="mgmt-close">&times;</button>
+    </div>
+
+    <div class="mgmt-body">
+      <button type="button" id="mgmtAddZone" class="mgmt-add-btn">+ Create Zone</button>
+      <ul id="mgmtZonesList" class="mgmt-list"></ul>
+    </div>
+  </div>
+
+  <!-- Create/Edit Zone (name, thickness - no location) -->
+  <div id="zoneForm" class="mgmt-form">
+    <div class="mgmt-form-title" id="zoneFormTitle">Create Zone</div>
+    <input type="hidden" id="zoneFormId">
+
+    <label class="mgmt-form-label" for="zoneFormName">Name</label>
+    <input type="text" id="zoneFormName" class="mgmt-form-input" maxlength="50">
+
+    <label class="mgmt-form-label" for="zoneFormThickness">Thickness</label>
+    <input type="number" id="zoneFormThickness" class="mgmt-form-input" min="1" step="1">
+
+    <div class="mgmt-form-error" id="zoneFormError"></div>
+
+    <div class="mgmt-form-buttons">
+      <button type="button" id="zoneFormCancel" class="btn btn-secondary">Cancel</button>
+      <button type="button" id="zoneFormSubmit" class="btn btn-primary">Save</button>
+    </div>
+  </div>
+
+  <audio id="enterSound" src="sounds/enter.mp3" preload="auto"></audio>
+  <audio id="exitSound" src="sounds/exit.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
