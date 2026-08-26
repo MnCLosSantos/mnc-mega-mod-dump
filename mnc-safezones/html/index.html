@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Zones Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── Zone HUD indicator (always in DOM, shown/hidden by JS) ── -->
+<div id="zoneHUD" class="hud-hidden">
+    <div id="hudIcon">🛡</div>
+    <div id="hudText">
+        <span id="hudTitle">SAFE ZONE</span>
+        <span id="hudName">Zone Name</span>
+        <span id="hudStatus">Combat Restricted</span>
+    </div>
+</div>
+
+<!-- ── Freecam control legend (shown while freecam is active) ── -->
+<div id="freecamLegend" class="hud-hidden">
+    <div class="legend-header">🎥 Freecam · Marking Safe Zone</div>
+    <div class="legend-row"><span class="key">Mouse</span><span>Look around</span></div>
+    <div class="legend-row"><span class="key">W A S D</span><span>Move</span></div>
+    <div class="legend-row"><span class="key">Space</span><span>Ascend</span></div>
+    <div class="legend-row"><span class="key">Ctrl</span><span>Descend</span></div>
+    <div class="legend-row"><span class="key">Shift</span><span>Boost speed</span></div>
+    <div class="legend-row"><span class="key">E</span><span>Place point (<span id="legendPointCount">0</span> captured)</span></div>
+    <div class="legend-row"><span class="key">Backspace</span><span>Undo last point</span></div>
+    <div class="legend-row"><span class="key">Esc</span><span>Exit freecam</span></div>
+</div>
+
+<!-- ── Main admin container ────────────────────────────────────── -->
+<div id="container" class="hidden">
+    <div class="header">
+        <div class="header-icon">🔒</div>
+        <h1>Safe Zones Manager</h1>
+        <p>Admin Panel · Combat Restricted Areas</p>
+    </div>
+
+    <div class="section">
+        <h2 id="formHeader">➕ Add New Safe Zone</h2>
+
+        <label>Zone Name</label>
+        <input type="text" id="zoneName" placeholder="e.g. City Hall" autocomplete="off" />
+
+        <div class="hint" id="coordHint">
+            Mark out the boundary with at least <strong id="minPointsHint">4</strong> points, in order around the
+            edge — everything below is done right here, no commands needed.
+        </div>
+
+        <div class="hint hint-legacy hidden" id="legacyCircleNotice">
+            ⚠️ This is a <strong>legacy circle zone</strong>. Saving will convert it into a polygon using these
+            points — adjust the corners as needed, then save.
+        </div>
+
+        <div class="two-col">
+            <button class="btn-action" onclick="capturePosition()">📍 Capture My Position</button>
+            <button class="btn-action btn-action-freecam" onclick="startFreecam()">🎥 Start Freecam</button>
+        </div>
+
+        <label>Captured Points <span id="pointsCount" class="badge">0</span></label>
+        <div id="pointsList" class="points-list">
+            <p class="empty-msg" id="pointsEmptyMsg">No points captured yet.</p>
+        </div>
+
+        <div class="manual-point-row">
+            <div class="coord-field">
+                <label>X</label>
+                <input type="number" id="mx" placeholder="0.00" step="0.01" />
+            </div>
+            <div class="coord-field">
+                <label>Y</label>
+                <input type="number" id="my" placeholder="0.00" step="0.01" />
+            </div>
+            <div class="coord-field">
+                <label>Z</label>
+                <input type="number" id="mz" placeholder="0.00" step="0.01" />
+            </div>
+            <button class="btn-add-point" onclick="addManualPoint()">+ Add</button>
+        </div>
+
+        <div class="two-col">
+            <div>
+                <label>Height (m)</label>
+                <input type="number" id="height" value="20" min="2" step="1" />
+            </div>
+            <div>
+                <label>&nbsp;</label>
+                <button class="btn-clear-points" onclick="clearPendingPoints()">🗑 Clear Points</button>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <button class="btn-create" id="saveZoneBtn" onclick="saveZone()">✔ Create Safe Zone</button>
+            <button class="btn-cancel-edit hidden" id="cancelEditBtn" onclick="cancelEdit()">✖ Cancel Edit</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📋 Existing Safe Zones <span id="zoneCount" class="badge">0</span></h2>
+        <div id="zoneList"></div>
+    </div>
+
+    <button class="close-btn" onclick="closeMenu()">✖ Close</button>
+</div>
+
+<!-- ── Confirm delete modal ────────────────────────────────────── -->
+<div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal">
+        <div class="modal-icon">⚠️</div>
+        <h3>Delete Safe Zone?</h3>
+        <p id="confirmText">This action cannot be undone.</p>
+        <div class="modal-buttons">
+            <button class="btn-cancel"  onclick="cancelDelete()">Cancel</button>
+            <button class="btn-confirm" onclick="confirmDelete()">Delete</button>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

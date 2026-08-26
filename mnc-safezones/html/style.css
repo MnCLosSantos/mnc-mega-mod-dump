@@ -1,0 +1,562 @@
+/* ── Reset ─────────────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: transparent;
+    color: #e8e8e8;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Main panel ────────────────────────────────────────────────── */
+#container {
+    width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #1a1a1a;
+    border: 2px solid #00cc77;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 0 40px rgba(0,204,119,0.25), 0 16px 48px rgba(0,0,0,0.6);
+    scrollbar-width: thin;
+    scrollbar-color: #00cc77 #2a2a2a;
+}
+#container::-webkit-scrollbar { width: 6px; }
+#container::-webkit-scrollbar-track { background: #2a2a2a; border-radius: 3px; }
+#container::-webkit-scrollbar-thumb { background: #00cc77; border-radius: 3px; }
+
+/* ── Header ────────────────────────────────────────────────────── */
+.header {
+    text-align: center;
+    margin-bottom: 22px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #2e2e2e;
+}
+.header-icon { font-size: 36px; margin-bottom: 6px; }
+.header h1   { color: #00ff99; font-size: 22px; letter-spacing: 0.5px; }
+.header p    { color: #777; font-size: 13px; margin-top: 4px; }
+
+/* ── Sections ──────────────────────────────────────────────────── */
+.section {
+    background: #222;
+    border: 1px solid #2e2e2e;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+}
+.section h2 {
+    color: #00ff99;
+    font-size: 15px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ── Badge ─────────────────────────────────────────────────────── */
+.badge {
+    background: #00cc77;
+    color: #000;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 7px;
+    border-radius: 999px;
+}
+
+/* ── Labels & inputs ───────────────────────────────────────────── */
+label {
+    display: block;
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+label:first-child { margin-top: 0; }
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    background: #2d2d2d;
+    border: 1px solid #3d3d3d;
+    color: #fff;
+    border-radius: 7px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+    outline: none;
+}
+input:focus        { border-color: #00cc77; }
+input::placeholder { color: #555; }
+
+/* ── Coordinate row ────────────────────────────────────────────── */
+.coord-row {
+    display: flex;
+    gap: 10px;
+}
+.coord-field { flex: 1; }
+
+/* ── Captured points list ──────────────────────────────────────── */
+.points-list {
+    max-height: 160px;
+    overflow-y: auto;
+    background: #1c1c1c;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    padding: 6px;
+    margin-top: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: #00cc77 #2a2a2a;
+}
+.points-list::-webkit-scrollbar       { width: 5px; }
+.points-list::-webkit-scrollbar-track { background: #2a2a2a; }
+.points-list::-webkit-scrollbar-thumb { background: #00cc77; border-radius: 3px; }
+
+.point-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 9px;
+    background: #262626;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    font-size: 12px;
+}
+.point-item:last-child { margin-bottom: 0; }
+
+.point-index {
+    color: #00cc77;
+    font-weight: 700;
+    flex-shrink: 0;
+    width: 26px;
+}
+.point-coords {
+    flex: 1;
+    color: #ccc;
+    font-variant-numeric: tabular-nums;
+}
+
+.btn-remove-point {
+    background: #8b1a1a;
+    color: #fff;
+    border: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    font-size: 11px;
+    line-height: 1;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+.btn-remove-point:hover { background: #cc2222; }
+
+/* ── Manual point entry row ────────────────────────────────────── */
+.manual-point-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    align-items: flex-end;
+}
+.manual-point-row .coord-field { flex: 1; }
+.manual-point-row .coord-field label { margin-top: 0; }
+
+.btn-add-point {
+    background: #00cc77;
+    color: #000;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.btn-add-point:hover { background: #00ff99; }
+
+/* ── Clear points button ───────────────────────────────────────── */
+.btn-clear-points {
+    width: 100%;
+    padding: 10px 12px;
+    background: #333;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-clear-points:hover { background: #444; }
+
+/* ── Point-capture action buttons ─────────────────────────────────── */
+.btn-action {
+    padding: 12px 10px;
+    background: #2d2d2d;
+    color: #eee;
+    border: 1px solid #3d3d3d;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-action:hover { background: #363636; border-color: #00cc77; }
+
+.btn-action-freecam {
+    background: rgba(0, 204, 119, 0.12);
+    border-color: #00cc77;
+    color: #00ff99;
+}
+.btn-action-freecam:hover { background: rgba(0, 204, 119, 0.22); }
+
+/* ── Two-column layout ─────────────────────────────────────────── */
+.two-col {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+}
+.two-col > div,
+.two-col > button { flex: 1; }
+
+/* ── Hint text ─────────────────────────────────────────────────── */
+.hint {
+    font-size: 12px;
+    color: #777;
+    margin: 8px 0 4px;
+    line-height: 1.5;
+}
+.hint strong { color: #00cc77; }
+
+.hint-legacy {
+    color: #f0c040;
+    background: rgba(240, 192, 64, 0.08);
+    border: 1px solid rgba(240, 192, 64, 0.3);
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+.hint-legacy strong { color: #f0c040; }
+
+/* ── Buttons ───────────────────────────────────────────────────── */
+.btn-create {
+    width: 100%;
+    margin-top: 14px;
+    padding: 11px;
+    background: #00cc77;
+    color: #000;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+.btn-create:hover  { background: #00ff99; }
+.btn-create:active { transform: scale(0.98); }
+
+.close-btn {
+    width: 100%;
+    padding: 12px;
+    background: #cc2222;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-top: 4px;
+}
+.close-btn:hover { background: #ff3333; }
+
+/* ── Zone list ─────────────────────────────────────────────────── */
+#zoneList {
+    max-height: 280px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #00cc77 #2a2a2a;
+}
+#zoneList::-webkit-scrollbar       { width: 5px; }
+#zoneList::-webkit-scrollbar-track { background: #2a2a2a; }
+#zoneList::-webkit-scrollbar-thumb { background: #00cc77; border-radius: 3px; }
+
+.zone-item {
+    background: #2a2a2a;
+    border: 1px solid #333;
+    padding: 11px 14px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.zone-item:last-child { margin-bottom: 0; }
+
+.zone-info        { flex: 1; min-width: 0; }
+.zone-info strong { display: block; color: #eee; font-size: 14px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.zone-meta        { font-size: 11px; color: #777; line-height: 1.6; }
+.zone-id          { color: #555; }
+
+.zone-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-delete {
+    background: #8b1a1a;
+    color: #fff;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+.btn-delete:hover { background: #cc2222; }
+
+.btn-edit {
+    background: rgba(240, 192, 64, 0.12);
+    color: #f0c040;
+    border: 1px solid #f0c040;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s;
+    flex-shrink: 0;
+}
+.btn-edit:hover { background: rgba(240, 192, 64, 0.22); }
+
+/* ── Cancel-edit button (paired with .btn-create in a .two-col row) ─────── */
+.btn-cancel-edit {
+    margin-top: 14px;
+    padding: 11px;
+    background: #333;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-cancel-edit:hover { background: #444; }
+
+.empty-msg {
+    text-align: center;
+    color: #555;
+    padding: 20px 0;
+    font-size: 13px;
+}
+
+/* ── Confirm modal ─────────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal {
+    background: #1f1f1f;
+    border: 2px solid #cc2222;
+    border-radius: 12px;
+    padding: 28px 32px;
+    text-align: center;
+    width: 340px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.7);
+}
+.modal-icon { font-size: 40px; margin-bottom: 10px; }
+.modal h3   { color: #ff4444; font-size: 18px; margin-bottom: 10px; }
+.modal p    { color: #aaa; font-size: 13px; line-height: 1.5; margin-bottom: 20px; }
+
+.modal-buttons { display: flex; gap: 12px; justify-content: center; }
+
+.btn-cancel {
+    padding: 10px 24px;
+    background: #333;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-cancel:hover { background: #444; }
+
+.btn-confirm {
+    padding: 10px 24px;
+    background: #cc2222;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-confirm:hover { background: #ff3333; }
+
+/* ── Utility ───────────────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── Zone HUD indicator ────────────────────────────────────────── */
+#zoneHUD {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px 10px 14px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    pointer-events: none;
+    z-index: 1000;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    min-width: 220px;
+}
+
+/* Hidden state */
+.hud-hidden {
+    opacity: 0 !important;
+    transform: translateX(-50%) translateY(12px) !important;
+    pointer-events: none;
+}
+
+/* Visible states */
+.hud-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Green – combat restricted */
+.hud-restricted {
+    background: rgba(0, 30, 15, 0.85);
+    border-color: #00cc77;
+    box-shadow: 0 0 18px rgba(0, 204, 119, 0.35);
+}
+
+/* Yellow – exempt */
+.hud-exempt {
+    background: rgba(30, 25, 0, 0.85);
+    border-color: #f0c040;
+    box-shadow: 0 0 18px rgba(240, 192, 64, 0.35);
+}
+
+#hudIcon {
+    font-size: 26px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+#hudText {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+#hudTitle {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.hud-restricted #hudTitle { color: #00cc77; }
+.hud-exempt     #hudTitle { color: #f0c040; }
+
+#hudName {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+}
+
+#hudStatus {
+    font-size: 11px;
+    color: #aaa;
+    margin-top: 1px;
+}
+
+.hud-restricted #hudStatus { color: #66ddaa; }
+.hud-exempt     #hudStatus { color: #f0c040; }
+
+/* ── Freecam control legend ───────────────────────────────────── */
+#freecamLegend {
+    position: fixed;
+    top: 90px;
+    right: 24px;
+    width: 240px;
+    background: rgba(10, 20, 15, 0.9);
+    border: 1px solid #00cc77;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 0 18px rgba(0, 204, 119, 0.25);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Positional hidden/visible states scoped to this panel — overrides the
+   bottom-centered translateX(-50%) used by the shared .hud-hidden/.hud-visible
+   classes, since this panel is anchored top-right instead. */
+#freecamLegend.hud-hidden {
+    opacity: 0 !important;
+    transform: translateX(12px) !important;
+}
+#freecamLegend.hud-visible {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+.legend-header {
+    color: #00ff99;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 204, 119, 0.3);
+}
+
+.legend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: #cfcfcf;
+    margin-bottom: 6px;
+}
+.legend-row:last-child { margin-bottom: 0; }
+
+.legend-row .key {
+    background: #222;
+    border: 1px solid #3d3d3d;
+    color: #00ff99;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+}

@@ -1,0 +1,575 @@
+/* ========================================
+   MNC Vehicle Image Generator — Tablet UI
+   ======================================== */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: transparent;
+    display: none;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+body.visible {
+    display: block;
+}
+
+/* Tablet Container */
+.container {
+    background: #f8f7f5;
+    border-radius: 28px;
+    width: 760px;
+    max-height: 92vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 
+        0 0 0 1px rgba(0,0,0,0.08),
+        0 10px 30px rgba(0,0,0,0.15),
+        0 40px 80px rgba(0,0,0,0.2);
+    animation: panelIn 0.35s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+    border: 6px solid #111;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    user-select: none;
+}
+
+.container.dragging {
+    animation: none;
+    box-shadow:
+        0 0 0 1px rgba(0,0,0,0.12),
+        0 20px 50px rgba(0,0,0,0.3),
+        0 60px 100px rgba(0,0,0,0.25);
+    cursor: grabbing;
+}
+
+@keyframes panelIn {
+    from { opacity: 0; transform: scale(0.94) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    background: #fff;
+    flex-shrink: 0;
+    border-radius: 16px 16px 0 0;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo-mark {
+    width: 42px;
+    height: 42px;
+    background: #111;
+    color: #fff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    cursor: grab;
+}
+
+.logo-mark:active {
+    cursor: grabbing;
+}
+
+/* Opacity control */
+.opacity-control {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    background: #f7f6f4;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 10px;
+    height: 38px;
+}
+
+.opacity-icon {
+    font-size: 13px;
+    color: #888;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+#opacitySlider {
+    -webkit-appearance: slider-horizontal;
+    appearance: auto;
+    width: 72px;
+    cursor: pointer;
+    accent-color: #111;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #888;
+    font-weight: 600;
+}
+
+.header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111;
+    letter-spacing: -0.02em;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.close-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    background: transparent;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.close-btn:hover {
+    background: #f0f0f0;
+    color: #111;
+}
+
+/* Content */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.content::-webkit-scrollbar { width: 6px; }
+.content::-webkit-scrollbar-track { background: transparent; }
+.content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 3px; }
+
+/* Cards */
+.card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 18px;
+    border: 1px solid rgba(0,0,0,0.07);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.card-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 14px;
+}
+
+.card-label svg {
+    color: #666;
+    flex-shrink: 0;
+}
+
+/* Badge */
+.badge {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    background: #f0f0f0;
+    color: #555;
+    padding: 3px 9px;
+    border-radius: 20px;
+}
+
+.badge-done {
+    background: #e6f7f0;
+    color: #0d8c71;
+}
+
+/* Input Row */
+.input-row {
+    display: flex;
+    gap: 10px;
+}
+
+#webhookInput {
+    flex: 1;
+    padding: 12px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #111;
+    background: #f7f6f4;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    outline: none;
+}
+
+#webhookInput:focus {
+    border-color: #111;
+    background: #fff;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.btn:active { transform: scale(0.96); }
+
+.btn-ghost {
+    background: #f7f6f4;
+    color: #444;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.btn-teal {
+    background: #e6f7f4;
+    color: #0d8c71;
+    border: 1px solid rgba(13,140,113,0.15);
+}
+
+.btn-blue {
+    background: #e8f0fe;
+    color: #2a5fd6;
+    border: 1px solid rgba(42,95,214,0.15);
+}
+
+.btn-start {
+    flex: 1;
+    justify-content: center;
+    background: #111;
+    color: #fff;
+    padding: 15px;
+    font-size: 15px;
+    border-radius: 14px;
+    font-weight: 700;
+}
+
+.btn-stop {
+    justify-content: center;
+    background: #fdf0ef;
+    color: #c0392b;
+    padding: 15px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(192,57,43,0.2);
+}
+
+/* Vehicle Grid */
+.vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.vehicle-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #f7f6f4;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.vehicle-checkbox:hover {
+    background: #f0eeea;
+    border-color: rgba(0,0,0,0.08);
+}
+
+.vehicle-checkbox:has(input:checked) {
+    background: #111;
+    border-color: #111;
+}
+
+.vehicle-checkbox:has(input:checked) label {
+    color: #fff;
+}
+
+.vehicle-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #111;
+}
+
+.vehicle-checkbox.done {
+    opacity: 0.65;
+    cursor: default;
+}
+
+.vehicle-checkbox.done label {
+    text-decoration: line-through;
+}
+
+/* Select Row */
+.select-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Preview Show Button */
+.preview-show-btn {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: #111;
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10000;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.preview-show-btn:hover {
+    transform: scale(1.05);
+    background: #222;
+}
+
+/* Settings Modal */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20000;
+}
+
+.modal-content {
+    background: #fff;
+    width: 520px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    overflow: hidden;
+}
+
+.modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid #eee;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 16px;
+    background: none;
+    border: none;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    border-bottom: 3px solid #111;
+    color: #111;
+}
+
+.tab-content {
+    display: none;
+    padding: 24px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.settings-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #f9f9f7;
+    border-radius: 14px;
+    margin-bottom: 12px;
+}
+
+.option-desc {
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.guide-section h3 {
+    margin: 20px 0 10px;
+    color: #111;
+}
+
+.guide-section ol, .guide-section ul {
+    padding-left: 22px;
+    line-height: 1.6;
+}
+
+/* Rest of original styles kept and adapted */
+.collapsible-trigger { cursor: pointer; }
+.chevron { transition: transform 0.3s; }
+.collapsible-trigger.collapsed .chevron { transform: rotate(-90deg); }
+.camera-content.collapsed { max-height: 0; overflow: hidden; opacity: 0; }
+
+.param-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: #777;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.axis-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.axis {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    min-width: 24px;
+    color: #888;
+}
+
+.num-input {
+    width: 92px;
+    padding: 8px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.slider {
+    flex: 1;
+    height: 5px;
+    background: #ddd;
+    border-radius: 999px;
+}
+
+.slider::-webkit-slider-thumb {
+    width: 18px;
+    height: 18px;
+    background: #111;
+    border-radius: 50%;
+}
+
+/* ==================== RESIZE HANDLES ==================== */
+.resize-handle {
+    position: absolute;
+    z-index: 100;
+}
+
+/* Edge handles */
+.resize-handle.n  { top: -4px; left: 12px; right: 12px; height: 8px; cursor: n-resize; }
+.resize-handle.s  { bottom: -4px; left: 12px; right: 12px; height: 8px; cursor: s-resize; }
+.resize-handle.e  { right: -4px; top: 12px; bottom: 12px; width: 8px; cursor: e-resize; }
+.resize-handle.w  { left: -4px; top: 12px; bottom: 12px; width: 8px; cursor: w-resize; }
+
+/* Corner handles */
+.resize-handle.nw { top: -4px; left: -4px; width: 14px; height: 14px; cursor: nw-resize; }
+.resize-handle.ne { top: -4px; right: -4px; width: 14px; height: 14px; cursor: ne-resize; }
+.resize-handle.sw { bottom: -4px; left: -4px; width: 14px; height: 14px; cursor: sw-resize; }
+.resize-handle.se { bottom: -4px; right: -4px; width: 14px; height: 14px; cursor: se-resize; }
+
+/* Visual indicator dots on corners */
+.resize-handle.nw::after,
+.resize-handle.ne::after,
+.resize-handle.sw::after,
+.resize-handle.se::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: background 0.2s;
+}
+
+.resize-handle.nw:hover::after,
+.resize-handle.ne:hover::after,
+.resize-handle.sw:hover::after,
+.resize-handle.se:hover::after {
+    background: rgba(0,0,0,0.55);
+}

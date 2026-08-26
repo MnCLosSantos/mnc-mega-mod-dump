@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Entry Editor</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <div id="editor" class="card editor-container hidden">
+    <button class="settings-btn" onclick="openSettingsModal()">
+      <i class="fas fa-cog"></i>
+    </button>
+    <button class="settings-btn export-all-btn" style="right: 70px;" onclick="openExportAllModal()">
+      <i class="fas fa-file-export"></i>
+    </button>
+    <div class="editor-content">
+      <!-- In-lua vehicles -->
+      <div class="vehicle-list-container">
+        <div class="search-container">
+          <input id="vehicleSearch" type="text" placeholder="Search vehicles...">
+          <i class="fas fa-search search-icon"></i>
+        </div>
+        <h2><i class="fas fa-car"></i> In lua Vehicles (<span id="vehicleCount">0</span>)</h2>
+        <div id="vehicleList" class="vehicle-list"></div>
+      </div>
+
+      <!-- Not-in-lua vehicles -->
+      <div class="vehicle-list-container">
+        <div class="search-container">
+          <input id="unavailableVehicleSearch" type="text" placeholder="Search unavailable vehicles...">
+          <i class="fas fa-search search-icon"></i>
+        </div>
+        <h2><i class="fas fa-car-crash"></i> Not in lua Vehicles (<span id="unavailableVehicleCount">0</span>)</h2>
+        <div id="unavailableVehicleList" class="vehicle-list"></div>
+      </div>
+
+      <!-- Main editor form -->
+      <div class="form-container">
+        <h2><i class="fas fa-code"></i> Entry Creator </h2>
+        <div class="form" id="mainForm">
+          <div class="combo">
+            <label for="model"><i class="fas fa-code"></i> Model:</label>
+            <input id="model" type="text" placeholder="Enter vehicle model...">
+          </div>
+          <div class="combo">
+            <label for="name"><i class="fas fa-tag"></i> Name:</label>
+            <input id="name" type="text" placeholder="Enter vehicle name...">
+          </div>
+          <div class="combo searchable">
+            <label for="brand"><i class="fas fa-industry"></i> Brand:</label>
+            <input id="brand" type="text" placeholder="Select or type brand...">
+            <div id="brandOptions" class="dropdown"></div>
+          </div>
+          <div class="combo">
+            <label for="price"><i class="fas fa-dollar-sign"></i> Price:</label>
+            <input id="price" type="number" placeholder="Enter price...">
+          </div>
+          <div class="combo searchable">
+            <label for="category"><i class="fas fa-layer-group"></i> Category:</label>
+            <input id="category" type="text" placeholder="Select or type category...">
+            <div id="categoryOptions" class="dropdown"></div>
+          </div>
+          <div class="combo searchable">
+            <label for="type"><i class="fas fa-car-side"></i> Type:</label>
+            <input id="type" type="text" placeholder="Select or type vehicle type...">
+            <div id="typeOptions" class="dropdown"></div>
+          </div>
+          <div class="combo searchable">
+            <label for="shop"><i class="fas fa-store"></i> Shop:</label>
+            <input id="shop" type="text" placeholder="Select or type shop...">
+            <div id="shopOptions" class="dropdown"></div>
+          </div>
+          <div class="buttons">
+            <button id="saveBtn" class="save"><i class="fas fa-save"></i> Save to vehiclesaves.lua</button>
+            <button id="closeBtn" class="close"><i class="fas fa-times"></i> Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-content">
+      <h2><i class="fas fa-sliders-h"></i> Settings</h2>
+      <div class="settings-grid">
+        <div class="setting-item">
+          <div class="setting-header"><i class="fas fa-paint-brush"></i><span class="setting-title">Theme</span></div>
+          <div class="setting-description">Choose the UI theme for the editor.</div>
+          <div class="theme-buttons">
+            <button id="darkThemeBtn" class="theme-btn" onclick="setTheme('dark')"><i class="fas fa-moon"></i> Dark Mode</button>
+            <button id="lightThemeBtn" class="theme-btn" onclick="setTheme('light')"><i class="fas fa-sun"></i> Light Mode</button>
+          </div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-header"><i class="fas fa-dollar-sign"></i><span class="setting-title">Auto Prices</span></div>
+          <div class="setting-description">Automatically set vehicle prices based on category, brand, type, and shop.</div>
+          <div class="theme-buttons">
+            <button id="autoPriceOnBtn" class="theme-btn"><i class="fas fa-toggle-on"></i> On</button>
+            <button id="autoPriceOffBtn" class="theme-btn active"><i class="fas fa-toggle-off"></i> Off</button>
+          </div>
+          <div class="toggle-status" id="autoPriceStatus">Off</div>
+        </div>
+      </div>
+      <div class="modal-buttons">
+        <button class="close" onclick="closeSettingsModal()"><i class="fas fa-times"></i> Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPORT ALL MODAL -->
+  <div id="exportAllModal" class="modal hidden">
+    <div class="modal-content">
+      <h2><i class="fas fa-file-export"></i> Export All Options</h2>
+      <div class="settings-grid">
+        <div class="setting-item">
+          <div class="setting-header"><i class="fas fa-store"></i><span class="setting-title">Fallback Shop</span></div>
+          <div class="setting-description">Shop used when a vehicle has no shop defined.</div>
+          <div class="combo searchable" style="margin-top:12px;">
+            <input id="fallbackShop" type="text" placeholder="Select fallback shop..." value="luxury">
+            <div id="fallbackShopOptions" class="dropdown"></div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-header"><i class="fas fa-ban"></i><span class="setting-title">Exclude Emergency Vehicles</span></div>
+          <div class="setting-description">Skip all vehicles with class 18 (emergency).</div>
+          <div class="theme-buttons" style="margin-top:12px;">
+            <button id="exclude18On" class="theme-btn"><i class="fas fa-toggle-on"></i> Yes</button>
+            <button id="exclude18Off" class="theme-btn active"><i class="fas fa-toggle-off"></i> No</button>
+          </div>
+          <div class="toggle-status" id="exclude18Status">No</div>
+        </div>
+        <div class="setting-item">
+          <div class="setting-header"><i class="fas fa-dollar-sign"></i><span class="setting-title">Auto-Price All</span></div>
+          <div class="setting-description">Calculate price for every vehicle using the same formula as the editor.</div>
+          <div class="theme-buttons" style="margin-top:12px;">
+            <button id="autoPriceAllOn" class="theme-btn"><i class="fas fa-toggle-on"></i> Yes</button>
+            <button id="autoPriceAllOff" class="theme-btn active"><i class="fas fa-toggle-off"></i> No</button>
+          </div>
+          <div class="toggle-status" id="autoPriceAllStatus">No</div>
+        </div>
+      </div>
+
+      <div id="exportProgress" class="hidden" style="margin-top:20px;">
+        <div style="background:rgba(255,255,255,0.2);border-radius:8px;height:12px;">
+          <div id="exportProgressBar" style="background:#10b981;width:0%;height:100%;border-radius:8px;transition:width .2s;"></div>
+        </div>
+        <div style="margin-top:6px;text-align:center;font-size:13px;" id="exportProgressText">0 / 0</div>
+      </div>
+
+      <div class="modal-buttons">
+        <button id="exportAllBtn" class="save"><i class="fas fa-file-export"></i> Export All to vehiclesaves.lua</button>
+        <button class="close" onclick="closeExportAllModal()"><i class="fas fa-times"></i> Cancel</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

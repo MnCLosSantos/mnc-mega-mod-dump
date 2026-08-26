@@ -1,0 +1,2 @@
+['car_jack']   = {['name']='car_jack',   ['label']='Car Jack',    ['weight']=5000, ['type']='item', ['image']='car_jack.png',   ['unique']=false, ['useable']=true, ['shouldClose']=true, ['combinable']=nil, ['description']='A hydraulic jack used to lift a vehicle off the ground.'},
+['axle_stand'] = {['name']='axle_stand', ['label']='Axle Stand',  ['weight']=3000, ['type']='item', ['image']='axle_stand.png', ['unique']=false, ['useable']=true, ['shouldClose']=true, ['combinable']=nil, ['description']='A safety stand placed under a raised vehicle to keep it supported.'},

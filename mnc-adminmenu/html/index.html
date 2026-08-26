@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MNC Admin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       ADMIN PANEL
+  ════════════════════════════════════════ -->
+  <div id="overlay" class="hidden">
+    <img id="watermark" src="watermark.png" alt="" />
+    <div id="panel">
+
+      <!-- Header -->
+      <div id="header">
+        <div id="header-left">
+          <img id="header-logo" src="logo.png" alt="Logo" />
+          <span id="header-title">Admin Panel</span>
+        </div>
+        <button id="close-btn" onclick="closeMenu()">✕</button>
+      </div>
+
+      <!-- Tabs -->
+      <div id="tabs">
+        <button class="tab active" data-tab="self">My Job</button>
+        <button class="tab"        data-tab="setplayer">Set Job</button>
+        <button class="tab"        data-tab="lookup">Remove Job</button>
+        <button class="tab"        data-tab="vehicles">Vehicles</button>
+        <button class="tab"        data-tab="money">Money</button>
+        <button class="tab"        data-tab="inventory">Inventory</button>
+      </div>
+
+      <!-- ── Tab: Set My Job ── -->
+      <div id="tab-self" class="tab-content active">
+        <div class="field-group">
+          <label>Job</label>
+          <select id="self-job" onchange="populateSelfGrades()">
+            <option value="">-- Select Job --</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Grade</label>
+          <select id="self-grade">
+            <option value="">-- Select Grade --</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="setSelfJob()">Set My Job</button>
+      </div>
+
+      <!-- ── Tab: Set Player Job ── -->
+      <div id="tab-setplayer" class="tab-content">
+        <div class="field-group">
+          <label>Citizen ID</label>
+          <input id="sp-cid" type="text" placeholder="Server ID or Citizen ID" />
+        </div>
+        <div class="field-group">
+          <label>Job</label>
+          <select id="sp-job" onchange="populateSpGrades()">
+            <option value="">-- Select Job --</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label>Grade</label>
+          <select id="sp-grade">
+            <option value="">-- Select Grade --</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="setPlayerJob()">Set Player Job</button>
+      </div>
+
+      <!-- ── Tab: Remove Job ── -->
+      <div id="tab-lookup" class="tab-content">
+        <div class="field-group">
+          <label>Citizen ID</label>
+          <div class="input-row">
+            <input id="lookup-cid" type="text" placeholder="Server ID or Citizen ID" />
+            <button class="btn-secondary" onclick="lookupPlayer()">Look Up</button>
+          </div>
+        </div>
+        <div id="lookup-result" class="hidden">
+          <div id="lookup-info"></div>
+          <div id="lookup-jobs"></div>
+          <div id="lookup-actions">
+            <button class="btn-danger" onclick="removeAllJobs()">🗑 Remove All Jobs</button>
+          </div>
+        </div>
+        <div id="lookup-notfound" class="hidden">
+          <span class="dim">No player found with that Citizen ID.</span>
+        </div>
+      </div>
+
+      <!-- ── Tab: Vehicles ── -->
+      <div id="tab-vehicles" class="tab-content">
+        <div class="field-group">
+          <label>Citizen ID</label>
+          <div class="input-row">
+            <input id="veh-cid" type="text" placeholder="Server ID or Citizen ID" />
+            <button class="btn-secondary" onclick="lookupVehicles()">Look Up</button>
+          </div>
+        </div>
+        <div id="veh-result" class="hidden">
+          <div id="veh-info"></div>
+          <div id="veh-list"></div>
+        </div>
+        <div id="veh-notfound" class="hidden">
+          <span class="dim">No player found or no vehicles registered.</span>
+        </div>
+
+        <!-- Vehicle detail modal -->
+        <div id="veh-modal" class="hidden">
+          <div id="veh-modal-inner">
+            <div id="veh-modal-header">
+              <span id="veh-modal-title">Vehicle</span>
+              <button onclick="closeVehModal()">✕</button>
+            </div>
+            <img id="veh-modal-img" alt="" />
+            <div id="veh-modal-body">
+              <div id="veh-modal-stats"></div>
+              <div class="veh-modal-actions">
+                <div class="field-group">
+                  <label>Move to Garage</label>
+                  <div class="input-row">
+                    <select id="veh-modal-garage-select">
+                      <option value="">-- Select Garage --</option>
+                    </select>
+                    <button class="btn-secondary" onclick="moveVehicleGarage()">Move</button>
+                  </div>
+                </div>
+                <button class="btn-danger btn-full" onclick="deleteVehicle()">🗑 Delete Vehicle</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Tab: Money ── -->
+      <div id="tab-money" class="tab-content">
+        <div class="field-group">
+          <label>Citizen ID</label>
+          <div class="input-row">
+            <input id="money-cid" type="text" placeholder="Server ID or Citizen ID" />
+            <button class="btn-secondary" onclick="lookupMoney()">Look Up</button>
+          </div>
+        </div>
+
+        <div id="money-result" class="hidden">
+          <div id="money-info"></div>
+          <div id="money-cards">
+            <div class="money-card" id="card-cash">
+              <div class="money-card-label">CASH</div>
+              <div class="money-card-value" id="display-cash">$0</div>
+            </div>
+            <div class="money-card" id="card-bank">
+              <div class="money-card-label">BANK</div>
+              <div class="money-card-value" id="display-bank">$0</div>
+            </div>
+          </div>
+          <div class="money-controls">
+            <div class="field-group">
+              <label>Type</label>
+              <select id="money-type">
+                <option value="cash">Cash</option>
+                <option value="bank">Bank</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Amount</label>
+              <input id="money-amount" type="number" min="0" placeholder="0" />
+            </div>
+          </div>
+          <div class="money-btn-row">
+            <button class="btn-money-add"    onclick="adjustMoney('add')">+ Add</button>
+            <button class="btn-money-remove" onclick="adjustMoney('remove')">− Remove</button>
+            <button class="btn-money-set"    onclick="adjustMoney('set')">= Set</button>
+          </div>
+        </div>
+
+        <div id="money-notfound" class="hidden">
+          <span class="dim">No player found with that Citizen ID.</span>
+        </div>
+      </div>
+
+      <!-- ── Tab: Inventory ── -->
+      <div id="tab-inventory" class="tab-content">
+        <div class="field-group">
+          <label>Citizen ID</label>
+          <div class="input-row">
+            <input id="inv-cid" type="text" placeholder="Server ID or Citizen ID" />
+            <button class="btn-secondary" onclick="lookupInventory()">Look Up</button>
+          </div>
+        </div>
+        <div id="inv-result" class="hidden">
+          <div id="inv-info"></div>
+          <div class="field-group">
+            <input id="inv-search" type="text" placeholder="Filter items…" oninput="filterInventory()" />
+          </div>
+          <div id="inv-list"></div>
+        </div>
+        <div id="inv-notfound" class="hidden">
+          <span class="dim">No player found or inventory is empty.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       PLAYER PANEL (/movegarage)
+  ════════════════════════════════════════ -->
+  <div id="player-panel" class="hidden">
+    <img id="pp-watermark" src="watermark.png" alt="" />
+    <div id="pp-inner">
+
+      <div id="pp-header">
+        <div id="header-left">
+          <img id="pp-logo" src="logo.png" alt="Logo" />
+          <span id="pp-title">Move Vehicle</span>
+        </div>
+        <button id="pp-close-btn" onclick="closeMenu()">✕</button>
+      </div>
+
+      <div id="pp-fee-notice">$100 fee per vehicle move</div>
+
+      <div id="pp-loading">Loading your vehicles…</div>
+      <div id="pp-empty"   class="hidden"><span class="dim">You have no registered vehicles.</span></div>
+
+      <div id="pp-vehicles" class="hidden">
+        <div id="pp-veh-list"></div>
+      </div>
+
+      <!-- Player move modal -->
+      <div id="pp-modal" class="hidden">
+        <div id="pp-modal-inner">
+          <div id="pp-modal-header">
+            <span id="pp-modal-title">Move Vehicle</span>
+            <button onclick="closePpModal()">✕</button>
+          </div>
+          <img id="pp-modal-img" alt="" />
+          <div id="pp-modal-body">
+            <div id="pp-modal-info"></div>
+            <div class="field-group">
+              <label>Destination Garage</label>
+              <select id="pp-garage-select">
+                <option value="">-- Select Garage --</option>
+              </select>
+            </div>
+            <button class="btn-primary" onclick="confirmPlayerMove()">Move — $100</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MNC Payments</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app" class="hidden">
+  <div id="ipad">
+    <div class="ipad-camera"></div>
+    <div id="screen">
+
+      <!-- Status bar -->
+      <div id="status-bar">
+        <div class="sb-left"><span id="sb-time">9:41</span></div>
+        <div class="sb-center"><span class="sb-app-name">Payments</span></div>
+        <div class="sb-right">
+          <span class="sb-job" id="sb-job">—</span>
+          <span class="sb-icon">&#9679;&#9679;&#9679;</span>
+          <span class="sb-icon">
+            <svg width="22" height="11" viewBox="0 0 22 11" fill="none">
+              <rect x="0.5" y="0.5" width="18" height="10" rx="2.5" stroke="currentColor" stroke-opacity="0.6"/>
+              <rect x="1.5" y="1.5" width="15" height="8" rx="1.5" fill="currentColor"/>
+              <path d="M19.5 3.5v4a1.5 1.5 0 0 0 0-4z" fill="currentColor" fill-opacity="0.4"/>
+            </svg>
+          </span>
+        </div>
+      </div>
+
+      <!-- Title bar -->
+      <div id="title-bar">
+        <div class="title-bar-inner">
+          <h1 id="page-title">New Invoice</h1>
+          <button class="ipad-close" id="close-btn">&#x2715;</button>
+        </div>
+      </div>
+
+      <!-- Page content -->
+      <div id="page-content">
+
+        <!-- ── SEND ── -->
+        <section id="tab-send" class="tab active">
+
+          <!-- Pending invoices bar (shown when this player owes money) -->
+          <div id="pending-bar" style="display:none"></div>
+
+          <div class="ios-group">
+            <div class="ios-group-label">Recipient</div>
+            <div class="ios-cell">
+              <div class="select-row">
+                <select id="target-select">
+                  <option value="">Choose recipient…</option>
+                  <option value="__self__">💳 Charge Myself</option>
+                </select>
+                <button class="ios-refresh" id="refresh-nearby" title="Refresh nearby players">↻</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="ios-group">
+            <div class="ios-group-label">Invoice Details</div>
+            <div class="ios-cell">
+              <span class="cell-label">Amount</span>
+              <input type="number" id="amount-input" class="ios-input" placeholder="0.00" min="1">
+            </div>
+            <div class="ios-cell-divider"></div>
+            <div class="ios-cell">
+              <span class="cell-label">Reason</span>
+              <input type="text" id="reason-input" class="ios-input" placeholder="Service description" maxlength="255">
+            </div>
+          </div>
+
+          <div class="ios-group">
+            <div class="ios-group-label">Billing as</div>
+            <div class="ios-cell">
+              <span class="cell-label">Organisation</span>
+              <span class="cell-value" id="billing-as">—</span>
+            </div>
+          </div>
+
+          <div class="ios-group" id="self-pay-type-row" style="display:none">
+            <div class="ios-group-label">Charge from</div>
+            <div class="ios-cell">
+              <div class="ios-segment pay-type-seg" id="self-pay-type-seg" style="width:100%">
+                <button class="seg-btn active" data-pt="cash">💵 Cash</button>
+                <button class="seg-btn" data-pt="bank">🏦 Bank</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="send-action-area">
+            <button class="ios-btn-primary" id="send-btn">Send Invoice</button>
+            <div class="form-error hidden" id="send-error"></div>
+          </div>
+        </section>
+
+        <!-- ── INBOX (staff — invoices I sent) ── -->
+        <section id="tab-inbox" class="tab hidden">
+          <div id="inbox-list" class="card-list">
+            <div class="empty-state">
+              <div class="empty-icon">📤</div>
+              <div class="empty-text">No invoices sent yet</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── RECEIPTS (player — invoices I paid) ── -->
+        <section id="tab-receipts" class="tab hidden">
+          <div id="receipts-list" class="card-list">
+            <div class="empty-state">
+              <div class="empty-icon">🧾</div>
+              <div class="empty-text">No receipts yet</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── LEDGER (owner — all job invoices) ── -->
+        <section id="tab-ledger" class="tab hidden">
+          <div class="ledger-seg-wrap">
+            <div class="ios-segment ledger-seg" id="ledger-segment">
+              <button class="seg-btn active" data-filter="all">All</button>
+              <button class="seg-btn" data-filter="pending">Pending</button>
+              <button class="seg-btn" data-filter="paid">Paid</button>
+              <button class="seg-btn" data-filter="declined">Declined</button>
+              <button class="seg-btn" data-filter="expired">Expired</button>
+            </div>
+          </div>
+          <div id="ledger-list" class="card-list">
+            <div class="empty-state">
+              <div class="empty-icon">📊</div>
+              <div class="empty-text">No ledger entries</div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Tab bar -->
+      <nav id="tab-bar">
+        <button class="tab-btn active" data-tab="send">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+          <span>Invoice</span>
+        </button>
+        <button class="tab-btn" data-tab="inbox">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-6l-2 3H10l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
+          <span>Sent</span>
+          <span class="tab-badge hidden" id="badge-inbox"></span>
+        </button>
+        <button class="tab-btn" data-tab="receipts">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span>Receipts</span>
+        </button>
+        <button class="tab-btn hidden" id="nav-ledger" data-tab="ledger">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Ledger</span>
+        </button>
+      </nav>
+
+      <div class="home-bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Receipt detail modal -->
+<div id="receipt-modal" class="sheet-overlay hidden">
+  <div class="sheet-card">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <span class="sheet-title">Receipt</span>
+      <button class="sheet-close" id="receipt-close">Done</button>
+    </div>
+    <div class="receipt-logo-row">
+      <div class="receipt-app-icon">💳</div>
+      <div class="receipt-app-name">Payments</div>
+    </div>
+    <div class="receipt-amount-big" id="receipt-amount-big"></div>
+    <div class="receipt-status-row" id="receipt-status-row"></div>
+    <div class="ios-group receipt-group" id="receipt-rows"></div>
+    <div class="receipt-thankyou">Thank you for your payment</div>
+  </div>
+</div>
+
+<!-- Confirm payment modal -->
+<div id="confirm-modal" class="sheet-overlay hidden">
+  <div class="sheet-card confirm-sheet">
+    <div class="sheet-handle"></div>
+    <div class="confirm-icon">🧾</div>
+    <div class="confirm-title" id="confirm-title">Confirm Payment</div>
+    <div class="confirm-amount" id="confirm-amount"></div>
+    <div class="confirm-meta" id="confirm-meta"></div>
+    <div class="pay-type-wrap">
+      <div class="pay-type-label">Pay with</div>
+      <div class="ios-segment pay-type-seg" id="pay-type-seg">
+        <button class="seg-btn active" data-pt="cash">💵 Cash</button>
+        <button class="seg-btn" data-pt="bank">🏦 Bank</button>
+      </div>
+    </div>
+    <div class="confirm-btns">
+      <button class="ios-btn-danger" id="confirm-decline">Decline</button>
+      <button class="ios-btn-primary" id="confirm-pay">Pay Now</button>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
