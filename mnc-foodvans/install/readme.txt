@@ -1,0 +1,1 @@
+you will need to add the items into qb-smallresources or something like jim-consuables or mnc-drugeffects.
