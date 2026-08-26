@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MnC FreeCam</title>
+    <style>
+        :root {
+            --bg-void:    #0d0d0f;
+            --bg-panel:   #141418;
+            --bg-card:    #1a1a20;
+            --bg-row:     #1f1f26;
+            --border:     #2a2a35;
+            --amber:      #f0a500;
+            --amber-dim:  #b87c00;
+            --amber-glow: rgba(240,165,0,0.12);
+            --text:       #e8e8ec;
+            --text-muted: #7a7a8a;
+            --font:       'Segoe UI', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: transparent;
+            font-family: var(--font);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        #hud {
+            position: fixed;
+            bottom: 28px;
+            left: 28px;
+            width: 260px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--amber);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.7), 0 0 0 1px rgba(240,165,0,0.04);
+            display: none;
+            animation: fadeIn 0.18s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Header ── */
+        .hud-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px 9px;
+            background: var(--bg-void);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hud-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--amber);
+            box-shadow: 0 0 6px var(--amber);
+        }
+
+        .hud-title {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--amber);
+        }
+
+        .hud-badge {
+            margin-left: auto;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* ── Section labels ── */
+        .hud-section {
+            padding: 8px 14px 3px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--amber-dim);
+        }
+
+        /* ── Rows ── */
+        .hud-rows {
+            padding: 0 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .hud-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 8px;
+            border-radius: 4px;
+            background: var(--bg-row);
+            border: 1px solid transparent;
+            transition: border-color 0.15s;
+        }
+
+        .hud-row:hover {
+            border-color: var(--border);
+        }
+
+        .hud-action {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .hud-keys {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+        }
+
+        .key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 18px;
+            padding: 0 5px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-bottom: 2px solid #333340;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            text-transform: uppercase;
+        }
+
+        .key-sep {
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        /* ── Filter info row ── */
+        .hud-filter-row {
+            margin: 0 10px 10px;
+            padding: 6px 8px;
+            border-radius: 4px;
+            background: var(--amber-glow);
+            border: 1px solid rgba(240,165,0,0.18);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 10px;
+            color: var(--text-muted);
+        }
+
+        .filter-name {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--amber);
+            margin-left: auto;
+            max-width: 130px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* ── FOV bar ── */
+        .hud-fov-row {
+            margin: 0 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .fov-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .fov-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .fov-value {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--amber);
+        }
+
+        .fov-track {
+            width: 100%;
+            height: 3px;
+            background: var(--bg-row);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .fov-fill {
+            height: 100%;
+            background: var(--amber);
+            border-radius: 2px;
+            transition: width 0.12s ease;
+        }
+
+        /* ── Footer ── */
+        .hud-footer {
+            padding: 7px 14px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-void);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-hint {
+            font-size: 9px;
+            color: var(--text-muted);
+        }
+
+        .footer-toggle {
+            font-size: 9px;
+            font-weight: 700;
+            color: var(--amber-dim);
+            letter-spacing: 0.06em;
+        }
+    </style>
+</head>
+<body>
+
+<div id="hud">
+    <!-- Header -->
+    <div class="hud-header">
+        <div class="hud-dot"></div>
+        <span class="hud-title">FreeCam</span>
+        <span class="hud-badge">MnCLosSantos</span>
+    </div>
+
+    <!-- Movement -->
+    <div class="hud-section">Movement</div>
+    <div class="hud-rows">
+        <div class="hud-row">
+            <span class="hud-action">Forward / Back</span>
+            <div class="hud-keys">
+                <span class="key">W</span><span class="key-sep">/</span><span class="key">S</span>
+            </div>
+        </div>
+        <div class="hud-row">
+            <span class="hud-action">Strafe Left / Right</span>
+            <div class="hud-keys">
+                <span class="key">A</span><span class="key-sep">/</span><span class="key">D</span>
+            </div>
+        </div>
+        <div class="hud-row">
+            <span class="hud-action">Up / Down</span>
+            <div class="hud-keys">
+                <span class="key">Q</span><span class="key-sep">/</span><span class="key">E</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera -->
+    <div class="hud-section">Camera</div>
+    <div class="hud-rows">
+        <div class="hud-row">
+            <span class="hud-action">Look</span>
+            <div class="hud-keys">
+                <span class="key">Mouse</span>
+            </div>
+        </div>
+        <div class="hud-row">
+            <span class="hud-action">Roll</span>
+            <div class="hud-keys">
+                <span class="key">◄</span><span class="key-sep">/</span><span class="key">►</span>
+            </div>
+        </div>
+        <div class="hud-row">
+            <span class="hud-action">Zoom</span>
+            <div class="hud-keys">
+                <span class="key">Scroll</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOV bar -->
+    <div class="hud-fov-row">
+        <div class="fov-header">
+            <span class="fov-label">FOV</span>
+            <span class="fov-value" id="fovValue">90°</span>
+        </div>
+        <div class="fov-track">
+            <div class="fov-fill" id="fovFill" style="width: 50%"></div>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="hud-section">Filter</div>
+    <div class="hud-rows">
+        <div class="hud-row">
+            <span class="hud-action">Next Filter</span>
+            <div class="hud-keys">
+                <span class="key">▲</span>
+            </div>
+        </div>
+        <div class="hud-row">
+            <span class="hud-action">Prev Filter</span>
+            <div class="hud-keys">
+                <span class="key">▼</span>
+            </div>
+        </div>
+        <div class="hud-row">
+            <span class="hud-action">Toggle Helpers</span>
+            <div class="hud-keys">
+                <span class="key">Bksp</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active filter indicator -->
+    <div class="hud-filter-row">
+        <span class="filter-label">Active:</span>
+        <span class="filter-name" id="filterName">None</span>
+    </div>
+
+    <!-- Footer -->
+    <div class="hud-footer">
+        <span class="footer-hint">Bksp to hide helpers</span>
+        <span class="footer-toggle" id="footerCmd">/freecam to exit</span>
+    </div>
+</div>
+
+<script>
+    const FOV_MIN = 30, FOV_MAX = 120, FOV_DEFAULT = 90;
+
+    function setFov(fov) {
+        const pct = ((fov - FOV_MIN) / (FOV_MAX - FOV_MIN)) * 100;
+        document.getElementById('fovValue').textContent = Math.round(fov) + '°';
+        document.getElementById('fovFill').style.width = pct + '%';
+    }
+
+    function setFilter(name) {
+        document.getElementById('filterName').textContent = name || 'None';
+    }
+
+    function setVisible(v) {
+        document.getElementById('hud').style.display = v ? 'block' : 'none';
+    }
+
+    window.addEventListener('message', function(event) {
+        const data = event.data;
+        if (!data || !data.type) return;
+
+        switch (data.type) {
+            case 'show':
+                setVisible(true);
+                setFov(data.fov ?? FOV_DEFAULT);
+                setFilter(data.filter ?? null);
+                break;
+            case 'hide':
+                setVisible(false);
+                break;
+            case 'updateFov':
+                setFov(data.fov);
+                break;
+            case 'updateFilter':
+                setFilter(data.filter);
+                break;
+        }
+    });
+</script>
+</body>
+</html>

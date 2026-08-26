@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Main Shop Container -->
+  <div id="shop" class="hidden">
+    <div class="shop-wrapper">
+      <!-- Fixed Header and Controls -->
+      <div class="shop-fixed">
+        <div class="shop-header">
+          <h1><i class="fas fa-tools"></i> <span id="shopTitle">Engine Shop</span></h1>
+          <p class="subtitle">Choose your perfect salvaged engine</p>
+          <button class="close-btn" id="closeBtn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="shop-controls">
+          <select id="categoryFilter">
+            <option value="all">All Categories</option>
+            <!-- Categories populated dynamically -->
+          </select>
+          <input type="text" id="searchBar" placeholder="Search salvaged engines..." />
+        </div>
+      </div>
+      <!-- Scrollable Grid -->
+      <div class="engines-container">
+        <div class="engines-grid" id="enginesGrid">
+          <!-- Engine cards will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Order Confirmation Modal -->
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <h2 id="modalTitle"><i class="fas fa-shopping-cart"></i> Confirm Order</h2>
+        <div class="modal-body">
+            <div id="modalImage" class="modal-image"></div>
+            <p id="modalDescription"></p>
+            <div class="modal-price">
+                <span class="price-label">Price:</span>
+                <span id="modalPrice" class="price-value">$0</span>
+            </div>
+            <div class="player-id-input">
+                <label for="playerIdInput">Charge Player ID (leave blank to charge yourself):</label>
+                <input type="number" id="playerIdInput" placeholder="Enter Player ID" min="1" />
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" id="cancelBtn"><i class="fas fa-ban"></i> Cancel</button>
+            <button class="btn-order" id="confirmBtn"><i class="fas fa-check"></i> Order Now</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

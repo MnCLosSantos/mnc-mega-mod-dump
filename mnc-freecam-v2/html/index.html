@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MnC FreeCam</title>
+    <style>
+        :root {
+            --bg-void:    #0d0d0f;
+            --bg-panel:   #141418;
+            --bg-card:    #1a1a20;
+            --bg-row:     #1f1f26;
+            --border:     #2a2a35;
+            --amber:      #f0a500;
+            --amber-dim:  #b87c00;
+            --amber-glow: rgba(240,165,0,0.09);
+            --text:       #e8e8ec;
+            --muted:      #7a7a8a;
+            --green:      #4caf6e;
+            --blue:       #5b9bd5;
+            --red:        #d55b5b;
+            --purple:     #9b6fd5;
+            --font:       'Segoe UI', sans-serif;
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background: transparent;
+            font-family: var(--font);
+            pointer-events: none;
+            user-select: none;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ── Cinematic bars ── */
+        .bar {
+            position: fixed; left:0; right:0;
+            background: #000;
+            transition: height 0.3s ease;
+            height: 0;
+            z-index: 1;
+        }
+        #barTop    { top:0; }
+        #barBottom { bottom:0; }
+
+        /* ── Shared panel chrome ── */
+        @keyframes fadeIn {
+            from { opacity:0; transform:translateY(8px); }
+            to   { opacity:1; transform:translateY(0);   }
+        }
+
+        .panel {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            overflow: hidden;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.85);
+            display: none;
+            z-index: 10;
+            animation: fadeIn 0.18s ease;
+        }
+
+        #panelMain  { left: 30px;  width: 310px; border-left: 3px solid var(--amber); }
+        #panelHelp  { right: 30px; width: 290px; border-left: 3px solid #3a3a4a; }
+
+        /* ── Panel header ── */
+        .p-header {
+            display: flex; align-items: center; gap: 9px;
+            padding: 11px 14px 10px;
+            background: var(--bg-void);
+            border-bottom: 1px solid var(--border);
+        }
+        .p-dot {
+            width:7px; height:7px; border-radius:50%;
+            background: var(--amber);
+            box-shadow: 0 0 6px var(--amber);
+            flex-shrink: 0;
+        }
+        .p-dot.grey { background: #3a3a4a; box-shadow: none; }
+        .p-title {
+            font-size: 11px; font-weight:700;
+            letter-spacing:.13em; text-transform:uppercase;
+            color: var(--amber);
+        }
+        .p-title.grey { color: var(--muted); }
+        .p-badge {
+            margin-left:auto;
+            font-size:9px; font-weight:600;
+            letter-spacing:.07em; text-transform:uppercase;
+            color: var(--muted);
+        }
+
+        /* ── Section label ── */
+        .section {
+            padding: 8px 14px 3px;
+            font-size: 9px; font-weight:700;
+            letter-spacing:.15em; text-transform:uppercase;
+            color: var(--amber-dim);
+        }
+        .section.grey { color: #3a3a55; }
+
+        /* ── Divider ── */
+        .divider { height:1px; background:var(--border); margin: 2px 12px 6px; }
+
+        /* ── Footer ── */
+        .p-footer {
+            padding: 7px 14px;
+            border-top: 1px solid var(--border);
+            background: var(--bg-void);
+            display: flex; align-items:center; justify-content:space-between;
+        }
+        .p-footer-hint { font-size:9px; color:var(--muted); }
+        .p-footer-cmd  { font-size:9px; font-weight:700; color:var(--amber-dim); letter-spacing:.05em; }
+
+        /* ════════════════════════════════
+           LEFT PANEL — live stats
+        ════════════════════════════════ */
+
+        .stats { padding: 0 10px 8px; display:flex; flex-direction:column; gap:5px; }
+
+        .stat {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 9px;
+            border-radius: 5px;
+            background: var(--bg-row);
+        }
+        .stat-left  { display:flex; flex-direction:column; gap:4px; min-width:0; }
+        .stat-right { display:flex; flex-direction:column; align-items:flex-end; gap:3px; flex-shrink:0; }
+
+        .stat-label {
+            font-size: 10px; font-weight:700;
+            letter-spacing:.06em; text-transform:uppercase;
+            color: var(--muted);
+            display: flex; align-items:center; gap:5px;
+        }
+        .stat-value {
+            font-size: 13px; font-weight:700;
+            color: var(--amber);
+            white-space: nowrap;
+        }
+        .stat-value.blue   { color: var(--blue);   }
+        .stat-value.green  { color: var(--green);  }
+        .stat-value.red    { color: var(--red);    }
+        .stat-value.purple { color: var(--purple); }
+
+        .stat-track {
+            width:100%; height:3px;
+            background: var(--bg-card);
+            border-radius:2px; overflow:hidden;
+        }
+        .stat-fill {
+            height:100%; border-radius:2px;
+            background: var(--amber);
+            transition: width 0.1s ease;
+        }
+        .stat-fill.blue   { background: var(--blue);   }
+        .stat-fill.green  { background: var(--green);  }
+        .stat-fill.red    { background: var(--red);    }
+        .stat-fill.purple { background: var(--purple); }
+
+        .pill {
+            font-size: 8px; font-weight:700;
+            letter-spacing:.08em; text-transform:uppercase;
+            padding: 2px 5px; border-radius:3px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            background: var(--bg-card);
+            transition: all .15s;
+        }
+        .pill.on {
+            color: var(--green);
+            border-color: rgba(76,175,110,0.5);
+            background: rgba(76,175,110,0.1);
+        }
+
+        /* filter chip */
+        .filter-chip {
+            margin: 0 10px 8px;
+            padding: 6px 10px;
+            border-radius: 5px;
+            background: var(--amber-glow);
+            border: 1px solid rgba(240,165,0,0.18);
+            display: flex; align-items:center; gap:8px;
+        }
+        .filter-lbl { font-size:10px; color:var(--muted); flex-shrink:0; }
+        .filter-val {
+            font-size:11px; font-weight:700; color:var(--amber);
+            margin-left:auto;
+            overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+        }
+
+        /* ════════════════════════════════
+           RIGHT PANEL — keybind reference
+        ════════════════════════════════ */
+
+        .help-rows { padding: 0 10px 8px; display:flex; flex-direction:column; gap:3px; }
+
+        .help-row {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 9px;
+            border-radius: 5px;
+            background: var(--bg-row);
+        }
+
+        .keys { display:flex; gap:3px; align-items:center; flex-shrink:0; }
+        .key {
+            display: inline-flex; align-items:center; justify-content:center;
+            min-width: 24px; height: 20px; padding: 0 6px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-bottom: 2px solid #252530;
+            border-radius: 4px;
+            font-size: 9px; font-weight:700;
+            color: var(--text);
+            white-space: nowrap;
+        }
+        .key-sep { font-size:9px; color:var(--muted); }
+
+        .help-desc {
+            font-size: 11px;
+            color: var(--text);
+            font-weight: 400;
+            line-height: 1.3;
+        }
+        .help-sub {
+            font-size: 9px;
+            color: var(--muted);
+            margin-top: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Cinematic bars (always present, sit behind panels) -->
+<div class="bar" id="barTop"></div>
+<div class="bar" id="barBottom"></div>
+
+<!-- ══════════════════════════════════════
+     LEFT — Live stats panel
+══════════════════════════════════════ -->
+<div class="panel" id="panelMain">
+
+    <div class="p-header">
+        <div class="p-dot"></div>
+        <span class="p-title">FreeCam</span>
+        <span class="p-badge">MnCLosSantos</span>
+    </div>
+
+    <!-- FOV + Roll -->
+    <div class="section">Camera</div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label">Field of View</span>
+                <div class="stat-track"><div class="stat-fill" id="fovFill" style="width:50%"></div></div>
+            </div>
+            <div class="stat-right">
+                <span class="stat-value" id="fovValue">90°</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Filter -->
+    <div class="section">Screen Filter</div>
+    <div class="filter-chip">
+        <span class="filter-lbl">Active:</span>
+        <span class="filter-val" id="filterName">None</span>
+    </div>
+    <div class="stats" style="padding-top:0">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--purple)">Strength</span>
+                <div class="stat-track"><div class="stat-fill purple" id="tcFill" style="width:20%"></div></div>
+            </div>
+            <div class="stat-right">
+                <span class="stat-value purple" id="tcValue">1.0</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- DOF -->
+    <div class="section">Depth of Field</div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--blue)">
+                    Near Focus
+                    <span class="pill" id="pillDof">OFF</span>
+                </span>
+                <div class="stat-track"><div class="stat-fill blue" id="dofNearFill" style="width:1%"></div></div>
+            </div>
+            <div class="stat-right">
+                <span class="stat-value blue" id="dofNearValue">1.0m</span>
+            </div>
+        </div>
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--blue)">Far Focus</span>
+                <div class="stat-track"><div class="stat-fill blue" id="dofFarFill" style="width:7%"></div></div>
+            </div>
+            <div class="stat-right">
+                <span class="stat-value blue" id="dofFarValue">15.0m</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Effects -->
+    <div class="section">Effects</div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--red)">
+                    Camera Shake
+                    <span class="pill" id="pillShake">OFF</span>
+                </span>
+                <div class="stat-track"><div class="stat-fill red" id="shakeFill" style="width:0%"></div></div>
+            </div>
+            <div class="stat-right">
+                <span class="stat-value red" id="shakeValue">0.00</span>
+            </div>
+        </div>
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--green)">
+                    Cinematic Bars
+                    <span class="pill" id="pillBars">OFF</span>
+                </span>
+                <div class="stat-track"><div class="stat-fill green" id="barsFill" style="width:0%"></div></div>
+            </div>
+            <div class="stat-right">
+                <span class="stat-value green" id="barsValue">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-footer">
+        <span class="p-footer-hint">Backspace to hide</span>
+        <span class="p-footer-cmd">/freecam to exit</span>
+    </div>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     RIGHT — Keybind helper panel
+══════════════════════════════════════ -->
+<div class="panel" id="panelHelp">
+
+    <div class="p-header">
+        <div class="p-dot grey"></div>
+        <span class="p-title grey">Controls</span>
+        <span class="p-badge">Reference</span>
+    </div>
+
+    <!-- Movement -->
+    <div class="section grey">Movement</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">W</span><span class="key-sep">/</span><span class="key">S</span></div>
+            <div>
+                <div class="help-desc">Forward / Backward</div>
+                <div class="help-sub">Move along camera facing direction</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">A</span><span class="key-sep">/</span><span class="key">D</span></div>
+            <div>
+                <div class="help-desc">Strafe Left / Right</div>
+                <div class="help-sub">Slide camera sideways</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Q</span><span class="key-sep">/</span><span class="key">E</span></div>
+            <div>
+                <div class="help-desc">Up / Down</div>
+                <div class="help-sub">Raise or lower vertically</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Mouse</span></div>
+            <div>
+                <div class="help-desc">Look Around</div>
+                <div class="help-sub">Pitch and yaw rotation</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">◄</span><span class="key-sep">/</span><span class="key">►</span></div>
+            <div>
+                <div class="help-desc">Roll Camera</div>
+                <div class="help-sub">Tilt on the camera axis</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Camera controls -->
+    <div class="section grey">Camera &amp; Filter</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">Scroll</span></div>
+            <div>
+                <div class="help-desc">Zoom (FOV)</div>
+                <div class="help-sub">Narrows or widens lens angle</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">▲</span><span class="key-sep">/</span><span class="key">▼</span></div>
+            <div>
+                <div class="help-desc">Next / Prev Filter</div>
+                <div class="help-sub">Cycle screen effects</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold G</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div>
+                <div class="help-desc">Filter Strength</div>
+                <div class="help-sub">Timecycle modifier intensity</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- DOF -->
+    <div class="section grey">Depth of Field</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">Tap Z</span></div>
+            <div>
+                <div class="help-desc">Toggle DOF</div>
+                <div class="help-sub">Enable / disable blur effect</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold Z</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div>
+                <div class="help-desc">Near Focus Distance</div>
+                <div class="help-sub">Where focus begins (0.1–50m)</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold X</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div>
+                <div class="help-desc">Far Focus Distance</div>
+                <div class="help-sub">Where focus ends (1–200m)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Effects -->
+    <div class="section grey">Effects</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold C</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div>
+                <div class="help-desc">Camera Shake</div>
+                <div class="help-sub">Hand-held wobble (0–3)</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Tap B</span></div>
+            <div>
+                <div class="help-desc">Toggle Cinematic Bars</div>
+                <div class="help-sub">Black letterbox on/off</div>
+            </div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold B</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div>
+                <div class="help-desc">Bar Thickness</div>
+                <div class="help-sub">Height of letterbox bars (0–30%)</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-footer">
+        <span class="p-footer-hint">Backspace to hide</span>
+        <span class="p-footer-cmd">Helper panel</span>
+    </div>
+</div>
+
+<script>
+    const FOV_MIN = 10, FOV_MAX = 120;
+    const TC_MAX       = 5.0;
+    const DOF_NEAR_MAX = 50.0;
+    const DOF_FAR_MAX  = 200.0;
+    const SHAKE_MAX    = 3.0;
+    const BARS_MAX     = 0.30;
+
+    function pct(v, max) { return Math.min(100, Math.max(0, (v / max) * 100)) + '%'; }
+
+    function setFov(v) {
+        const p = ((v - FOV_MIN) / (FOV_MAX - FOV_MIN)) * 100;
+        document.getElementById('fovValue').textContent = Math.round(v) + '°';
+        document.getElementById('fovFill').style.width  = p + '%';
+    }
+
+    function setFilter(name) {
+        document.getElementById('filterName').textContent = name || 'None';
+    }
+
+    function setTC(v) {
+        document.getElementById('tcValue').textContent = v.toFixed(1);
+        document.getElementById('tcFill').style.width  = pct(v, TC_MAX);
+    }
+
+    function setDofNear(v) {
+        document.getElementById('dofNearValue').textContent = v.toFixed(1) + 'm';
+        document.getElementById('dofNearFill').style.width  = pct(v, DOF_NEAR_MAX);
+    }
+
+    function setDofFar(v) {
+        document.getElementById('dofFarValue').textContent = v.toFixed(1) + 'm';
+        document.getElementById('dofFarFill').style.width  = pct(v, DOF_FAR_MAX);
+    }
+
+    function setShake(v) {
+        document.getElementById('shakeValue').textContent = v.toFixed(2);
+        document.getElementById('shakeFill').style.width  = pct(v, SHAKE_MAX);
+        setPill('pillShake', v > 0);
+    }
+
+    function setBars(fraction) {
+        const px = Math.round(fraction * window.innerHeight);
+        document.getElementById('barTop').style.height    = px + 'px';
+        document.getElementById('barBottom').style.height = px + 'px';
+        document.getElementById('barsValue').textContent  = Math.round(fraction * 100) + '%';
+        document.getElementById('barsFill').style.width   = pct(fraction, BARS_MAX);
+        setPill('pillBars', fraction > 0);
+    }
+
+    function setPill(id, on) {
+        const el = document.getElementById(id);
+        el.classList.toggle('on', on);
+        el.textContent = on ? 'ON' : 'OFF';
+    }
+
+    function setVisible(v) {
+        const display = v ? 'block' : 'none';
+        document.getElementById('panelMain').style.display = display;
+        document.getElementById('panelHelp').style.display = display;
+    }
+
+    window.addEventListener('message', function(e) {
+        const d = e.data;
+        if (!d || !d.type) return;
+        if (d.type === 'hide') { setVisible(false); return; }
+        if (d.type === 'show') setVisible(true);
+
+        if (d.fov        != null) setFov(d.fov);
+        if (d.filter     != null) setFilter(d.filter);
+        if (d.tcStrength != null) setTC(d.tcStrength);
+        if (d.dofNear    != null) setDofNear(d.dofNear);
+        if (d.dofFar     != null) setDofFar(d.dofFar);
+        if (d.shake      != null) setShake(d.shake);
+        if (d.bars       != null) setBars(d.bars);
+        if (d.dofEnabled != null) setPill('pillDof', d.dofEnabled);
+    });
+</script>
+</body>
+</html>
