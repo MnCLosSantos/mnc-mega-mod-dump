@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MNC Handling Editor</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app" class="hidden">
+  <div id="panel">
+
+    <!-- Top bar -->
+    <header id="topbar">
+      <div id="brand">
+        <span id="brand-mark">Handling Editor</span>
+        <button class="nav-btn active" data-view="editor">
+          <span class="nav-dot"></span>
+          Editor
+        </button>
+        <button class="nav-btn" data-view="saved">
+          <span class="nav-dot"></span>
+          Saves
+        </button>
+      </div>
+      <button id="closeBtn" title="Close (Esc)">&times;</button>
+    </header>
+
+    <div id="body">
+
+      <!-- Main content -->
+      <main id="content">
+
+        <!-- EDITOR VIEW -->
+        <section id="view-editor" class="view active">
+
+          <div id="modelBanner">
+            <div id="modelBannerInfo">
+              <span id="modelLabel">&mdash;</span>
+              <span id="modelCode">&mdash;</span>
+              <span id="modelBadge" class="badge">Default</span>
+            </div>
+            <div id="modelMeta"></div>
+          </div>
+
+          <div id="editorWorkspace">
+
+            <div id="presetBar" class="hidden"></div>
+
+            <div id="categoryTabs"></div>
+
+            <div id="fieldList"></div>
+
+            <footer id="editorFooter">
+              <button id="revertAllBtn" class="btn btn-ghost">Revert All</button>
+              <div id="footerSpacer"></div>
+              <button id="saveBtn" class="btn btn-primary">Save Changes</button>
+            </footer>
+
+          </div>
+
+        </section>
+
+        <!-- SAVED OVERRIDES VIEW -->
+        <section id="view-saved" class="view">
+
+          <div id="savedHeader">
+            <input id="savedSearch" type="text" placeholder="Filter saved overrides&hellip;" autocomplete="off">
+          </div>
+
+          <div id="savedListWrap">
+            <table id="savedTable">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Updated By</th>
+                  <th>Updated At</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="savedTableBody"></tbody>
+            </table>
+            <div id="savedEmpty" class="hidden">No custom handling overrides have been saved yet.</div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm modal (native confirm()/alert() block the NUI JS thread, so this is custom) -->
+<div id="confirmModal" class="hidden">
+  <div id="confirmBox">
+    <p id="confirmText">Are you sure?</p>
+    <div id="confirmActions">
+      <button id="confirmCancel" class="btn btn-ghost">Cancel</button>
+      <button id="confirmOk" class="btn btn-danger">Revert</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="hidden"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

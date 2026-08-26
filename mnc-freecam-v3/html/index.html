@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>MnC FreeCam</title>
+<style>
+:root {
+    --bg-void:    #0d0d0f;
+    --bg-panel:   #141418;
+    --bg-card:    #1a1a20;
+    --bg-row:     #1f1f26;
+    --border:     #2a2a35;
+    --amber:      #f0a500;
+    --amber-dim:  #d48f00;
+    --amber-glow: rgba(240,165,0,0.09);
+    --text:       #f0f0f4;
+    --muted:      #a8a8bc;
+    --green:      #4caf6e;
+    --blue:       #5b9bd5;
+    --red:        #d55b5b;
+    --purple:     #b07de0;
+    --font:       'Segoe UI',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:transparent;font-family:var(--font);pointer-events:none;user-select:none;width:100vw;height:100vh;overflow:hidden;}
+
+/* bars */
+.bar{position:fixed;left:0;right:0;background:#000;transition:height .3s ease;height:0;z-index:1;}
+#barTop{top:0;}#barBottom{bottom:0;}
+
+/* panels */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.panel{position:fixed;top:50%;transform:translateY(-50%);background:var(--bg-panel);border:1px solid var(--border);border-radius:7px;box-shadow:0 8px 40px rgba(0,0,0,.85);display:none;z-index:10;animation:fadeIn .18s ease;}
+#panelMain{left:28px;width:290px;border-left:3px solid var(--amber);overflow:hidden;}
+#panelHelp{right:28px;width:275px;border-left:3px solid #3a3a4a;overflow:hidden;}
+#panelCine{left:50%;transform:translate(-50%,-50%);width:520px;border-left:3px solid var(--blue);display:none;}
+
+/* shared chrome */
+.p-header{display:flex;align-items:center;gap:8px;padding:10px 13px 9px;background:var(--bg-void);border-bottom:1px solid var(--border);}
+.p-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);box-shadow:0 0 6px var(--amber);flex-shrink:0;}
+.p-dot.grey{background:#3a3a4a;box-shadow:none;}
+.p-dot.blue{background:var(--blue);box-shadow:0 0 6px var(--blue);}
+.p-title{font-size:11px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--amber);}
+.p-title.grey{color:var(--muted);}
+.p-title.blue{color:var(--blue);}
+.p-badge{margin-left:auto;font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#9090a8;}
+.p-logo{margin-left:auto;height:22px;width:22px;border-radius:50%;object-fit:cover;opacity:.85;flex-shrink:0;}
+.section{padding:7px 13px 3px;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--amber-dim);}
+.section.grey{color:#8888a8;}
+.section.blue{color:#5b86b8;}
+.divider{height:1px;background:var(--border);margin:2px 11px 5px;}
+.p-footer{padding:7px 13px;border-top:1px solid var(--border);background:var(--bg-void);display:flex;align-items:center;justify-content:space-between;}
+.p-footer-hint{font-size:9px;color:#9898b0;}
+.p-footer-cmd{font-size:9px;font-weight:700;color:var(--amber-dim);}
+
+/* stats */
+.stats{padding:0 9px 7px;display:flex;flex-direction:column;gap:4px;}
+.stat{display:grid;grid-template-columns:1fr auto;align-items:center;gap:9px;padding:6px 8px;border-radius:5px;background:var(--bg-row);}
+.stat-left{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.stat-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;}
+.stat-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#9898b4;display:flex;align-items:center;gap:4px;}
+.stat-value{font-size:13px;font-weight:700;color:var(--amber);white-space:nowrap;}
+.stat-value.blue{color:var(--blue);}
+.stat-value.green{color:var(--green);}
+.stat-value.red{color:var(--red);}
+.stat-value.purple{color:var(--purple);}
+.stat-track{width:100%;height:3px;background:var(--bg-card);border-radius:2px;overflow:hidden;}
+.stat-fill{height:100%;border-radius:2px;background:var(--amber);transition:width .1s ease;}
+.stat-fill.blue{background:var(--blue);}
+.stat-fill.green{background:var(--green);}
+.stat-fill.red{background:var(--red);}
+.stat-fill.purple{background:var(--purple);}
+.pill{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 5px;border-radius:3px;border:1px solid var(--border);color:var(--muted);background:var(--bg-card);transition:all .15s;}
+.pill.on{color:var(--green);border-color:rgba(76,175,110,.5);background:rgba(76,175,110,.1);}
+.filter-chip{margin:0 9px 7px;padding:6px 9px;border-radius:5px;background:var(--amber-glow);border:1px solid rgba(240,165,0,.18);display:flex;align-items:center;gap:7px;}
+.filter-lbl{font-size:9px;color:#a0a0b8;flex-shrink:0;}
+.filter-val{font-size:11px;font-weight:700;color:var(--amber);margin-left:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.wheel-row{margin:0 9px 7px;padding:7px 9px;border-radius:5px;background:var(--bg-row);display:flex;align-items:center;gap:8px;}
+.wheel-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#a0a0b8;flex:1;}
+.wheel-track{flex:1;height:3px;background:var(--bg-card);border-radius:2px;position:relative;}
+.wheel-fill{position:absolute;top:0;height:100%;border-radius:2px;background:var(--amber);transition:all .1s ease;}
+.wheel-value{font-size:12px;font-weight:700;color:var(--amber);min-width:38px;text-align:right;}
+
+/* keybinds */
+.help-rows{padding:0 9px 7px;display:flex;flex-direction:column;gap:3px;}
+.help-row{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:9px;padding:5px 8px;border-radius:5px;background:var(--bg-row);}
+.keys{display:flex;gap:3px;align-items:center;flex-shrink:0;}
+.key{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:19px;padding:0 5px;background:var(--bg-card);border:1px solid #3a3a4e;border-bottom:2px solid #252535;border-radius:3px;font-size:9px;font-weight:700;color:#d8d8e8;white-space:nowrap;}
+.key-sep{font-size:9px;color:#8888a0;}
+.help-desc{font-size:10px;color:#d8d8e8;line-height:1.3;}
+.help-sub{font-size:8px;color:#9090a8;margin-top:1px;}
+
+/* cinematic */
+.cine-body{padding:0 11px 10px;}
+.cine-tabs{display:flex;gap:2px;padding:8px 11px 0;border-bottom:1px solid var(--border);margin-bottom:0;}
+.cine-tab{padding:6px 14px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9898b8;border-radius:5px 5px 0 0;cursor:pointer;border:1px solid transparent;border-bottom:none;pointer-events:all;transition:all .15s;}
+.cine-tab.active{color:var(--blue);background:var(--bg-card);border-color:var(--border);}
+.cine-tab-content{display:none;padding-top:8px;}
+.cine-tab-content.active{display:block;}
+.setup-bar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:var(--bg-card);color:var(--text);transition:all .15s;pointer-events:all;}
+.btn:hover{border-color:var(--blue);color:var(--blue);}
+.btn.primary{background:rgba(91,155,213,.15);border-color:rgba(91,155,213,.4);color:var(--blue);}
+.btn.primary:hover{background:rgba(91,155,213,.25);}
+.btn.danger{background:rgba(213,91,91,.12);border-color:rgba(213,91,91,.35);color:var(--red);}
+.btn.danger:hover{background:rgba(213,91,91,.22);}
+.btn.success{background:rgba(76,175,110,.12);border-color:rgba(76,175,110,.35);color:var(--green);}
+.btn.success:hover{background:rgba(76,175,110,.22);}
+.btn.amber{background:rgba(240,165,0,.12);border-color:rgba(240,165,0,.35);color:var(--amber);}
+.btn.amber:hover{background:rgba(240,165,0,.22);}
+.btn.purple{background:rgba(176,125,224,.15);border-color:rgba(176,125,224,.4);color:var(--purple);}
+.btn.purple:hover{background:rgba(176,125,224,.25);}
+.type-toggle,.mode-toggle{display:flex;gap:2px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;padding:2px;}
+.type-btn,.mode-btn{padding:4px 10px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9898b8;border-radius:3px;cursor:pointer;transition:all .15s;pointer-events:all;}
+.type-btn.active,.mode-btn.active{background:rgba(91,155,213,.2);color:var(--blue);}
+.kf-scroll-wrap{position:relative;margin:6px 0;}
+.kf-scroll-btn{width:100%;height:22px;display:none;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;cursor:pointer;pointer-events:all;font-size:11px;color:var(--muted);user-select:none;transition:all .15s;}
+.kf-scroll-btn:hover{background:var(--bg-row);color:var(--text);}
+.kf-scroll-btn.visible{display:flex;}
+.kf-list{display:flex;flex-direction:column;gap:3px;max-height:260px;overflow:hidden;}
+.kf-item{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:7px;padding:6px 8px;border-radius:4px;background:var(--bg-row);border:1px solid transparent;pointer-events:none;}
+.kf-num{font-size:10px;font-weight:700;color:var(--blue);min-width:18px;}
+.kf-pos{font-size:9px;color:#a8a8c0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kf-dur{display:flex;align-items:center;gap:4px;pointer-events:none;}
+.kf-dur input{width:46px;padding:3px 5px;background:var(--bg-card);border:1px solid var(--border);border-radius:3px;color:var(--text);font-size:10px;font-family:var(--font);text-align:center;outline:none;pointer-events:all;}
+.kf-dur input:focus{border-color:var(--blue);}
+.kf-del{font-size:10px;color:var(--red);cursor:pointer;padding:2px 5px;border-radius:3px;pointer-events:all;}
+.kf-del:hover{background:rgba(213,91,91,.15);}
+.kf-empty{font-size:10px;color:#9090a8;text-align:center;padding:12px 0;font-style:italic;}
+.seq-list{display:flex;flex-direction:column;gap:4px;margin-top:6px;}
+.seq-item{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:8px 9px;border-radius:5px;background:var(--bg-row);border:1px solid transparent;}
+.seq-item:hover{border-color:var(--border);}
+.seq-left{display:flex;flex-direction:column;gap:2px;}
+.seq-name{font-size:11px;font-weight:600;color:var(--text);}
+.seq-meta{font-size:9px;color:#9898b4;}
+.seq-code{font-size:8px;color:var(--amber-dim);font-family:monospace;letter-spacing:.05em;}
+.seq-actions{display:flex;gap:4px;}
+.input-row{display:flex;gap:6px;align-items:center;margin:6px 0;}
+.cine-input{flex:1;padding:6px 9px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;font-family:var(--font);outline:none;pointer-events:all;}
+.cine-input:focus{border-color:var(--blue);}
+.cine-label{font-size:9px;color:#a0a0bc;margin-bottom:3px;display:block;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.global-dur-row{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:5px;background:var(--bg-row);margin-bottom:7px;}
+.global-dur-label{font-size:10px;color:#a0a0bc;flex:1;}
+.cine-status{padding:5px 9px 3px;font-size:9px;color:#9090a8;font-style:italic;}
+.setup-hint{padding:5px 9px;background:rgba(91,155,213,.1);border:1px solid rgba(91,155,213,.25);border-radius:4px;font-size:9px;color:var(--blue);margin-bottom:6px;display:none;}
+.setup-hint.visible{display:block;}
+
+/* confirm modal */
+#confirmModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9999;pointer-events:all;}
+#confirmModal.open{display:flex;}
+.confirm-box{background:var(--bg-panel);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:7px;padding:18px 20px;min-width:220px;box-shadow:0 8px 40px rgba(0,0,0,.9);}
+.confirm-msg{font-size:12px;color:var(--text);margin-bottom:14px;}
+.confirm-btns{display:flex;gap:8px;justify-content:flex-end;}
+
+/* setup toast */
+#setupToast{
+    position:fixed;bottom:38px;left:50%;transform:translateX(-50%);
+    background:rgba(13,13,15,.92);border:1px solid rgba(91,155,213,.35);
+    border-left:3px solid var(--blue);border-radius:8px;
+    padding:13px 20px;display:none;flex-direction:column;align-items:center;
+    gap:10px;z-index:20;box-shadow:0 6px 32px rgba(0,0,0,.8);
+    min-width:320px;pointer-events:all;animation:fadeIn .2s ease;
+}
+#setupToast.visible{display:flex;}
+.toast-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);}
+.toast-body{font-size:11px;color:var(--text);text-align:center;line-height:1.6;}
+.toast-key{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;padding:0 7px;background:var(--bg-card);border:1px solid #3a3a4e;border-bottom:2px solid #252535;border-radius:3px;font-size:10px;font-weight:700;color:var(--amber);margin:0 2px;}
+.toast-count{font-size:10px;color:#a0a0bc;margin-top:2px;}
+.toast-stop{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#9898b4;cursor:pointer;padding:4px 10px;border-radius:3px;border:1px solid #2a2a38;pointer-events:all;transition:all .15s;}
+.toast-stop:hover{color:var(--red);border-color:rgba(213,91,91,.4);background:rgba(213,91,91,.08);}
+
+/* cam capture toast */
+#camCaptureToast{
+    position:fixed;bottom:38px;left:50%;transform:translateX(-50%);
+    background:rgba(13,13,15,.92);border:1px solid rgba(240,165,0,.35);
+    border-left:3px solid var(--amber);border-radius:8px;
+    padding:13px 20px;display:none;flex-direction:column;align-items:center;
+    gap:10px;z-index:20;box-shadow:0 6px 32px rgba(0,0,0,.8);
+    min-width:340px;pointer-events:all;animation:fadeIn .2s ease;
+}
+#camCaptureToast.visible{display:flex;}
+.capture-toast-title{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);}
+.capture-toast-body{font-size:11px;color:var(--text);text-align:center;line-height:1.6;}
+.capture-toast-actions{display:flex;gap:8px;margin-top:2px;}
+
+/* copy btn */
+.copy-btn{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;border:1px solid rgba(240,165,0,.3);background:rgba(240,165,0,.08);color:var(--amber-dim);transition:all .15s;pointer-events:all;user-select:none;}
+.copy-btn:hover{background:rgba(240,165,0,.18);border-color:rgba(240,165,0,.5);color:var(--amber);}
+.copy-btn.copied{border-color:rgba(76,175,110,.5);background:rgba(76,175,110,.1);color:var(--green);}
+.seq-code-row{display:flex;align-items:center;gap:6px;margin-top:1px;}
+
+/* edit seq modal */
+#editSeqModal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:9998;pointer-events:all;background:rgba(0,0,0,.55);}
+#editSeqModal.open{display:flex;}
+.edit-seq-box{background:var(--bg-panel);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:7px;padding:0;width:520px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.9);overflow:hidden;}
+.edit-seq-header{display:flex;align-items:center;gap:8px;padding:10px 13px 9px;background:var(--bg-void);border-bottom:1px solid var(--border);flex-shrink:0;}
+.edit-seq-body{padding:11px 11px 10px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1;}
+.edit-seq-footer{display:flex;gap:8px;justify-content:flex-end;padding:7px 13px;border-top:1px solid var(--border);background:var(--bg-void);flex-shrink:0;}
+
+/* ══ CAMERA SWITCHER ══ */
+#panelCamSwitch{left:50%;transform:translate(-50%,-50%);width:440px;border-left:3px solid var(--purple);}
+.cam-scroll-wrap{position:relative;padding:4px 9px 2px;}
+.cam-scroll-btn{width:100%;height:22px;display:none;align-items:center;justify-content:center;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;cursor:pointer;pointer-events:all;font-size:11px;color:var(--muted);user-select:none;transition:all .15s;}
+.cam-scroll-btn:hover{background:var(--bg-row);color:var(--text);}
+.cam-scroll-btn.visible{display:flex;}
+.cam-list{display:flex;flex-direction:column;gap:4px;max-height:340px;overflow:hidden;}
+
+/* cam row — redesigned for clarity */
+.cam-item{
+    display:flex;align-items:center;gap:0;
+    padding:0;border-radius:6px;
+    background:var(--bg-row);border:1px solid var(--border);
+    overflow:hidden;transition:border-color .15s;
+}
+.cam-item:hover{border-color:rgba(176,125,224,.4);}
+.cam-item.active{border-color:rgba(176,125,224,.6);background:rgba(176,125,224,.08);}
+
+/* USE button — main clickable area */
+.cam-use{
+    flex:1;display:flex;align-items:center;gap:10px;
+    padding:10px 11px;cursor:pointer;min-width:0;
+    transition:background .15s;pointer-events:all;
+}
+.cam-use:hover{background:rgba(176,125,224,.1);}
+.cam-item.active .cam-use{cursor:default;}
+
+.cam-id-badge{
+    font-size:9px;font-weight:700;
+    color:#6a6a88;background:var(--bg-card);
+    border:1px solid var(--border);border-radius:3px;
+    padding:2px 5px;white-space:nowrap;flex-shrink:0;
+    letter-spacing:.04em;font-family:monospace;
+}
+.cam-item.active .cam-id-badge{color:var(--purple);border-color:rgba(176,125,224,.35);}
+
+.cam-label-wrap{flex:1;min-width:0;}
+.cam-item-label{font-size:11px;font-weight:600;color:var(--text);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cam-item.active .cam-item-label{color:var(--purple);}
+.cam-active-tag{font-size:8px;font-weight:700;color:var(--purple);letter-spacing:.07em;text-transform:uppercase;margin-top:1px;display:block;}
+.cam-use-hint{font-size:8px;color:#5a5a80;letter-spacing:.05em;margin-top:1px;display:block;}
+
+/* right-side action buttons */
+.cam-actions{display:flex;align-items:stretch;border-left:1px solid var(--border);flex-shrink:0;}
+.cam-act-btn{
+    display:flex;align-items:center;justify-content:center;
+    width:36px;min-height:42px;
+    background:transparent;border:none;border-left:1px solid var(--border);
+    font-size:13px;cursor:pointer;pointer-events:all;
+    transition:background .15s;color:var(--muted);
+    text-align:center;flex-shrink:0;
+}
+.cam-act-btn:first-child{border-left:none;}
+.cam-act-btn:hover{background:rgba(255,255,255,.07);color:var(--text);}
+.cam-act-btn.eye-hidden{opacity:.4;}
+.cam-act-btn.eye-hidden:hover{opacity:.8;}
+.cam-act-btn.active{color:var(--amber);background:rgba(240,165,0,.12);}
+.cam-act-btn.active:hover{background:rgba(240,165,0,.2);}
+.cam-act-btn.edit-btn:hover{color:var(--amber);}
+.cam-act-btn.del-btn:hover{color:var(--red);background:rgba(213,91,91,.1);}
+/* text-label variant — wider than icon buttons */
+.cam-act-text{width:auto!important;min-width:36px;padding:0 6px;font-size:8px!important;font-weight:700;letter-spacing:.05em;text-transform:uppercase;}
+
+/* USE pill button */
+.cam-use-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    padding:3px 10px;border-radius:4px;cursor:pointer;pointer-events:all;
+    font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid var(--border);background:var(--bg-row);color:var(--muted);
+    transition:all .15s;white-space:nowrap;flex-shrink:0;
+}
+.cam-use-btn:hover{color:var(--purple);border-color:rgba(176,125,224,.5);background:rgba(176,125,224,.12);}
+/* head tracking toggle row in switcher */
+.ht-row{
+    display:flex;align-items:center;gap:10px;
+    padding:7px 9px;margin:4px 9px 6px;
+    border-radius:5px;background:var(--bg-card);
+    border:1px solid var(--border);
+}
+.ht-label{font-size:10px;font-weight:700;color:var(--muted);flex:1;letter-spacing:.04em;}
+.ht-toggle{
+    display:flex;align-items:center;gap:6px;
+    padding:4px 10px;border-radius:4px;cursor:pointer;pointer-events:all;
+    font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+    border:1px solid var(--border);background:var(--bg-row);color:var(--muted);
+    transition:all .15s;
+}
+.ht-toggle.active{color:var(--amber);border-color:rgba(240,165,0,.4);background:rgba(240,165,0,.1);}
+.ht-hint{font-size:8px;color:#7070a0;margin-top:2px;}
+
+/* add cam form */
+.add-cam-row{display:flex;gap:5px;align-items:center;padding:6px 9px 8px;border-top:1px solid var(--border);}
+.add-cam-row input{flex:1;padding:5px 8px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:10px;font-family:var(--font);outline:none;pointer-events:all;}
+.add-cam-row input:focus{border-color:var(--purple);}
+.add-cam-id{width:52px!important;flex:none!important;text-align:center;}
+
+/* cam edit panel */
+#panelCamEdit{left:50%;transform:translate(-50%,-50%);width:400px;border-left:3px solid var(--amber);pointer-events:all;}
+.cam-edit-body{padding:8px 11px 10px;display:flex;flex-direction:column;gap:8px;pointer-events:all;}
+.cam-edit-row{display:flex;align-items:center;gap:10px;pointer-events:all;}
+.cam-edit-label{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);width:70px;flex-shrink:0;}
+.cam-edit-slider{flex:1;-webkit-appearance:none;appearance:none;height:3px;border-radius:2px;background:var(--bg-card);border:1px solid var(--border);outline:none;pointer-events:all;cursor:pointer;}
+.cam-edit-slider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--amber);cursor:pointer;border:2px solid var(--bg-void);}
+.cam-edit-val{font-size:11px;font-weight:700;color:var(--amber);min-width:40px;text-align:right;}
+.cam-edit-actions{display:flex;gap:6px;margin-top:4px;pointer-events:all;}
+.cam-capture-divider{display:flex;align-items:center;gap:8px;margin:4px 0;}
+.cam-capture-divider span{font-size:8px;color:#5a5a78;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+.cam-capture-divider::before,.cam-capture-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.save-feedback{font-size:9px;font-weight:700;color:var(--green);opacity:0;transition:opacity .2s;pointer-events:none;}
+.save-feedback.show{opacity:1;}
+
+/* preset manager */
+#panelPresets{left:50%;transform:translate(-50%,-50%);width:400px;border-left:3px solid var(--green);}
+.preset-grid{padding:6px 9px 10px;display:flex;flex-direction:column;gap:4px;}
+.preset-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;padding:7px 10px;border-radius:5px;background:var(--bg-row);border:1px solid transparent;}
+.preset-row:hover{border-color:var(--border);}
+.preset-empty-slot{padding:7px 10px;border-radius:5px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:space-between;}
+.preset-name{font-size:11px;font-weight:600;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.preset-meta{font-size:8px;color:var(--muted);margin-top:2px;}
+.preset-actions{display:flex;gap:4px;flex-shrink:0;}
+.preset-slot-lbl{font-size:9px;font-weight:700;color:var(--muted);min-width:18px;}
+.preset-save-row{padding:6px 9px 8px;display:flex;gap:6px;align-items:center;border-top:1px solid var(--border);margin-top:2px;}
+.preset-save-row input{flex:1;padding:6px 9px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;color:var(--text);font-size:11px;font-family:var(--font);outline:none;pointer-events:all;}
+.preset-save-row input:focus{border-color:var(--green);}
+</style>
+</head>
+<body>
+
+<div class="bar" id="barTop"></div>
+<div class="bar" id="barBottom"></div>
+
+<!-- setup toast -->
+<div id="setupToast">
+    <span class="toast-title">📍 Setup Mode Active</span>
+    <div class="toast-body">
+        Fly the camera to each position, then press<br>
+        <span class="toast-key">K</span> to capture a keyframe<br><br>
+        Press <span class="toast-key">I</span> when done to complete setup
+    </div>
+    <div class="toast-count" id="toastKfCount">0 keyframes captured</div>
+    <div class="toast-stop" id="toastStopBtn">■ Done — Open Editor</div>
+</div>
+
+<!-- cam capture toast -->
+<div id="camCaptureToast">
+    <span class="capture-toast-title">📷 Camera Position Capture</span>
+    <div class="capture-toast-body">
+        Fly freecam to the desired camera position &amp; angle<br>
+        <span class="toast-key">K</span> — Capture this position &nbsp;&nbsp; <span class="toast-key">ESC</span> — Cancel
+    </div>
+    <div class="capture-toast-actions">
+        <div class="btn success" id="btnConfirmCapture" style="pointer-events:all;">✔ Capture Position (K)</div>
+        <div class="btn danger"  id="btnCancelCapture"  style="pointer-events:all;">✕ Cancel</div>
+    </div>
+</div>
+
+<!-- ══ LEFT — stats ══ -->
+<div class="panel" id="panelMain">
+    <div class="p-header">
+        <div class="p-dot"></div>
+        <span class="p-title">FreeCam</span>
+        <img src="https://forum.cfx.re/user_avatar/forum.cfx.re/midnight-club-devs/144/6329123_2.png" class="p-logo" alt="MnCLosSantos">
+    </div>
+    <div class="section">Camera</div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label">Field of View</span>
+                <div class="stat-track"><div class="stat-fill" id="fovFill" style="width:50%"></div></div>
+            </div>
+            <div class="stat-right"><span class="stat-value" id="fovValue">90°</span></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section">Screen Filter</div>
+    <div class="filter-chip">
+        <span class="filter-lbl">Active:</span>
+        <span class="filter-val" id="filterName">None</span>
+    </div>
+    <div class="stats" style="padding-top:0">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--purple)">Strength</span>
+                <div class="stat-track"><div class="stat-fill purple" id="tcFill" style="width:20%"></div></div>
+            </div>
+            <div class="stat-right"><span class="stat-value purple" id="tcValue">1.0</span></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section">Depth of Field</div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--blue)">Near Focus <span class="pill" id="pillDof">OFF</span></span>
+                <div class="stat-track"><div class="stat-fill blue" id="dofNearFill" style="width:1%"></div></div>
+            </div>
+            <div class="stat-right"><span class="stat-value blue" id="dofNearValue">1.0m</span></div>
+        </div>
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--blue)">Far Focus</span>
+                <div class="stat-track"><div class="stat-fill blue" id="dofFarFill" style="width:7%"></div></div>
+            </div>
+            <div class="stat-right"><span class="stat-value blue" id="dofFarValue">15.0m</span></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section">Effects</div>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--red)">Camera Shake <span class="pill" id="pillShake">OFF</span></span>
+                <div class="stat-track"><div class="stat-fill red" id="shakeFill" style="width:0%"></div></div>
+            </div>
+            <div class="stat-right"><span class="stat-value red" id="shakeValue">0.00</span></div>
+        </div>
+        <div class="stat">
+            <div class="stat-left">
+                <span class="stat-label" style="color:var(--green)">Cinematic Bars <span class="pill" id="pillBars">OFF</span></span>
+                <div class="stat-track"><div class="stat-fill green" id="barsFill" style="width:0%"></div></div>
+            </div>
+            <div class="stat-right"><span class="stat-value green" id="barsValue">0%</span></div>
+        </div>
+    </div>
+    <div id="wheelSection" style="display:none">
+        <div class="divider"></div>
+        <div class="section">Wheel Turn</div>
+        <div class="wheel-row">
+            <span class="wheel-label">Steering</span>
+            <div class="wheel-track">
+                <div class="wheel-fill" id="wheelFill" style="left:50%;width:0%"></div>
+            </div>
+            <span class="wheel-value" id="wheelValue">0°</span>
+        </div>
+    </div>
+    <div class="p-footer">
+        <span class="p-footer-hint">Bksp hide · I cinematics · ESC exit</span>
+        <span class="p-footer-cmd">/freecam to exit</span>
+    </div>
+</div>
+
+<!-- ══ RIGHT — keybinds ══ -->
+<div class="panel" id="panelHelp">
+    <div class="p-header">
+        <div class="p-dot grey"></div>
+        <span class="p-title grey">Controls</span>
+        <span class="p-badge">Reference</span>
+    </div>
+    <div class="section grey">Movement</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">↑</span><span class="key-sep">/</span><span class="key">↓</span></div>
+            <div><div class="help-desc">Forward / Backward</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">←</span><span class="key-sep">/</span><span class="key">→</span></div>
+            <div><div class="help-desc">Strafe Left / Right</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">PgUp</span><span class="key-sep">/</span><span class="key">PgDn</span></div>
+            <div><div class="help-desc">Up / Down</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Mouse</span></div>
+            <div><div class="help-desc">Look Around <span style="font-size:8px;color:var(--muted)">(blocked in vehicle cam)</span></div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">[</span><span class="key-sep">/</span><span class="key">]</span></div>
+            <div><div class="help-desc">Roll Camera</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section grey">Camera &amp; Filter</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">Scroll</span></div>
+            <div><div class="help-desc">Zoom (FOV) <span style="font-size:8px;color:var(--muted)">(freecam only)</span></div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">,</span><span class="key-sep">/</span><span class="key">.</span></div>
+            <div><div class="help-desc">Prev / Next Filter</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold G</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div><div class="help-desc">Filter Strength</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section grey">Depth of Field</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold Z</span><span class="key-sep">3s</span></div>
+            <div><div class="help-desc">Toggle DOF</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold Z</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div><div class="help-desc">Near Focus Distance</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold X</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div><div class="help-desc">Far Focus Distance</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section grey">Effects</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold Q</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div><div class="help-desc">Camera Shake</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Tap B</span></div>
+            <div><div class="help-desc">Toggle Bars</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">Hold B</span><span class="key-sep">+</span><span class="key">Scroll</span></div>
+            <div><div class="help-desc">Bar Thickness</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section grey">Cinematic</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">I</span></div>
+            <div><div class="help-desc">Open Cinematic Editor</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">H</span></div>
+            <div><div class="help-desc">Toggle Hide Ped</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="section grey">View &amp; Presets</div>
+    <div class="help-rows">
+        <div class="help-row">
+            <div class="keys"><span class="key">C</span></div>
+            <div><div class="help-desc">Cycle Camera Mode</div><div class="help-sub">Also works via /camsets (no freecam needed)</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">/</span></div>
+            <div><div class="help-desc">Camera Switcher</div><div class="help-sub">Pick, use, edit vehicle views · /camsets outside freecam</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">O</span></div>
+            <div><div class="help-desc">Preset Manager</div></div>
+        </div>
+        <div class="help-row">
+            <div class="keys"><span class="key">/camsets</span></div>
+            <div><div class="help-desc">Standalone Camera Sets</div><div class="help-sub">Use camera switcher &amp; C-key cycle without freecam</div></div>
+        </div>
+    </div>
+    <div class="p-footer">
+        <span class="p-footer-hint">Backspace to hide both panels</span>
+        <span class="p-footer-cmd">Helper</span>
+    </div>
+</div>
+
+<!-- ══ CINEMATIC EDITOR ══ -->
+<div class="panel" id="panelCine">
+    <div class="p-header">
+        <div class="p-dot blue"></div>
+        <span class="p-title blue">Cinematic Editor</span>
+        <span class="p-badge" id="cineStatus">Idle</span>
+        <div class="btn" id="btnCloseCine" style="margin-left:auto;padding:3px 9px;font-size:9px;pointer-events:all;">✕ Close</div>
+    </div>
+    <div class="cine-tabs">
+        <div class="cine-tab active" data-tab="setup">Setup</div>
+        <div class="cine-tab" data-tab="sequences">My Sequences</div>
+        <div class="cine-tab" data-tab="import">Import</div>
+    </div>
+    <!-- SETUP tab -->
+    <div class="cine-tab-content active" id="tab-setup">
+        <div class="cine-body">
+            <div class="setup-hint" id="setupHint">📍 Setup mode active — fly to each position and click <strong>+ Capture Frame</strong></div>
+            <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;">
+                <div style="flex:1">
+                    <span class="cine-label">Sequence Name</span>
+                    <input class="cine-input" id="seqName" placeholder="My Sequence" />
+                </div>
+                <div>
+                    <span class="cine-label">Type</span>
+                    <div class="type-toggle">
+                        <div class="type-btn active" data-type="world">World</div>
+                        <div class="type-btn" data-type="vehicle">Vehicle</div>
+                    </div>
+                </div>
+            </div>
+            <div class="global-dur-row">
+                <span class="global-dur-label">Default transition duration</span>
+                <div class="keys" style="gap:4px;">
+                    <span style="font-size:10px;color:var(--muted)">sec</span>
+                    <input class="cine-input" id="globalDur" value="3.0" style="width:52px;padding:3px 6px;text-align:center;" />
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="font-size:9px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;">Playback</span>
+                <div class="mode-toggle">
+                    <div class="mode-btn active" data-mode="once">Once</div>
+                    <div class="mode-btn" data-mode="loop">Loop</div>
+                    <div class="mode-btn" data-mode="pingpong">Ping-Pong</div>
+                </div>
+            </div>
+            <div class="setup-bar">
+                <div class="btn primary" id="btnStartSetup">▶ Start Setup</div>
+                <div class="btn" id="btnStopSetup" style="display:none">■ Stop Setup</div>
+                <div class="btn success" id="btnCaptureKf">＋ Capture Frame</div>
+                <div class="btn danger" id="btnClearKf">✕ Clear All</div>
+                <div class="btn" id="btnNewSetup" title="Clear everything and start a brand-new sequence">🔄 New</div>
+            </div>
+            <div class="section blue" style="padding:0 0 4px">Keyframes</div>
+            <div class="kf-scroll-wrap">
+                <div class="kf-scroll-btn" id="kfScrollUp">▲</div>
+                <div class="kf-list" id="kfList">
+                    <div class="kf-empty">No keyframes yet — start setup and press K</div>
+                </div>
+                <div class="kf-scroll-btn" id="kfScrollDown">▼</div>
+            </div>
+            <div class="setup-bar" style="margin-top:4px;">
+                <div class="btn amber" id="btnPlay">▶ Play</div>
+                <div class="btn danger" id="btnStopPlay" style="display:none">■ Stop</div>
+                <div class="btn primary" id="btnSave">💾 Save</div>
+            </div>
+            <div id="shareCodeBox" style="display:none;margin-top:6px;padding:7px 9px;border-radius:5px;background:var(--amber-glow);border:1px solid rgba(240,165,0,.2);">
+                <span style="font-size:9px;color:var(--muted);">Share Code</span>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:2px;">
+                    <div style="font-size:12px;font-weight:700;color:var(--amber);font-family:monospace;letter-spacing:.08em;flex:1;" id="shareCodeVal"></div>
+                    <div class="copy-btn" id="btnCopyCode">📋 Copy</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SEQUENCES tab -->
+    <div class="cine-tab-content" id="tab-sequences">
+        <div class="cine-body">
+            <div class="section blue" style="padding:6px 0 4px">Saved Sequences</div>
+            <div class="seq-list" id="seqList"><div class="kf-empty">Loading...</div></div>
+        </div>
+    </div>
+    <!-- IMPORT tab -->
+    <div class="cine-tab-content" id="tab-import">
+        <div class="cine-body" style="padding-top:8px;">
+            <span class="cine-label">Enter Share Code</span>
+            <div class="input-row">
+                <input class="cine-input" id="importCode" placeholder="TIGER-BLUE-7-SUNSET" style="text-transform:uppercase;letter-spacing:.06em;" />
+                <div class="btn primary" id="btnImport">Import</div>
+            </div>
+            <div style="font-size:9px;color:var(--muted);margin-top:4px;">Enter the 4-word share code from another player to import their sequence.</div>
+            <div class="divider" style="margin:10px 0 8px;"></div>
+            <span class="cine-label">Command Alternative</span>
+            <div style="font-size:10px;color:var(--muted);padding:6px 8px;background:var(--bg-row);border-radius:4px;font-family:monospace;">/importcinematic WORD-WORD-N-WORD</div>
+        </div>
+    </div>
+    <div class="p-footer">
+        <span class="p-footer-hint">Click ✕ to close · ESC exits freecam</span>
+        <span class="p-footer-cmd" id="cinePbStatus">Ready</span>
+    </div>
+</div>
+
+<!-- ══ CAMERA SWITCHER ══ -->
+<div class="panel" id="panelCamSwitch" style="display:none;">
+    <div class="p-header">
+        <div class="p-dot" style="background:var(--purple);box-shadow:0 0 6px var(--purple);"></div>
+        <span class="p-title" style="color:var(--purple);">Camera View</span>
+        <span class="p-badge" id="camSwitchBadge">Select Mode</span>
+        <div class="btn" id="btnCloseCamSwitch" style="margin-left:auto;padding:3px 9px;font-size:9px;pointer-events:all;">✕</div>
+    </div>
+    <!-- Standalone-only: hide UI notice -->
+    <div id="camSwitchHideBar" style="display:none;padding:6px 9px 4px;">
+        <div style="padding:7px 10px;border-radius:5px;background:rgba(176,125,224,.08);border:1px solid rgba(176,125,224,.25);display:flex;align-items:center;justify-content:space-between;gap:10px;">
+            <div>
+                <div style="font-size:9px;font-weight:700;color:var(--purple);letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px;">UI must be hidden to use C key</div>
+                <div style="font-size:8px;color:var(--muted);line-height:1.4;">While this panel is open it captures keyboard input.<br>Hide it to cycle cameras with <strong style="color:var(--text);">C</strong> or reopen with <strong style="color:var(--text);">/camsets</strong>.</div>
+            </div>
+            <div class="ht-toggle" id="btnHideCamUI" style="white-space:nowrap;flex-shrink:0;">Hide UI</div>
+        </div>
+    </div>
+    <!-- Head tracking info (driver cam always on; others set per-cam in edit panel) -->
+    <div style="padding:4px 9px 2px;">
+        <div style="padding:5px 9px;border-radius:4px;background:rgba(240,165,0,.07);border:1px solid rgba(240,165,0,.18);font-size:8px;color:var(--muted);line-height:1.4;">
+            <span style="color:var(--amber);font-weight:700;">HEAD TRACKING</span> — Driver cam always on. Other cams: toggle per-cam in <span style="color:var(--text);">EDIT</span> panel.
+        </div>
+    </div>
+    <div class="cam-scroll-wrap">
+        <div class="cam-scroll-btn" id="camScrollUp">▲</div>
+        <div class="cam-list" id="camList"></div>
+        <div class="cam-scroll-btn" id="camScrollDown">▼</div>
+    </div>
+    <div class="add-cam-row" id="addCamRow">
+        <input class="add-cam-id" id="addCamId" type="number" min="0" max="99" placeholder="ID" title="GTA view mode ID"/>
+        <input id="addCamLabel" placeholder="Camera name…" maxlength="30"/>
+        <div class="btn" id="btnAddCam" style="padding:3px 9px;font-size:9px;pointer-events:all;white-space:nowrap;">＋ Add</div>
+    </div>
+    <div class="p-footer">
+        <span class="p-footer-hint" id="camSwitchFooterHint">USE = activate · EDIT = adjust position &amp; FOV</span>
+        <span class="p-footer-cmd">C to cycle</span>
+    </div>
+    <!-- Button legend -->
+    <div style="padding:4px 9px 7px;border-top:1px solid var(--border);">
+        <div style="font-size:8px;color:#6060a0;line-height:1.7;letter-spacing:.02em;">
+            <span style="color:var(--muted);font-weight:700;">CYCLE/SKIP</span> — include or exclude from C key<br>
+            <span style="color:var(--muted);font-weight:700;">PEDS VIS/HID</span> — hide player ped on this cam<br>
+            <span style="color:var(--muted);font-weight:700;">HEAD ON/OFF</span> — yaw follows steering angle<br>
+            <span style="color:var(--muted);font-weight:700;">EDIT</span> — open position, angle &amp; FOV editor
+        </div>
+    </div>
+</div>
+
+<!-- ══ PRESET MANAGER ══ -->
+<div class="panel" id="panelPresets" style="display:none;">
+    <div class="p-header">
+        <div class="p-dot" style="background:var(--green);box-shadow:0 0 6px var(--green);"></div>
+        <span class="p-title" style="color:var(--green);">Preset Manager</span>
+        <span class="p-badge">FreeCam Slots</span>
+        <div class="btn" id="btnClosePresets" style="margin-left:auto;padding:3px 9px;font-size:9px;pointer-events:all;">✕</div>
+    </div>
+    <div style="padding:8px 9px 4px;">
+        <div class="preset-save-row" style="border-top:none;padding:0 0 6px;margin:0;">
+            <input id="presetNameInput" placeholder="Preset name…" maxlength="40"/>
+            <div class="btn success" id="btnSavePreset" style="white-space:nowrap;">💾 Save Here</div>
+        </div>
+    </div>
+    <div class="divider" style="margin:0 9px 4px;"></div>
+    <div class="preset-grid" id="presetGrid"></div>
+    <div class="p-footer">
+        <span class="p-footer-hint">O to toggle · saves current position &amp; effects</span>
+    </div>
+</div>
+
+<!-- ══ CAM OFFSET EDITOR ══ -->
+<div class="panel" id="panelCamEdit" style="display:none;pointer-events:all;">
+    <div class="p-header" style="pointer-events:all;">
+        <div class="p-dot"></div>
+        <span class="p-title" id="camEditTitle">Edit Camera Offset</span>
+        <span class="p-badge">SQL Saved</span>
+        <div class="btn" id="btnCloseCamEdit" style="margin-left:auto;padding:3px 9px;font-size:9px;pointer-events:all;">✕</div>
+    </div>
+    <div class="cam-edit-body">
+        <div class="btn amber" id="btnStartCamCapture" style="justify-content:center;width:100%;">📷 Capture Position (fly freecam)</div>
+        <div class="cam-capture-divider"><span>or adjust manually</span></div>
+        <div class="cam-edit-row">
+            <span class="cam-edit-label">Left / Right</span>
+            <input class="cam-edit-slider" type="range" id="sliderLX" min="-8" max="8" step="0.01" value="0"/>
+            <span class="cam-edit-val" id="valLX">0.00</span>
+        </div>
+        <div class="cam-edit-row">
+            <span class="cam-edit-label">Fwd / Back</span>
+            <input class="cam-edit-slider" type="range" id="sliderLY" min="-20" max="20" step="0.01" value="0"/>
+            <span class="cam-edit-val" id="valLY">0.00</span>
+        </div>
+        <div class="cam-edit-row">
+            <span class="cam-edit-label">Up / Down</span>
+            <input class="cam-edit-slider" type="range" id="sliderLZ" min="-3" max="15" step="0.01" value="0"/>
+            <span class="cam-edit-val" id="valLZ">0.00</span>
+        </div>
+        <div class="cam-edit-row">
+            <span class="cam-edit-label">Pitch</span>
+            <input class="cam-edit-slider" type="range" id="sliderPitch" min="-89" max="89" step="0.5" value="0"/>
+            <span class="cam-edit-val" id="valPitch">0.0°</span>
+        </div>
+        <div class="cam-edit-row">
+            <span class="cam-edit-label">Yaw</span>
+            <input class="cam-edit-slider" type="range" id="sliderYaw" min="-180" max="180" step="0.5" value="0"/>
+            <span class="cam-edit-val" id="valYaw">0.0°</span>
+        </div>
+        <div class="cam-edit-row">
+            <span class="cam-edit-label">Roll</span>
+            <input class="cam-edit-slider" type="range" id="sliderRoll" min="-89" max="89" step="0.5" value="0"/>
+            <span class="cam-edit-val" id="valRoll">0.0°</span>
+        </div>
+        <div class="cam-edit-row">
+            <span class="cam-edit-label">FOV</span>
+            <input class="cam-edit-slider" type="range" id="sliderFov" min="10" max="120" step="0.5" value="70"/>
+            <span class="cam-edit-val" id="valFov">70.0°</span>
+        </div>
+        <!-- Model-allowed toggle — shown for all numeric cams, lets player enable per-model presets -->
+        <div class="cam-edit-row" id="rowModelAllowed" style="display:none;">
+            <span class="cam-edit-label" style="line-height:1.2;">Per-Model<br>Presets</span>
+            <div style="flex:1;display:flex;align-items:center;gap:8px;">
+                <div class="ht-toggle" id="btnToggleModelAllowed" style="font-size:9px;">OFF</div>
+                <span style="font-size:8px;color:var(--muted);line-height:1.3;">Enable to save separate offsets per vehicle model for this cam</span>
+            </div>
+        </div>
+        <div class="cam-edit-actions">
+            <div class="btn primary" id="btnSaveCamEdit" style="flex:1;">💾 Save to SQL</div>
+            <div class="btn danger"  id="btnResetCamEdit">↺ Reset Default</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
+            <span style="font-size:9px;color:var(--muted);">Sliders update live · Save persists across sessions</span>
+            <span class="save-feedback" id="camEditSaveFeedback">✔ Saved!</span>
+        </div>
+        <!-- Per-model presets — shown when model_allowed is enabled for this cam -->
+        <div id="camEditModelSection" style="display:none;margin-top:8px;border-top:1px solid var(--border);padding-top:8px;">
+            <div style="font-size:9px;font-weight:700;color:var(--amber);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px;">Per-Model Presets</div>
+            <div style="font-size:8px;color:var(--muted);margin-bottom:6px;line-height:1.4;">Saves current slider values as the offset for this cam + your current vehicle model, overriding the global default for that model only.</div>
+            <div class="btn amber" id="btnSaveModelOffset" style="width:100%;justify-content:center;margin-bottom:6px;">📌 Save for Current Vehicle Model</div>
+            <!-- Scrollable model preset list -->
+            <div style="position:relative;">
+                <div class="cam-scroll-btn" id="modelListScrollUp" style="display:none;">▲</div>
+                <div id="modelOffsetList" style="display:flex;flex-direction:column;gap:3px;max-height:90px;overflow-y:auto;"></div>
+                <div class="cam-scroll-btn" id="modelListScrollDown" style="display:none;">▼</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ EDIT SEQUENCE MODAL ══ -->
+<div id="editSeqModal">
+    <div class="edit-seq-box">
+        <div class="edit-seq-header">
+            <div class="p-dot blue"></div>
+            <span class="p-title blue">Edit Sequence</span>
+            <span class="p-badge" id="editSeqShareLabel"></span>
+            <div class="btn" id="btnCloseEditSeqModal" style="margin-left:auto;padding:3px 9px;font-size:9px;pointer-events:all;">✕</div>
+        </div>
+        <div class="edit-seq-body">
+            <div style="display:flex;gap:8px;align-items:flex-end;margin-bottom:8px;">
+                <div style="flex:1">
+                    <span class="cine-label">Sequence Name</span>
+                    <input class="cine-input" id="editSeqName" placeholder="My Sequence" />
+                </div>
+                <div>
+                    <span class="cine-label">Type</span>
+                    <div class="type-toggle" id="editTypeToggle">
+                        <div class="type-btn active" data-type="world">World</div>
+                        <div class="type-btn" data-type="vehicle">Vehicle</div>
+                    </div>
+                </div>
+            </div>
+            <div class="global-dur-row">
+                <span class="global-dur-label">Default transition duration</span>
+                <div class="keys" style="gap:4px;">
+                    <span style="font-size:10px;color:var(--muted)">sec</span>
+                    <input class="cine-input" id="editGlobalDur" value="3.0" style="width:52px;padding:3px 6px;text-align:center;" />
+                </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                <span style="font-size:9px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase;">Playback</span>
+                <div class="mode-toggle" id="editModeToggle">
+                    <div class="mode-btn active" data-mode="once">Once</div>
+                    <div class="mode-btn" data-mode="loop">Loop</div>
+                    <div class="mode-btn" data-mode="pingpong">Ping-Pong</div>
+                </div>
+            </div>
+            <div class="setup-bar">
+                <div class="btn primary" id="editBtnStartSetup">▶ Start Setup</div>
+                <div class="btn" id="editBtnStopSetup" style="display:none">■ Stop Setup</div>
+                <div class="btn success" id="editBtnCaptureKf">＋ Capture Frame</div>
+                <div class="btn danger" id="editBtnClearKf">✕ Clear All</div>
+            </div>
+            <div class="section blue" style="padding:0 0 4px">Keyframes</div>
+            <div class="kf-scroll-wrap">
+                <div class="kf-scroll-btn" id="editKfScrollUp">▲</div>
+                <div class="kf-list" id="editKfList"><div class="kf-empty">No keyframes yet</div></div>
+                <div class="kf-scroll-btn" id="editKfScrollDown">▼</div>
+            </div>
+            <div class="setup-bar" style="margin-top:4px;">
+                <div class="btn amber" id="editBtnPlay">▶ Play</div>
+                <div class="btn danger" id="editBtnStopPlay" style="display:none">■ Stop</div>
+                <div class="btn primary" id="btnSaveEditSeq">💾 Save</div>
+            </div>
+            <div id="editShareCodeBox" style="display:none;margin-top:6px;padding:7px 9px;border-radius:5px;background:var(--amber-glow);border:1px solid rgba(240,165,0,.2);">
+                <span style="font-size:9px;color:var(--muted);">Share Code</span>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:2px;">
+                    <div style="font-size:12px;font-weight:700;color:var(--amber);font-family:monospace;letter-spacing:.08em;flex:1;" id="editShareCodeVal"></div>
+                    <div class="copy-btn" id="btnCopyEditCode">📋 Copy</div>
+                </div>
+            </div>
+        </div>
+        <div class="edit-seq-footer">
+            <div class="btn" id="btnCancelEditSeq">✕ Cancel</div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ CONFIRM MODAL ══ -->
+<div id="confirmModal">
+    <div class="confirm-box">
+        <div class="confirm-msg" id="confirmMsg"></div>
+        <div class="confirm-btns">
+            <div class="btn" id="confirmNo">Cancel</div>
+            <div class="btn danger" id="confirmYes">Confirm</div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ── constants ──
+const FOV_MIN=10,FOV_MAX=120,TC_MAX=5,DOF_NEAR_MAX=50,DOF_FAR_MAX=200,SHAKE_MAX=3,BARS_MAX=0.3,WHEEL_MAX=60;
+function pct(v,max){return Math.min(100,Math.max(0,(v/max)*100))+'%';}
+function eid(id){return document.getElementById(id);}
+
+// ── stats ──
+function setFov(v){const p=((v-FOV_MIN)/(FOV_MAX-FOV_MIN))*100;eid('fovValue').textContent=Math.round(v)+'°';eid('fovFill').style.width=p+'%';}
+function setFilter(n){eid('filterName').textContent=n||'None';}
+function setTC(v){eid('tcValue').textContent=v.toFixed(1);eid('tcFill').style.width=pct(v,TC_MAX);}
+function setDofNear(v){eid('dofNearValue').textContent=v.toFixed(1)+'m';eid('dofNearFill').style.width=pct(v,DOF_NEAR_MAX);}
+function setDofFar(v){eid('dofFarValue').textContent=v.toFixed(1)+'m';eid('dofFarFill').style.width=pct(v,DOF_FAR_MAX);}
+function setShake(v){eid('shakeValue').textContent=v.toFixed(2);eid('shakeFill').style.width=pct(v,SHAKE_MAX);setPill('pillShake',v>0);}
+function setBars(f){const px=Math.round(f*window.innerHeight);eid('barTop').style.height=px+'px';eid('barBottom').style.height=px+'px';eid('barsValue').textContent=Math.round(f*100)+'%';eid('barsFill').style.width=pct(f,BARS_MAX);setPill('pillBars',f>0);}
+function setWheel(v){
+    eid('wheelSection').style.display='block';
+    eid('wheelValue').textContent=(v>=0?'+':'')+v.toFixed(1)+'°';
+    const off=(v/WHEEL_MAX)*50;
+    const fill=eid('wheelFill');
+    if(v>=0){fill.style.left='50%';fill.style.width=off+'%';}
+    else{fill.style.left=(50+off)+'%';fill.style.width=(-off)+'%';}
+}
+function setPill(id,on){const el=eid(id);el.classList.toggle('on',on);el.textContent=on?'ON':'OFF';}
+
+// ── clipboard ──
+function copyCode(code,btn){
+    if(!code)return;
+    navigator.clipboard.writeText(code).then(()=>{
+        const orig=btn.textContent;btn.textContent='✔ Copied!';btn.classList.add('copied');
+        setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied');},1800);
+    }).catch(()=>{
+        const ta=document.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.opacity='0';
+        document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);
+        const orig=btn.textContent;btn.textContent='✔ Copied!';btn.classList.add('copied');
+        setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied');},1800);
+    });
+}
+eid('btnCopyCode').addEventListener('click',()=>copyCode(eid('shareCodeVal').textContent.trim(),eid('btnCopyCode')));
+
+// ── confirm modal ──
+let _confirmCb=null;
+function showConfirm(msg,cb){_confirmCb=cb;eid('confirmMsg').textContent=msg;eid('confirmModal').classList.add('open');}
+eid('confirmYes').addEventListener('click',()=>{eid('confirmModal').classList.remove('open');if(_confirmCb){_confirmCb();_confirmCb=null;}});
+eid('confirmNo').addEventListener('click',()=>{eid('confirmModal').classList.remove('open');_confirmCb=null;});
+
+// ── panel visibility ──
+function setVisible(v){const d=v?'block':'none';eid('panelMain').style.display=d;eid('panelHelp').style.display=d;}
+function setCineVisible(v){eid('panelCine').style.display=v?'block':'none';}
+function setCamSwitcherVisible(v){eid('panelCamSwitch').style.display=v?'block':'none';}
+function setCamEditVisible(v){eid('panelCamEdit').style.display=v?'block':'none';}
+function setPresetPanelVisible(v){eid('panelPresets').style.display=v?'block':'none';}
+
+// ── post to Lua ──
+function post(event,data){fetch('https://mnc-freecam-v3/'+event,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data||{})});}
+
+// ── keyframe list ──
+let _keyframes=[];
+let _editingId=null;
+
+function renderKeyframes(kfs){
+    _keyframes=kfs||[];
+    const list=eid('kfList');list.innerHTML='';
+    if(!_keyframes.length){list.innerHTML='<div class="kf-empty">No keyframes yet — start setup and press K to capture</div>';return;}
+    _keyframes.forEach((kf,i)=>{
+        const row=document.createElement('div');row.className='kf-item';
+        row.innerHTML=`<span class="kf-num">#${i+1}</span>
+            <span class="kf-pos">${kf.pos.x.toFixed(1)}, ${kf.pos.y.toFixed(1)}, ${kf.pos.z.toFixed(1)} · FOV ${kf.fov.toFixed(0)}°</span>
+            <div class="kf-dur"><span style="font-size:9px;color:var(--muted)">s</span>
+            <input type="text" inputmode="decimal" value="${(kf.duration||3).toFixed(1)}" onchange="updateKfDur(${i+1},this)"/></div>
+            <span class="kf-del" onclick="removeKf(${i+1})">✕</span>`;
+        list.appendChild(row);
+    });
+    setTimeout(kfUpdateArrows,0);
+}
+function removeKf(idx){post('removeKeyframe',{index:idx});}
+function updateKfDur(idx,el){let v=parseFloat(el.value);if(isNaN(v)||v<0.5)v=0.5;if(v>60)v=60;el.value=v.toFixed(1);post('updateKeyframeDuration',{index:idx,duration:v});}
+
+const _kfList=eid('kfList'),_kfUp=eid('kfScrollUp'),_kfDown=eid('kfScrollDown');
+const KF_SCROLL_STEP=80;
+function kfScroll(d){_kfList.scrollTop+=d;kfUpdateArrows();}
+function kfUpdateArrows(){
+    _kfUp.classList.toggle('visible',_kfList.scrollTop>0);
+    _kfDown.classList.toggle('visible',_kfList.scrollTop<(_kfList.scrollHeight-_kfList.clientHeight-1));
+}
+_kfUp.addEventListener('click',()=>kfScroll(-KF_SCROLL_STEP));
+_kfDown.addEventListener('click',()=>kfScroll(KF_SCROLL_STEP));
+document.addEventListener('wheel',function(e){
+    const r=_kfList.getBoundingClientRect();
+    if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
+        e.preventDefault();_kfList.scrollTop+=e.deltaY>0?KF_SCROLL_STEP:-KF_SCROLL_STEP;kfUpdateArrows();
+    }
+},{passive:false});
+
+// ── sequence list ──
+let _sequences=[];
+let _pendingPlay=null;
+function renderSequences(seqs){
+    _sequences=seqs||[];
+    const list=eid('seqList');list.innerHTML='';
+    if(!_sequences.length){list.innerHTML='<div class="kf-empty">No saved sequences yet</div>';return;}
+    _sequences.forEach(s=>{
+        const row=document.createElement('div');row.className='seq-item';
+        row.innerHTML=`
+            <div class="seq-left">
+                <span class="seq-name">${s.name}</span>
+                <span class="seq-meta">${s.type} · ${s.playback_mode} · ${s.default_duration}s</span>
+                <div class="seq-code-row">
+                    <span class="seq-code">${s.share_code}</span>
+                    <span class="copy-btn" data-code="${s.share_code}">📋</span>
+                </div>
+            </div>
+            <div class="seq-actions">
+                <div class="btn amber"   style="padding:3px 8px;font-size:9px" onclick="playSeq(${s.id},'${s.type}')">▶</div>
+                <div class="btn primary" style="padding:3px 8px;font-size:9px" onclick="openEditSeqModal(${s.id})">✏ Edit</div>
+                <div class="btn danger"  style="padding:3px 8px;font-size:9px" onclick="deleteSeq(${s.id})">Del</div>
+            </div>`;
+        const cb=row.querySelector('.copy-btn[data-code]');
+        if(cb)cb.addEventListener('click',()=>copyCode(s.share_code,cb));
+        list.appendChild(row);
+    });
+    setTimeout(kfUpdateArrows,0);
+}
+function deleteSeq(id){showConfirm('Delete this sequence?',()=>post('deleteSequence',{id}));}
+function playSeq(id,seqType){_pendingPlay={seqType};post('loadSequence',{id});}
+
+// ── tabs ──
+document.querySelectorAll('.cine-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+        document.querySelectorAll('.cine-tab').forEach(t=>t.classList.remove('active'));
+        document.querySelectorAll('.cine-tab-content').forEach(c=>c.classList.remove('active'));
+        tab.classList.add('active');eid('tab-'+tab.dataset.tab).classList.add('active');
+    });
+});
+
+// ── type/mode toggles ──
+let _currentType='world';
+document.querySelectorAll('.type-btn').forEach(b=>{
+    b.addEventListener('click',()=>{document.querySelectorAll('.type-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');_currentType=b.dataset.type;});
+});
+let _currentMode='once';
+document.querySelectorAll('.mode-btn').forEach(b=>{
+    b.addEventListener('click',()=>{document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');_currentMode=b.dataset.mode;post('setPlaybackMode',{mode:_currentMode});});
+});
+
+// ── setup buttons ──
+let _inSetup=false;
+function updateCaptureBtn(){const btn=eid('btnCaptureKf');btn.style.opacity=_inSetup?'1':'0.4';btn.style.pointerEvents=_inSetup?'all':'none';}
+updateCaptureBtn();
+
+eid('btnStartSetup').addEventListener('click',()=>{
+    post('startSetup',{setupType:_currentType});
+    _inSetup=true;updateCaptureBtn();
+    eid('btnStartSetup').style.display='none';eid('btnStopSetup').style.display='inline-flex';
+    eid('setupHint').classList.add('visible');eid('cineStatus').textContent='Setup';
+});
+eid('btnStopSetup').addEventListener('click',()=>{
+    post('stopSetup',{});
+    _inSetup=false;updateCaptureBtn();
+    eid('btnStartSetup').style.display='inline-flex';eid('btnStopSetup').style.display='none';
+    eid('setupHint').classList.remove('visible');eid('cineStatus').textContent='Idle';
+});
+eid('btnCaptureKf').addEventListener('click',()=>{if(_inSetup)post('captureKeyframe',{});});
+eid('btnClearKf').addEventListener('click',()=>{
+    showConfirm('Clear all keyframes?',()=>{
+        _keyframes=[];renderKeyframes([]);post('stopSetup',{});
+        _inSetup=false;updateCaptureBtn();
+        eid('btnStartSetup').style.display='inline-flex';eid('btnStopSetup').style.display='none';
+        eid('setupHint').classList.remove('visible');
+    });
+});
+eid('btnNewSetup').addEventListener('click',()=>{
+    showConfirm('Start a new sequence? This will clear the current setup.',()=>{
+        if(_inSetup){post('stopSetup',{});_inSetup=false;updateCaptureBtn();eid('btnStartSetup').style.display='inline-flex';eid('btnStopSetup').style.display='none';eid('setupHint').classList.remove('visible');hideSetupToast();}
+        _editingId=null;_currentShareCode='';
+        _keyframes=[];renderKeyframes([]);
+        eid('seqName').value='';eid('globalDur').value='3.0';
+        eid('shareCodeBox').style.display='none';eid('shareCodeVal').textContent='';
+        _currentType='world';document.querySelectorAll('.type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type==='world'));
+        _currentMode='once';document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode==='once'));
+        eid('cineStatus').textContent='Idle';
+        post('setGlobalDuration',{duration:3.0});
+    });
+});
+eid('btnPlay').addEventListener('click',()=>{
+    post('playSequence',{keyframes:_keyframes,playbackMode:_currentMode,seqType:_currentType});
+    eid('btnPlay').style.display='none';eid('btnStopPlay').style.display='inline-flex';eid('cinePbStatus').textContent='Playing…';
+});
+eid('btnStopPlay').addEventListener('click',()=>{
+    post('stopPlayback',{});
+    eid('btnPlay').style.display='inline-flex';eid('btnStopPlay').style.display='none';eid('cinePbStatus').textContent='Ready';
+});
+eid('btnSave').addEventListener('click',()=>{
+    const name=eid('seqName').value.trim()||'Untitled';
+    const dur=parseFloat(eid('globalDur').value)||3.0;
+    post('saveSequence',{id:_editingId||0,name,type:_currentType,default_duration:dur,playback_mode:_currentMode,share_code:_currentShareCode||''});
+});
+eid('globalDur').addEventListener('change',()=>post('setGlobalDuration',{duration:parseFloat(eid('globalDur').value)||3.0}));
+let _importBusy=false;
+eid('btnImport').addEventListener('click',()=>{
+    if(_importBusy)return;
+    const code=eid('importCode').value.trim().toUpperCase().replace(/\s+/g,'-');
+    if(!code)return;
+    _importBusy=true;eid('btnImport').textContent='Importing…';
+    post('importCode',{code});
+    setTimeout(()=>{_importBusy=false;eid('btnImport').textContent='Import';},3000);
+});
+eid('btnCloseCine').addEventListener('click',()=>{post('closeCinematic',{});setCineVisible(false);});
+
+// ── setup toast ──
+function showSetupToast(){eid('setupToast').classList.add('visible');}
+function hideSetupToast(){eid('setupToast').classList.remove('visible');}
+function updateToastCount(n){const el=eid('toastKfCount');el.textContent=n+' keyframe'+(n===1?'':'s')+' captured';el.style.color=n>=2?'var(--green)':'#a0a0bc';}
+eid('toastStopBtn').addEventListener('click',()=>{
+    if(_editModalInSetup){
+        post('stopEditSetup',{});hideSetupToast();_editModalInSetup=false;editUpdateCaptureBtn();
+        eid('editBtnStartSetup').style.display='inline-flex';eid('editBtnStopSetup').style.display='none';
+    } else {
+        post('stopSetup',{});hideSetupToast();_inSetup=false;updateCaptureBtn();
+        eid('btnStartSetup').style.display='inline-flex';eid('btnStopSetup').style.display='none';
+        eid('setupHint').classList.remove('visible');eid('cineStatus').textContent='Idle';
+    }
+});
+
+function resetSetupTab(){
+    _keyframes=[];renderKeyframes([]);
+    eid('seqName').value='';eid('globalDur').value='3.0';
+    eid('shareCodeBox').style.display='none';eid('shareCodeVal').textContent='';
+    _currentType='world';document.querySelectorAll('.type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type==='world'));
+    _currentMode='once';document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode==='once'));
+}
+
+// ══════════════════════════════════════════════
+// EDIT SEQUENCE MODAL
+// ══════════════════════════════════════════════
+let _editModalId=null,_editModalType='world',_editModalMode='once',_editModalShareCode='';
+let _editModalKeyframes=[],_editModalInSetup=false,_pendingEditModal=false;
+
+const _editKfList=eid('editKfList'),_editKfUp=eid('editKfScrollUp'),_editKfDown=eid('editKfScrollDown');
+function editKfScroll(d){_editKfList.scrollTop+=d;editKfUpdateArrows();}
+function editKfUpdateArrows(){
+    _editKfUp.classList.toggle('visible',_editKfList.scrollTop>0);
+    _editKfDown.classList.toggle('visible',_editKfList.scrollTop<(_editKfList.scrollHeight-_editKfList.clientHeight-1));
+}
+_editKfUp.addEventListener('click',()=>editKfScroll(-KF_SCROLL_STEP));
+_editKfDown.addEventListener('click',()=>editKfScroll(KF_SCROLL_STEP));
+document.addEventListener('wheel',function(e){
+    const r=_editKfList.getBoundingClientRect();
+    if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
+        e.preventDefault();_editKfList.scrollTop+=e.deltaY>0?KF_SCROLL_STEP:-KF_SCROLL_STEP;editKfUpdateArrows();
+    }
+},{passive:false});
+
+function renderEditKeyframes(kfs){
+    _editModalKeyframes=kfs||[];_editKfList.innerHTML='';
+    if(!_editModalKeyframes.length){_editKfList.innerHTML='<div class="kf-empty">No keyframes — start setup and press K</div>';editKfUpdateArrows();return;}
+    _editModalKeyframes.forEach((kf,i)=>{
+        const row=document.createElement('div');row.className='kf-item';
+        row.innerHTML=`<span class="kf-num">#${i+1}</span>
+            <span class="kf-pos">${kf.pos.x.toFixed(1)}, ${kf.pos.y.toFixed(1)}, ${kf.pos.z.toFixed(1)} · FOV ${kf.fov.toFixed(0)}°</span>
+            <div class="kf-dur"><span style="font-size:9px;color:var(--muted)">s</span>
+            <input type="text" inputmode="decimal" value="${(kf.duration||3).toFixed(1)}" onchange="editUpdateKfDur(${i+1},this)"/></div>
+            <span class="kf-del" onclick="editRemoveKf(${i+1})">✕</span>`;
+        _editKfList.appendChild(row);
+    });
+    setTimeout(editKfUpdateArrows,0);
+}
+function editRemoveKf(idx){post('removeKeyframe',{index:idx});}
+function editUpdateKfDur(idx,el){let v=parseFloat(el.value);if(isNaN(v)||v<0.5)v=0.5;if(v>60)v=60;el.value=v.toFixed(1);post('updateKeyframeDuration',{index:idx,duration:v});}
+function editUpdateCaptureBtn(){const btn=eid('editBtnCaptureKf');btn.style.opacity=_editModalInSetup?'1':'0.4';btn.style.pointerEvents=_editModalInSetup?'all':'none';}
+editUpdateCaptureBtn();
+
+function openEditSeqModal(id){_pendingEditModal=true;post('loadSequence',{id});}
+function populateEditModal(seq,globalDuration,playbackMode,keyframesData){
+    _editModalId=seq.id;_editModalShareCode=seq.share_code||'';
+    _editModalType=seq.type||'world';_editModalMode=playbackMode||seq.playback_mode||'once';
+    eid('editSeqName').value=seq.name||'';
+    eid('editGlobalDur').value=(globalDuration||seq.default_duration||3).toFixed(1);
+    eid('editSeqShareLabel').textContent=seq.share_code||'';
+    document.querySelectorAll('#editTypeToggle .type-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===_editModalType));
+    document.querySelectorAll('#editModeToggle .mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===_editModalMode));
+    if(_editModalShareCode){eid('editShareCodeBox').style.display='block';eid('editShareCodeVal').textContent=_editModalShareCode;}
+    else{eid('editShareCodeBox').style.display='none';}
+    _editModalInSetup=false;editUpdateCaptureBtn();
+    eid('editBtnStartSetup').style.display='inline-flex';eid('editBtnStopSetup').style.display='none';
+    eid('editBtnPlay').style.display='inline-flex';eid('editBtnStopPlay').style.display='none';
+    renderEditKeyframes(keyframesData||[]);
+    eid('editSeqModal').classList.add('open');
+}
+document.querySelectorAll('#editTypeToggle .type-btn').forEach(b=>{
+    b.addEventListener('click',()=>{document.querySelectorAll('#editTypeToggle .type-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');_editModalType=b.dataset.type;});
+});
+document.querySelectorAll('#editModeToggle .mode-btn').forEach(b=>{
+    b.addEventListener('click',()=>{document.querySelectorAll('#editModeToggle .mode-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');_editModalMode=b.dataset.mode;post('setPlaybackMode',{mode:_editModalMode});});
+});
+eid('editBtnStartSetup').addEventListener('click',()=>{
+    post('startEditSetup',{setupType:_editModalType});
+    _editModalInSetup=true;editUpdateCaptureBtn();
+    eid('editBtnStartSetup').style.display='none';eid('editBtnStopSetup').style.display='inline-flex';
+    eid('editSeqModal').classList.remove('open');
+});
+eid('editBtnStopSetup').addEventListener('click',()=>{
+    post('stopEditSetup',{});_editModalInSetup=false;editUpdateCaptureBtn();
+    eid('editBtnStartSetup').style.display='inline-flex';eid('editBtnStopSetup').style.display='none';
+});
+eid('editBtnCaptureKf').addEventListener('click',()=>{if(_editModalInSetup)post('captureKeyframe',{});});
+eid('editBtnClearKf').addEventListener('click',()=>showConfirm('Clear all keyframes?',()=>{_editModalKeyframes=[];renderEditKeyframes([]);post('clearEditKeyframes',{});}));
+eid('editBtnPlay').addEventListener('click',()=>{
+    post('playSequence',{keyframes:_editModalKeyframes,playbackMode:_editModalMode,seqType:_editModalType});
+    eid('editBtnPlay').style.display='none';eid('editBtnStopPlay').style.display='inline-flex';
+    eid('editSeqModal').classList.remove('open');
+});
+eid('editBtnStopPlay').addEventListener('click',()=>{
+    post('stopPlayback',{});eid('editBtnPlay').style.display='inline-flex';eid('editBtnStopPlay').style.display='none';
+    eid('editSeqModal').classList.add('open');
+});
+eid('btnSaveEditSeq').addEventListener('click',()=>{
+    if(!_editModalId)return;
+    const name=eid('editSeqName').value.trim()||'Untitled';
+    const dur=parseFloat(eid('editGlobalDur').value)||3.0;
+    post('saveSequence',{id:_editModalId,name,type:_editModalType,default_duration:dur,playback_mode:_editModalMode,share_code:_editModalShareCode,editKeyframes:_editModalKeyframes});
+});
+eid('btnCopyEditCode').addEventListener('click',()=>copyCode(eid('editShareCodeVal').textContent.trim(),eid('btnCopyEditCode')));
+function closeEditSeqModal(){
+    eid('editSeqModal').classList.remove('open');
+    _editModalId=null;_pendingEditModal=false;_editModalInSetup=false;editUpdateCaptureBtn();
+    eid('editBtnStartSetup').style.display='inline-flex';eid('editBtnStopSetup').style.display='none';
+}
+eid('btnCloseEditSeqModal').addEventListener('click',closeEditSeqModal);
+eid('btnCancelEditSeq').addEventListener('click',closeEditSeqModal);
+
+// ══════════════════════════════════════════════
+// CAMERA SWITCHER
+// ══════════════════════════════════════════════
+let _activeCamMode='freecam';
+// Head tracking state — controlled from Lua (driver cam always on, others via per-cam KVP)
+let _headTrackEnabled=false;
+
+let _camSwitcherStandalone=false;
+
+function renderCamList(cameras,active,standalone){
+    _activeCamMode=active||'freecam';
+    _camSwitcherStandalone=!!standalone;
+    const list=eid('camList');list.innerHTML='';
+    // Show/hide add-cam row — hidden in standalone mode
+    const addRow=eid('addCamRow');
+    if(addRow) addRow.style.display=standalone?'none':'flex';
+
+    (cameras||[]).forEach(cam=>{
+        const isActive=cam.id===_activeCamMode;
+        const suffix=cam.id.startsWith('vehicle_')?cam.id.slice(8):null;
+        const modeInt=suffix!==null?parseInt(suffix):NaN;
+        const editable=!isNaN(modeInt); // any numeric cam ID (built-in or custom) is editable
+        const isHidden=!!cam.cycleHidden;
+        const isCustom=!!cam.custom;
+        const idLabel=cam.numericId!=null?`ID:${cam.numericId}`:cam.id==='freecam'?'FREE':'CIN';
+
+        const row=document.createElement('div');
+        row.className='cam-item'+(isActive?' active':'');
+
+        // USE area — always the primary interaction
+        const useDiv=document.createElement('div');
+        useDiv.className='cam-use';
+        useDiv.title=isActive?'Currently active — click to re-apply':'▶ Use this camera';
+        useDiv.innerHTML=`
+            <span class="cam-id-badge">${idLabel}</span>
+            <div class="cam-label-wrap">
+                <span class="cam-item-label">${cam.label}</span>
+                ${isActive?'<span class="cam-active-tag">● Active</span>':''}
+            </div>
+            <span class="cam-use-btn">${isActive?'ACTIVE':'USE'}</span>
+        `;
+        useDiv.addEventListener('click',()=>{
+            post('selectCamera',{id:cam.id});
+            document.querySelectorAll('.cam-item').forEach(r=>{
+                r.classList.remove('active');
+                const tag=r.querySelector('.cam-active-tag');if(tag)tag.remove();
+                const btn=r.querySelector('.cam-use-btn');if(btn)btn.textContent='USE';
+            });
+            row.classList.add('active');
+            const myBtn=row.querySelector('.cam-use-btn');if(myBtn)myBtn.textContent='ACTIVE';
+            _activeCamMode=cam.id;
+        });
+        row.appendChild(useDiv);
+
+        // Action buttons
+        {
+            const actDiv=document.createElement('div');
+            actDiv.className='cam-actions';
+
+            // Eye toggle (C cycle visibility) — hidden in standalone mode
+            if(!standalone){
+                const eyeBtn=document.createElement('span');
+                eyeBtn.className='cam-act-btn cam-act-text'+(isHidden?' eye-hidden':'');
+                eyeBtn.title=isHidden?'Excluded from C cycle — click to include':'Included in C cycle — click to exclude';
+                eyeBtn.textContent=isHidden?'SKIP':'CYCLE';
+                eyeBtn.addEventListener('click',e=>{e.stopPropagation();post('setCamCycleHidden',{id:cam.id,hidden:!isHidden});});
+                actDiv.appendChild(eyeBtn);
+            }
+
+            // Hide peds toggle (vehicle cams only)
+            if(cam.id!=='freecam'&&cam.id!=='vehicle_cinematic'){
+                let hideHide=!!cam.hidePeds;
+                const hideBtn=document.createElement('span');
+                hideBtn.className='cam-act-btn cam-act-text'+(hideHide?' active':'');
+                hideBtn.title=hideHide?'Peds hidden when this cam is active — click to show':'Peds visible — click to hide peds for this cam';
+                hideBtn.textContent=hideHide?'PEDS\nHID':'PEDS\nVIS';
+                hideBtn.style.cssText='white-space:pre;line-height:1.1;font-size:7px;';
+                hideBtn.addEventListener('click',e=>{
+                    e.stopPropagation();
+                    hideHide=!hideHide;
+                    post('setCamHidePeds',{id:cam.id,hidden:hideHide});
+                    hideBtn.classList.toggle('active',hideHide);
+                    hideBtn.textContent=hideHide?'PEDS\nHID':'PEDS\nVIS';
+                    hideBtn.title=hideHide?'Peds hidden when this cam is active — click to show':'Peds visible — click to hide peds for this cam';
+                });
+                actDiv.appendChild(hideBtn);
+            }
+
+            // Auto head tracking toggle (vehicle cams, not driver cam which is always on)
+            if(cam.id!=='freecam'&&cam.id!=='vehicle_cinematic'&&cam.id!=='vehicle_4'){
+                let isAHT=!!cam.autoHeadTrack;
+                const ahtBtn=document.createElement('span');
+                ahtBtn.className='cam-act-btn cam-act-text'+(isAHT?' active':'');
+                ahtBtn.title=isAHT?'Auto head tracking ON — click to disable':'Auto head tracking OFF — click to enable';
+                ahtBtn.textContent=isAHT?'HEAD\nON':'HEAD\nOFF';
+                ahtBtn.style.cssText='white-space:pre;line-height:1.1;font-size:7px;';
+                ahtBtn.addEventListener('click',e=>{
+                    e.stopPropagation();
+                    isAHT=!isAHT;
+                    post('setCamAutoHeadTrack',{id:cam.id,enabled:isAHT});
+                    ahtBtn.classList.toggle('active',isAHT);
+                    ahtBtn.textContent=isAHT?'HEAD\nON':'HEAD\nOFF';
+                    ahtBtn.title=isAHT?'Auto head tracking ON — click to disable':'Auto head tracking OFF — click to enable';
+                });
+                actDiv.appendChild(ahtBtn);
+            }
+
+            // Edit/setup button — numeric editable modes only
+            if(editable){
+                const editBtn=document.createElement('span');
+                editBtn.className='cam-act-btn cam-act-text edit-btn';
+                editBtn.title='Setup camera position (fly freecam to position, press K)';
+                editBtn.textContent='EDIT';
+                editBtn.addEventListener('click',e=>{
+                    e.stopPropagation();
+                    const alreadyActive=cam.id===_activeCamMode;
+                    if(!alreadyActive) post('selectCamera',{id:cam.id});
+                    eid('panelCamSwitch').style.display='none';
+                    setTimeout(()=>post('openCamEdit',{mode_id:modeInt,label:cam.label}),alreadyActive?50:200);
+                });
+                actDiv.appendChild(editBtn);
+            }
+
+            // Delete — custom cams only
+            if(isCustom){
+                const delBtn=document.createElement('span');
+                delBtn.className='cam-act-btn del-btn';
+                delBtn.title='Delete custom camera';
+                delBtn.textContent='✕';
+                delBtn.addEventListener('click',e=>{
+                    e.stopPropagation();
+                    showConfirm('Delete this custom camera?',()=>post('deleteCustomCam',{id:modeInt}));
+                });
+                actDiv.appendChild(delBtn);
+            }
+
+            row.appendChild(actDiv);
+        }
+
+        list.appendChild(row);
+    });
+    setTimeout(camUpdateArrows,0);
+}
+
+// cam list scroll
+const _camList=eid('camList'),_camUp=eid('camScrollUp'),_camDown=eid('camScrollDown');
+const CAM_SCROLL_STEP=80;
+function camScroll(d){_camList.scrollTop+=d;camUpdateArrows();}
+function camUpdateArrows(){
+    _camUp.classList.toggle('visible',_camList.scrollTop>0);
+    _camDown.classList.toggle('visible',_camList.scrollTop<(_camList.scrollHeight-_camList.clientHeight-1));
+}
+_camUp.addEventListener('click',()=>camScroll(-CAM_SCROLL_STEP));
+_camDown.addEventListener('click',()=>camScroll(CAM_SCROLL_STEP));
+document.addEventListener('wheel',function(e){
+    const r=_camList.getBoundingClientRect();
+    if(e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom){
+        e.preventDefault();_camList.scrollTop+=e.deltaY>0?CAM_SCROLL_STEP:-CAM_SCROLL_STEP;camUpdateArrows();
+    }
+},{passive:false});
+
+eid('btnCloseCamSwitch').addEventListener('click',()=>{
+    if(_camSwitcherStandalone){
+        post('hideCamSwitcherUI',{});
+        eid('panelCamSwitch').style.display='none';
+    } else {
+        post('closeCamSwitcher',{});
+        setCamSwitcherVisible(false);
+    }
+});
+eid('btnHideCamUI').addEventListener('click',()=>{post('hideCamSwitcherUI',{});eid('panelCamSwitch').style.display='none';});
+let _pendingCaptureCamId=null; // set when add fires so addCustomCamResult knows to open capture
+eid('btnAddCam').addEventListener('click',()=>{
+    const id=parseInt(eid('addCamId').value);const label=eid('addCamLabel').value.trim();
+    if(isNaN(id)||id<0||id>99)return;if(!label){eid('addCamLabel').focus();return;}
+    _pendingCaptureCamId=id;
+    post('addCustomCam',{id,label});eid('addCamId').value='';eid('addCamLabel').value='';
+});
+
+// ══════════════════════════════════════════════
+// CAM OFFSET EDITOR
+// ══════════════════════════════════════════════
+let _camEditModeId=null;
+let _camCaptureModePending=null;
+let _camEditIsDriver=false;
+let _camEditModelAllowed=false;
+
+function getCamEditValues(){
+    return {
+        mode_id:       _camEditModeId,
+        lx:            parseFloat(eid('sliderLX').value),
+        ly:            parseFloat(eid('sliderLY').value),
+        lz:            parseFloat(eid('sliderLZ').value),
+        init_pitch:    parseFloat(eid('sliderPitch').value),
+        init_yaw:      parseFloat(eid('sliderYaw').value),
+        init_roll:     parseFloat(eid('sliderRoll').value),
+        init_fov:      parseFloat(eid('sliderFov').value),
+        model_allowed: _camEditModelAllowed,
+    };
+}
+function camEditPreview(){
+    if(_camEditModeId===null)return;
+    post('previewCamOffset',getCamEditValues());
+}
+['LX','LY','LZ'].forEach(axis=>{
+    const sl=eid('slider'+axis),vl=eid('val'+axis);
+    sl.addEventListener('input',()=>{vl.textContent=parseFloat(sl.value).toFixed(2);camEditPreview();});
+});
+['Pitch','Yaw','Roll'].forEach(axis=>{
+    const sl=eid('slider'+axis),vl=eid('val'+axis);
+    sl.addEventListener('input',()=>{vl.textContent=parseFloat(sl.value).toFixed(1)+'°';camEditPreview();});
+});
+{
+    const sl=eid('sliderFov'),vl=eid('valFov');
+    sl.addEventListener('input',()=>{vl.textContent=parseFloat(sl.value).toFixed(1)+'°';camEditPreview();});
+}
+// model_allowed toggle — only updates local state; user must click Save to persist
+eid('btnToggleModelAllowed').addEventListener('click',()=>{
+    _camEditModelAllowed=!_camEditModelAllowed;
+    const btn=eid('btnToggleModelAllowed');
+    btn.textContent=_camEditModelAllowed?'ON':'OFF';
+    btn.classList.toggle('active',_camEditModelAllowed);
+    eid('camEditModelSection').style.display=_camEditModelAllowed?'block':'none';
+    if(_camEditModelAllowed) renderModelOffsetList(_modelOffsetListCache);
+    updateModelListArrows();
+});
+// Model offset list scroll
+const MODEL_SCROLL_STEP=28;
+function updateModelListArrows(){
+    const el=eid('modelOffsetList');
+    if(!el)return;
+    const up=eid('modelListScrollUp'),dn=eid('modelListScrollDown');
+    const canScroll=el.scrollHeight>el.clientHeight+2;
+    if(up)up.style.display=canScroll?'block':'none';
+    if(dn)dn.style.display=canScroll&&el.scrollTop<(el.scrollHeight-el.clientHeight-2)?'block':'none';
+}
+eid('modelListScrollUp').addEventListener('click',()=>{const el=eid('modelOffsetList');el.scrollTop-=MODEL_SCROLL_STEP;updateModelListArrows();});
+eid('modelListScrollDown').addEventListener('click',()=>{const el=eid('modelOffsetList');el.scrollTop+=MODEL_SCROLL_STEP;updateModelListArrows();});
+eid('btnSaveCamEdit').addEventListener('click',()=>{
+    if(_camEditModeId===null)return;
+    post('saveCamOffset',getCamEditValues());
+});
+eid('btnResetCamEdit').addEventListener('click',()=>{
+    if(_camEditModeId===null)return;
+    showConfirm('Reset camera to default offsets?',()=>post('resetCamOffset',{mode_id:_camEditModeId}));
+});
+eid('btnCloseCamEdit').addEventListener('click',()=>{post('closeCamEdit',{});setCamEditVisible(false);_camEditModeId=null;_camEditIsDriver=false;});
+
+// ── Model preset handlers ──
+function renderModelOffsetList(list){
+    const el=eid('modelOffsetList');if(!el)return;
+    el.innerHTML='';
+    // Filter to only show entries for the currently open cam
+    const filtered=(list||[]).filter(m=>m.mode_id===_camEditModeId);
+    filtered.forEach(m=>{
+        const row=document.createElement('div');
+        row.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:6px;padding:3px 0;';
+        row.innerHTML=`<span style="font-size:9px;color:var(--text);">${m.model_name||'#'+m.model_hash}</span>`+
+            `<span class="cam-act-btn cam-act-text del-btn" title="Delete this model preset" style="min-height:unset;padding:2px 6px;" onclick="deleteModelOffset(${m.mode_id},${m.model_hash})">DEL</span>`;
+        el.appendChild(row);
+    });
+    if(!filtered.length){
+        el.innerHTML='<span style="font-size:8px;color:var(--muted);">No model presets saved yet.</span>';
+    }
+    setTimeout(updateModelListArrows,0);
+}
+let _modelOffsetListCache=[];
+function deleteModelOffset(modeId,hash){showConfirm('Delete model cam preset?',()=>post('deleteModelOffset',{mode_id:modeId,model_hash:hash}));}
+eid('btnSaveModelOffset').addEventListener('click',()=>post('saveModelOffset',{mode_id:_camEditModeId}));
+
+// ── Capture position ──
+eid('btnStartCamCapture').addEventListener('click',()=>{
+    if(_camEditModeId===null)return;
+    _camCaptureModePending=_camEditModeId;
+    post('startCamCapture',{mode_id:_camEditModeId});
+});
+eid('btnConfirmCapture').addEventListener('click',()=>{
+    post('confirmCamCapture',{mode_id:_camCaptureModePending});
+});
+eid('btnCancelCapture').addEventListener('click',()=>{
+    const pendingId=_camCaptureModePending;
+    post('cancelCamCapture',{});
+    eid('camCaptureToast').classList.remove('visible');
+    _camCaptureModePending=null;
+    if(pendingId!==null){
+        setTimeout(()=>post('openCamEdit',{mode_id:pendingId}),100);
+    } else {
+        setCamEditVisible(false);
+    }
+});
+
+// ══════════════════════════════════════════════
+// PRESET MANAGER
+// ══════════════════════════════════════════════
+function renderPresets(presets){
+    const grid=eid('presetGrid');grid.innerHTML='';
+    const bySlot={};(presets||[]).forEach(p=>{bySlot[p._slot||p.slot]=p;});
+    for(let i=1;i<=20;i++){
+        const p=bySlot[i];const row=document.createElement('div');
+        if(p){
+            row.className='preset-row';
+            row.innerHTML=`<div style="min-width:0"><div style="display:flex;align-items:center;gap:6px;"><span class="preset-slot-lbl">#${i}</span><span class="preset-name">${p.name||'Preset '+i}</span></div><div class="preset-meta">FOV ${p.fov?Math.round(p.fov)+'°':'—'} · ${p.filter&&p.filter>1?'Filter on':'No filter'} · ${p.dofEnabled?'DOF on':'No DOF'}</div></div><div class="preset-actions"><div class="btn success" style="padding:3px 8px;font-size:9px;" onclick="loadPreset(${i})">▶ Load</div><div class="btn danger" style="padding:3px 8px;font-size:9px;" onclick="deletePreset(${i})">✕</div></div>`;
+        } else {
+            row.className='preset-empty-slot';
+            row.innerHTML=`<span style="font-size:9px;color:var(--muted);">Slot ${i} — empty</span><div class="btn" style="padding:3px 8px;font-size:9px;pointer-events:all;" onclick="saveToSlot(${i})">＋ Save</div>`;
+        }
+        grid.appendChild(row);
+    }
+}
+function loadPreset(slot){post('loadPreset',{slot});}
+function deletePreset(slot){showConfirm('Delete preset in slot '+slot+'?',()=>post('deletePreset',{slot}));}
+function saveToSlot(slot){const name=eid('presetNameInput').value.trim()||('Preset '+slot);post('savePreset',{slot,name});}
+eid('btnSavePreset').addEventListener('click',()=>post('savePreset',{name:eid('presetNameInput').value.trim()}));
+eid('btnClosePresets').addEventListener('click',()=>{post('closePresetPanel',{});setPresetPanelVisible(false);});
+
+// ── ESC / keyboard ──
+document.addEventListener('keydown',function(e){
+    if(e.key==='i'||e.key==='I'){
+        const toast=eid('setupToast');
+        if(toast&&toast.classList.contains('visible')){
+            if(_editModalInSetup){post('stopEditSetup',{});hideSetupToast();_editModalInSetup=false;editUpdateCaptureBtn();eid('editBtnStartSetup').style.display='inline-flex';eid('editBtnStopSetup').style.display='none';}
+            else{post('stopSetup',{});hideSetupToast();_inSetup=false;updateCaptureBtn();eid('btnStartSetup').style.display='inline-flex';eid('btnStopSetup').style.display='none';eid('setupHint').classList.remove('visible');eid('cineStatus').textContent='Idle';}
+        }
+        return;
+    }
+    if(e.key==='Escape'){
+        e.preventDefault();e.stopPropagation();
+        // If in cam capture mode, cancel it
+        if(_camCaptureModePending){
+            post('cancelCamCapture',{});
+            eid('camCaptureToast').classList.remove('visible');
+            _camCaptureModePending=null;
+            return;
+        }
+        // Always hide all panels immediately so they don't flash on next open
+        // Lua will also send 'hide' via toggleFreeCam → nuiHide, so this is belt-and-suspenders
+        setCineVisible(false);hideSetupToast();
+        eid('panelCamSwitch').style.display='none';
+        setPresetPanelVisible(false);setCamEditVisible(false);setBars(0);
+        // setVisible is intentionally NOT called here — Lua owns that state via helpersVisible.
+        // Lua's toggleFreeCam always resets helpersVisible=true then sends 'hide' → setVisible(false).
+        post('exitFreecam',{});
+    }
+    // K key while cam capture toast is visible
+    if((e.key==='k'||e.key==='K')&&_camCaptureModePending&&eid('camCaptureToast').classList.contains('visible')){
+        post('confirmCamCapture',{mode_id:_camCaptureModePending});
+    }
+});
+
+let _currentShareCode='';
+
+// ── message handler ──
+window.addEventListener('message',function(e){
+    const d=e.data;if(!d||!d.type)return;
+
+    if(d.type==='hide'){setVisible(false);setCineVisible(false);hideSetupToast();eid('panelCamSwitch').style.display='none';setPresetPanelVisible(false);setCamEditVisible(false);return;}
+    if(d.type==='resetBars'){setBars(0);return;}
+    if(d.type==='resetUI'){
+        _pendingEditModal=false;_pendingPlay=null;_editModalId=null;_currentShareCode='';_inSetup=false;_keyframes=[];
+        renderKeyframes([]);renderSequences([]);resetSetupTab();
+        eid('btnStartSetup').style.display='inline-flex';eid('btnStopSetup').style.display='none';
+        eid('setupHint').classList.remove('visible');eid('cineStatus').textContent='Idle';updateCaptureBtn();return;
+    }
+
+    // camera switcher
+    if(d.type==='camSwitcherOpen'){
+        _pendingCaptureCamId=null; // clear any stale add-pending (e.g. duplicate ID was rejected)
+        setCamSwitcherVisible(true);
+        renderCamList(d.cameras,d.active,d.standalone);
+        eid('camSwitchBadge').textContent=d.standalone?'Standalone Mode':'Select Mode';
+        const hint=eid('camSwitchFooterHint');
+        if(hint)hint.textContent=d.standalone?'USE to switch · C to cycle':'USE = activate · EDIT = position &amp; FOV';
+        // Show/hide the standalone hide-UI notice
+        const hideBar=eid('camSwitchHideBar');
+        if(hideBar)hideBar.style.display=d.standalone?'block':'none';
+        // Sync head track state (used internally for per-cam HEAD ON/OFF buttons)
+        if(d.headTrack!==undefined) _headTrackEnabled=d.headTrack;
+        return;
+    }
+    if(d.type==='camSwitcherClose'){eid('panelCamSwitch').style.display='none';return;}
+    if(d.type==='addCustomCamResult'){
+        renderCamList(d.cameras,_activeCamMode,_camSwitcherStandalone);
+        if(_pendingCaptureCamId!==null){
+            const newId=_pendingCaptureCamId;
+            _pendingCaptureCamId=null;
+            // Find the label for the new cam
+            const newCam=(d.cameras||[]).find(c=>c.numericId===newId);
+            const newLabel=newCam?newCam.label:('Camera '+newId);
+            // Switch to it, hide the switcher, then open edit panel and auto-start capture
+            post('selectCamera',{id:'vehicle_'+newId});
+            eid('panelCamSwitch').style.display='none';
+            setTimeout(()=>{
+                post('openCamEdit',{mode_id:newId,label:newLabel});
+                setTimeout(()=>{
+                    // Mirror what btnStartCamCapture does so toast/K-key paths work
+                    _camEditModeId=newId;
+                    _camCaptureModePending=newId;
+                    post('startCamCapture',{mode_id:newId});
+                },150);
+            },200);
+        }
+        return;
+    }
+    if(d.type==='activeCamChanged'){_activeCamMode=d.id;return;}
+
+    // cam offset editor
+    if(d.type==='camEditOpen'){
+        _camEditModeId=d.mode_id;
+        _camEditIsDriver=(d.is_driver===true);
+        _camEditModelAllowed=!!(d.model_allowed);
+        eid('camEditTitle').textContent='Edit — '+(d.label||('Camera '+d.mode_id));
+        eid('sliderLX').value=d.lx;         eid('valLX').textContent=parseFloat(d.lx).toFixed(2);
+        eid('sliderLY').value=d.ly;         eid('valLY').textContent=parseFloat(d.ly).toFixed(2);
+        eid('sliderLZ').value=d.lz;         eid('valLZ').textContent=parseFloat(d.lz).toFixed(2);
+        eid('sliderPitch').value=d.init_pitch;eid('valPitch').textContent=parseFloat(d.init_pitch).toFixed(1)+'°';
+        eid('sliderYaw').value=d.init_yaw||0;eid('valYaw').textContent=parseFloat(d.init_yaw||0).toFixed(1)+'°';
+        eid('sliderRoll').value=d.init_roll||0;eid('valRoll').textContent=parseFloat(d.init_roll||0).toFixed(1)+'°';
+        const fovVal=d.init_fov!=null?d.init_fov:70;
+        eid('sliderFov').value=fovVal;eid('valFov').textContent=parseFloat(fovVal).toFixed(1)+'°';
+        // model_allowed toggle
+        const maBtn=eid('btnToggleModelAllowed');
+        maBtn.textContent=_camEditModelAllowed?'ON':'OFF';
+        maBtn.classList.toggle('active',_camEditModelAllowed);
+        eid('rowModelAllowed').style.display='flex';
+        eid('camEditModelSection').style.display=_camEditModelAllowed?'block':'none';
+        if(_camEditModelAllowed) renderModelOffsetList(_modelOffsetListCache);
+        setCamEditVisible(true);return;
+    }
+    if(d.type==='camEditClose'){setCamEditVisible(false);_camEditModeId=null;return;}
+    if(d.type==='camOffsetSaved'){const fb=eid('camEditSaveFeedback');if(fb){fb.classList.add('show');setTimeout(()=>fb.classList.remove('show'),2000);}return;}
+    if(d.type==='camOffsetReset'){
+        const defaults={0:{lx:0,ly:2.5,lz:0.6,p:-5,f:70},1:{lx:0,ly:-4,lz:1.5,p:-8,f:70},2:{lx:0,ly:-9,lz:2.5,p:-10,f:70},3:{lx:0,ly:-14,lz:3.5,p:-12,f:70},4:{lx:-0.35,ly:0.25,lz:0.65,p:-2,f:70},5:{lx:-2.5,ly:-1,lz:1,p:-5,f:70},6:{lx:2.5,ly:-1,lz:1,p:-5,f:70},7:{lx:0,ly:-1,lz:6,p:-80,f:70}};
+        const def=defaults[d.mode_id];
+        if(def&&_camEditModeId===d.mode_id){
+            eid('sliderLX').value=def.lx;eid('valLX').textContent=parseFloat(def.lx).toFixed(2);
+            eid('sliderLY').value=def.ly;eid('valLY').textContent=parseFloat(def.ly).toFixed(2);
+            eid('sliderLZ').value=def.lz;eid('valLZ').textContent=parseFloat(def.lz).toFixed(2);
+            eid('sliderPitch').value=def.p;eid('valPitch').textContent=parseFloat(def.p).toFixed(1)+'°';
+            eid('sliderYaw').value=0;eid('valYaw').textContent='0.0°';
+            eid('sliderRoll').value=0;eid('valRoll').textContent='0.0°';
+            eid('sliderFov').value=def.f;eid('valFov').textContent=parseFloat(def.f).toFixed(1)+'°';
+            _camEditModelAllowed=false;
+            const maBtn=eid('btnToggleModelAllowed');maBtn.textContent='OFF';maBtn.classList.remove('active');
+            eid('camEditModelSection').style.display='none';
+        }
+        return;
+    }
+
+    // cam capture flow
+    if(d.type==='camCaptureStart'){
+        setCamEditVisible(false);
+        eid('camCaptureToast').classList.add('visible');
+        return;
+    }
+    if(d.type==='camCaptureReady'){
+        // K was pressed in Lua while in capture mode — auto-fire confirm
+        if(_camCaptureModePending){
+            post('confirmCamCapture',{mode_id:_camCaptureModePending});
+        }
+        return;
+    }
+    if(d.type==='camCaptureConfirmed'){
+        eid('camCaptureToast').classList.remove('visible');
+        _camCaptureModePending=null;
+        eid('sliderLX').value=d.lx;         eid('valLX').textContent=parseFloat(d.lx).toFixed(2);
+        eid('sliderLY').value=d.ly;         eid('valLY').textContent=parseFloat(d.ly).toFixed(2);
+        eid('sliderLZ').value=d.lz;         eid('valLZ').textContent=parseFloat(d.lz).toFixed(2);
+        eid('sliderPitch').value=d.init_pitch;eid('valPitch').textContent=parseFloat(d.init_pitch).toFixed(1)+'°';
+        eid('sliderYaw').value=d.init_yaw||0;eid('valYaw').textContent=parseFloat(d.init_yaw||0).toFixed(1)+'°';
+        eid('sliderRoll').value=d.init_roll||0;eid('valRoll').textContent=parseFloat(d.init_roll||0).toFixed(1)+'°';
+        if(d.init_fov!=null){eid('sliderFov').value=d.init_fov;eid('valFov').textContent=parseFloat(d.init_fov).toFixed(1)+'°';}
+        if(_camEditModeId!==null) setCamEditVisible(true);
+        return;
+    }
+    if(d.type==='camCaptureCancel'){
+        eid('camCaptureToast').classList.remove('visible');
+        _camCaptureModePending=null;
+        if(_camEditModeId!==null) setCamEditVisible(true);
+        return;
+    }
+    if(d.type==='modelOffsetList'){
+        _modelOffsetListCache=d.list||[];
+        renderModelOffsetList(_modelOffsetListCache);
+        return;
+    }
+
+    // head track sync
+    if(d.type==='update'&&d.headTrack!==undefined){
+        _headTrackEnabled=d.headTrack;
+    }
+
+    // preset manager
+    if(d.type==='presetPanelOpen'){setPresetPanelVisible(true);renderPresets(d.presets);return;}
+    if(d.type==='presetPanelClose'){setPresetPanelVisible(false);return;}
+    if(d.type==='presetSaved'){renderPresets(d.presets);return;}
+    if(d.type==='presetDeleted'){renderPresets(d.presets);return;}
+
+    if(d.type==='show'){setVisible(true);}
+    if(d.type==='cinematicOpen'){setCineVisible(true);if(d.sequences)renderSequences(d.sequences);return;}
+    if(d.type==='cinematicClose'){setCineVisible(false);return;}
+    if(d.type==='updateKeyframes'){
+        if(_editModalId&&_editModalInSetup)renderEditKeyframes(d.keyframes);
+        else{renderKeyframes(d.keyframes);updateToastCount(d.keyframes?d.keyframes.length:0);}
+        return;
+    }
+    if(d.type==='setupModeActive'){
+        if(d.active){if(!_editModalInSetup)showSetupToast();updateToastCount(0);}
+        else{
+            hideSetupToast();
+            if(_editModalInSetup){_editModalInSetup=false;editUpdateCaptureBtn();eid('editBtnStartSetup').style.display='inline-flex';eid('editBtnStopSetup').style.display='none';if(_editModalId)eid('editSeqModal').classList.add('open');}
+        }
+        return;
+    }
+    if(d.type==='updateSequences'){renderSequences(d.sequences);return;}
+    if(d.type==='loadedSequence'){
+        if(_pendingPlay){
+            const pp=_pendingPlay;_pendingPlay=null;
+            setTimeout(()=>{post('playSequence',{keyframes:d.keyframes,playbackMode:d.sequence.playback_mode||'once',seqType:pp.seqType});eid('btnPlay').style.display='none';eid('btnStopPlay').style.display='inline-flex';eid('cinePbStatus').textContent='Playing…';},50);
+            return;
+        }
+        if(_pendingEditModal){_pendingEditModal=false;populateEditModal(d.sequence,d.globalDuration,d.playbackMode,d.keyframes);return;}
+        return;
+    }
+    if(d.type==='sequenceSaved'){
+        if(_editModalId&&_editModalId===d.id){
+            _editModalShareCode=d.share_code;eid('editShareCodeBox').style.display='block';eid('editShareCodeVal').textContent=d.share_code;eid('editSeqShareLabel').textContent=d.share_code;closeEditSeqModal();
+        } else {
+            // New sequence saved from setup tab — update id/share_code and stay on setup tab
+            _editingId=d.id;_currentShareCode=d.share_code;
+            eid('shareCodeBox').style.display='block';eid('shareCodeVal').textContent=d.share_code;
+            // Switch to setup tab so the share code box is visible
+            document.querySelectorAll('.cine-tab').forEach(t=>t.classList.remove('active'));
+            document.querySelectorAll('.cine-tab-content').forEach(c=>c.classList.remove('active'));
+            document.querySelector('[data-tab="setup"]').classList.add('active');eid('tab-setup').classList.add('active');
+        }
+        return;
+    }
+    if(d.type==='update'||d.type==='show'){
+        if(d.fov!=null)setFov(d.fov);
+        if(d.filter!=null)setFilter(d.filter);
+        if(d.tcStrength!=null)setTC(d.tcStrength);
+        if(d.dofNear!=null)setDofNear(d.dofNear);
+        if(d.dofFar!=null)setDofFar(d.dofFar);
+        if(d.shake!=null)setShake(d.shake);
+        if(d.bars!=null)setBars(d.bars);
+        if(d.dofEnabled!=null)setPill('pillDof',d.dofEnabled);
+        if(d.wheelAngle!=null)setWheel(d.wheelAngle);
+        if(d.playbackActive!=null){eid('btnPlay').style.display=d.playbackActive?'none':'inline-flex';eid('btnStopPlay').style.display=d.playbackActive?'inline-flex':'none';eid('cinePbStatus').textContent=d.playbackActive?'Playing…':'Ready';}
+    }
+});
+</script>
+</body>
+</html>
