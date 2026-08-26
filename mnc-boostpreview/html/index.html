@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'self'; style-src 'unsafe-inline' 'self' nui://*; img-src 'self' data:; connect-src https://*;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MNC Boost Gauge Preview</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="overlay" class="hidden">
+    <div id="panel">
+      <div id="header">
+        <h1>Boost Gauge Preview</h1>
+        <div id="tabs">
+          <button class="tab-btn active" data-tab="presets">Presets</button>
+          <button class="tab-btn" data-tab="custom">Create Custom Boost Gauge</button>
+        </div>
+        <button id="closeBtn" title="Close">&times;</button>
+      </div>
+
+      <div id="toolbar">
+        <div id="customSelectors" class="selector-row hidden">
+          <div class="selector-group">
+            <span class="selector-title">Face</span>
+            <button id="stylePrev">&lsaquo;</button>
+            <span id="styleLabel">1 / 40</span>
+            <button id="styleNext">&rsaquo;</button>
+          </div>
+          <div class="selector-group">
+            <span class="selector-title">Bezel</span>
+            <button id="bezelPrev">&lsaquo;</button>
+            <span id="bezelLabel">1 / 20</span>
+            <button id="bezelNext">&rsaquo;</button>
+          </div>
+        </div>
+        <div id="warningBanner" class="hidden">
+          Could not load mnc-boostgauge styles - check Config.SourceResource in mnc-boostpreview/config.lua.
+        </div>
+      </div>
+
+      <div id="grid"></div>
+
+      <div id="customPanel" class="hidden">
+        <div id="customPreview"></div>
+        <div id="customInfo">
+          <div class="info-row">
+            <span class="info-tag">Face</span>
+            <span id="customFaceInfo">#1 &mdash; Classic &mdash; Item: boostgauge_classic</span>
+          </div>
+          <div class="info-row">
+            <span class="info-tag">Bezel</span>
+            <span id="customBezelInfo">#1 &mdash; Chrome &mdash; Item: bezel_chrome</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
