@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Main Container -->
+  <div id="priceSheet" class="hidden">
+    <div class="sheet-wrapper">
+      <!-- Header -->
+      <div class="sheet-header">
+        <button class="settings-btn" id="settingsBtn"><i class="fas fa-cog"></i></button>
+        <h1 id="sheetTitle">Price Sheet</h1>
+        <button class="close-btn" id="closeBtn"><i class="fas fa-times"></i></button>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-btn active" data-tab="menu">
+          <i class="fas fa-list"></i> Menu
+        </button>
+        <button class="tab-btn" data-tab="special">
+          <i class="fas fa-tag"></i> Special Offers
+        </button>
+      </div>
+
+      <!-- Menu Tab -->
+      <div id="menuTab" class="tab-content active">
+        <!-- Controls -->
+        <div class="sheet-controls">
+          <select id="categoryFilter">
+            <option value="all">All Categories</option>
+          </select>
+          <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="searchBar" placeholder="Search items..." />
+          </div>
+        </div>
+
+        <!-- Items Grid -->
+        <div class="items-container">
+          <div class="items-grid" id="itemsGrid"></div>
+        </div>
+      </div>
+
+      <!-- Special Offers Tab -->
+      <div id="specialTab" class="tab-content">
+        <div class="special-container">
+          <div class="special-grid" id="specialGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discount Modal -->
+  <div id="discountModal" class="modal hidden">
+    <div class="modal-content">
+      <h2><i class="fas fa-percent"></i> Apply Discount</h2>
+      <div class="modal-body">
+        <p id="discountItemName"></p>
+        <div class="discount-input-group">
+          <label for="discountInput">Discount Percentage:</label>
+          <input type="number" id="discountInput" min="0" max="100" placeholder="0-50%" />
+          <span class="discount-note">Maximum: 50%</span>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="discountCancelBtn"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn-confirm" id="discountConfirmBtn"><i class="fas fa-check"></i> Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Offer Modal -->
+  <div id="specialModal" class="modal hidden">
+    <div class="modal-content special-modal-large">
+      <h2><i class="fas fa-tag"></i> Create Special Offer</h2>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="specialName">Name:</label>
+          <input type="text" id="specialName" placeholder="e.g. Bundle Deal" />
+        </div>
+        <div class="form-group">
+          <label for="specialDesc">Description:</label>
+          <input type="text" id="specialDesc" placeholder="e.g. Buy 2 get 1 free" />
+        </div>
+        <div class="form-group">
+          <label for="specialOriginal">Original Price:</label>
+          <input type="number" id="specialOriginal" min="0" placeholder="e.g. 100" />
+        </div>
+        <div class="form-group">
+          <label for="specialSale">Sale Price:</label>
+          <input type="number" id="specialSale" min="0" placeholder="e.g. 80" />
+        </div>
+        <div class="form-group">
+          <label>Select Image:</label>
+          <div id="imageGridContainer" class="image-grid"></div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="specialCancelBtn"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn-confirm" id="specialConfirmBtn"><i class="fas fa-check"></i> Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW: Confirmation Modal -->
+  <div id="confirmModal" class="modal hidden">
+    <div class="modal-content">
+      <h2><i class="fas fa-question-circle"></i> Confirm Action</h2>
+      <div class="modal-body">
+        <p id="confirmMessage">Are you sure?</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" id="confirmCancelBtn"><i class="fas fa-times"></i> Cancel</button>
+        <button class="btn-confirm" id="confirmRemoveBtn"><i class="fas fa-check"></i> Confirm</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

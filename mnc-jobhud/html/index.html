@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- Individual HUD elements positioned absolutely -->
+  <div id="time" class="hud-box">
+    <i class="fas fa-clock"></i>
+    <span class="label">Time:</span>
+    <span class="value"></span>
+  </div>
+  
+  <div id="id" class="hud-box">
+    <i class="fas fa-id-card"></i>
+    <span class="label">ID:</span>
+    <span class="value"></span>
+  </div>
+  
+  <div id="players" class="hud-box">
+    <i class="fas fa-users"></i>
+    <span class="label">Players:</span>
+    <span class="value"></span>
+  </div>
+  
+  <div id="jobOrGang" class="hud-box">
+    <i class="fas fa-briefcase"></i>
+    <span class="label">Job:</span>
+    <span class="value"></span>
+  </div>
+  
+  <div id="bank" class="hud-box">
+    <i class="fas fa-university"></i>
+    <span class="label">Bank:</span>
+    <span class="value"></span>
+    <span class="change"></span>
+  </div>
+  
+  <div id="cash" class="hud-box">
+    <i class="fas fa-wallet"></i>
+    <span class="label">Cash:</span>
+    <span class="value"></span>
+    <span class="change"></span>
+  </div>
+
+  <div id="notificationContainer"></div>
+
+<div id="hudHelpModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>HUD Help & Styles</h2>
+      <button id="closeHudHelp">ESC to close</button>
+    </div>
+    <div class="modal-body">
+      <div id="stylesList"></div>
+      <pre id="hudGuide"></pre>
+    </div>
+  </div>
+</div>
+
+
+
+    </div>
+  </div>
+</body>
+</html>

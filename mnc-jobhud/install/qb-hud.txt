@@ -1,0 +1,33 @@
+-----
+-----
+      apend the code below into qb-hud for the ui hide to work correctly right at the bottom of the file just go downa line or tow and paste it.
+-----
+-----
+
+
+
+
+
+
+
+
+-- mnc-freecam bridge
+local mncForceHidden = false
+CreateThread(function()
+    while true do
+        if mncForceHidden then
+            SendNUIMessage({ action = 'hudtick',   show = false })
+            SendNUIMessage({ action = 'car',        show = false })
+            SendNUIMessage({ action = 'baseplate',  show = false })
+            Wait(0)  -- every frame, beats qb-hud's own Wait(50)/Wait(0) loops
+        else
+            Wait(500)
+        end
+    end
+end)
+RegisterNetEvent('mnc-freecam:qbhud:SetVisible', function(visible)
+    mncForceHidden = not visible
+    if visible then
+        SendNUIMessage({ action = 'hudtick', show = true })
+    end
+end)

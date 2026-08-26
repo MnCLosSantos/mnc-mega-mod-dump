@@ -1,0 +1,1 @@
+print("^2[mnc-muteondeath]^7 Script loaded successfully!")
