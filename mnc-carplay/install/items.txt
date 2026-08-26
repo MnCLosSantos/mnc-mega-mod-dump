@@ -1,0 +1,199 @@
+-- mnc-carplay items — paste into qb-core's shared items lua table.
+-- 16 total: 10 colour units + 5 artwork/wrap units + 1 removal tool.
+--
+    ['carplay_silver'] = {
+        ['name'] = 'carplay_silver',
+        ['label'] = 'Carplay Unit (Silver)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_black'] = {
+        ['name'] = 'carplay_black',
+        ['label'] = 'Carplay Unit (Black)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_white'] = {
+        ['name'] = 'carplay_white',
+        ['label'] = 'Carplay Unit (White)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_red'] = {
+        ['name'] = 'carplay_red',
+        ['label'] = 'Carplay Unit (Red)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_blue'] = {
+        ['name'] = 'carplay_blue',
+        ['label'] = 'Carplay Unit (Blue)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_green'] = {
+        ['name'] = 'carplay_green',
+        ['label'] = 'Carplay Unit (Green)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_yellow'] = {
+        ['name'] = 'carplay_yellow',
+        ['label'] = 'Carplay Unit (Yellow)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_purple'] = {
+        ['name'] = 'carplay_purple',
+        ['label'] = 'Carplay Unit (Purple)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_orange'] = {
+        ['name'] = 'carplay_orange',
+        ['label'] = 'Carplay Unit (Orange)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+    ['carplay_pink'] = {
+        ['name'] = 'carplay_pink',
+        ['label'] = 'Carplay Unit (Pink)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay music unit. Use near a vehicle to install it.'
+    },
+
+    -- ── Artwork wraps (5) ──────────────────────────────────────
+    ['carplay_racing'] = {
+        ['name'] = 'carplay_racing',
+        ['label'] = 'Carplay Unit (Racing Stripes)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay unit wrapped in dual racing stripes over a blacked-out shell.'
+    },
+    ['carplay_carbon'] = {
+        ['name'] = 'carplay_carbon',
+        ['label'] = 'Carplay Unit (Carbon Fiber)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay unit wrapped in a woven carbon fiber shell.'
+    },
+    ['carplay_camo'] = {
+        ['name'] = 'carplay_camo',
+        ['label'] = 'Carplay Unit (Tactical Camo)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay unit finished in a tactical camo pattern.'
+    },
+    ['carplay_engraved'] = {
+        ['name'] = 'carplay_engraved',
+        ['label'] = 'Carplay Unit (Gunmetal Engraved)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay unit with a hand-engraved gunmetal finish.'
+    },
+    ['carplay_wood'] = {
+        ['name'] = 'carplay_wood',
+        ['label'] = 'Carplay Unit (Walnut Wood)',
+        ['weight'] = 400,
+        ['type'] = 'item',
+        ['image'] = 'carplay_unit.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'A dash-mounted Carplay unit finished in a walnut wood veneer.'
+    },
+
+    -- ── Removal tool — reusable, never consumed ────────────────
+    ['carplay_tool'] = {
+        ['name'] = 'carplay_tool',
+        ['label'] = 'Carplay Removal Tool',
+        ['weight'] = 200,
+        ['type'] = 'item',
+        ['image'] = 'carplay_tool.png',
+        ['unique'] = false,
+        ['useable'] = true,
+        ['shouldClose'] = true,
+        ['combinable'] = nil,
+        ['description'] = 'Uninstalls a Carplay unit from a nearby vehicle and hands it back to you.'
+    },

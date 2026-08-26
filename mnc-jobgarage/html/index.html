@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MnC Job Garage Admin</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div id="overlay" class="hidden">
+  <div id="panel">
+
+    <!-- Header -->
+    <div id="panel-header">
+      <div id="panel-title">
+        <i class="fas fa-warehouse"></i>
+        <span>Job Garage Admin</span>
+        <span id="panel-sub">MnC Los Santos</span>
+      </div>
+      <button id="btn-close" onclick="closeUI()"><i class="fas fa-times"></i></button>
+    </div>
+
+    <!-- Tabs -->
+    <div id="tabs">
+      <button class="tab active" data-tab="garages"><i class="fas fa-map-marker-alt"></i> Garages</button>
+      <button class="tab" data-tab="vehicles"><i class="fas fa-car"></i> Vehicles</button>
+      <button class="tab" data-tab="roles"><i class="fas fa-id-badge"></i> Roles</button>
+      <button class="tab" data-tab="playerroles"><i class="fas fa-users"></i> Player Roles</button>
+    </div>
+
+    <!-- ═══════════ TAB: GARAGES ═══════════ -->
+    <div id="tab-garages" class="tab-content active">
+      <div class="tab-toolbar">
+        <button class="btn-primary" onclick="openGarageForm(null)">
+          <i class="fas fa-plus"></i> New Garage
+        </button>
+        <button class="btn-secondary" onclick="startSetupMode()">
+          <i class="fas fa-crosshairs"></i> Setup Mode
+        </button>
+        <input class="search-box" id="garage-search" placeholder="Search job…" oninput="renderGarages()">
+      </div>
+      <div id="garage-list" class="card-grid"></div>
+    </div>
+
+    <!-- ═══════════ TAB: VEHICLES ═══════════ -->
+    <div id="tab-vehicles" class="tab-content">
+      <div class="tab-toolbar">
+        <select id="veh-job-filter" onchange="renderVehicles()">
+          <option value="">— All Jobs —</option>
+        </select>
+        <select id="veh-role-filter" onchange="renderVehicles()">
+          <option value="">— All Roles —</option>
+        </select>
+        <select id="veh-grade-filter" onchange="renderVehicles()">
+          <option value="">— All Grades —</option>
+        </select>
+        <button class="btn-primary" onclick="openVehicleForm(null)">
+          <i class="fas fa-plus"></i> Add Vehicle
+        </button>
+        <input class="search-box" id="veh-search" placeholder="Search model / name…" oninput="renderVehicles()">
+      </div>
+      <div id="vehicle-list" class="card-grid"></div>
+    </div>
+
+    <!-- ═══════════ TAB: ROLES ═══════════ -->
+    <div id="tab-roles" class="tab-content">
+      <div class="tab-toolbar">
+        <select id="role-job-filter" onchange="renderRoles()">
+          <option value="">— All Jobs —</option>
+        </select>
+        <button class="btn-primary" onclick="openRoleForm(null)">
+          <i class="fas fa-plus"></i> New Role
+        </button>
+      </div>
+      <div id="role-list" class="card-grid"></div>
+    </div>
+
+    <!-- ═══════════ TAB: PLAYER ROLES ═══════════ -->
+    <div id="tab-playerroles" class="tab-content">
+      <div class="tab-toolbar">
+        <select id="pr-job-filter" onchange="renderPlayerRoles()">
+          <option value="">— All Jobs —</option>
+        </select>
+        <select id="pr-role-filter" onchange="renderPlayerRoles()">
+          <option value="">— All Roles —</option>
+        </select>
+        <button class="btn-primary" onclick="openPlayerRoleForm()">
+          <i class="fas fa-user-plus"></i> Assign Role
+        </button>
+        <input class="search-box" id="pr-search" placeholder="Search citizenid…" oninput="renderPlayerRoles()">
+      </div>
+      <div id="playerrole-list" class="card-grid"></div>
+    </div>
+
+  </div><!-- /panel -->
+</div><!-- /overlay -->
+
+<!-- ═══════════ MODAL ═══════════ -->
+<div id="modal-overlay" class="hidden">
+  <div id="modal">
+    <div id="modal-header">
+      <span id="modal-title">Edit</span>
+      <button onclick="closeModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div id="modal-body"></div>
+    <div id="modal-footer">
+      <!-- built dynamically by openModal() -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PULL-OUT (in-game vehicle picker) ═══════════ -->
+<div id="pullout-overlay" class="hidden">
+  <div id="pullout-panel">
+    <div id="pullout-header">
+      <div id="pullout-title">
+        <i class="fas fa-warehouse"></i>
+        <span id="pullout-joblabel">Job Garage</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="pullout-roles-btn" class="btn-secondary" onclick="pulloutShowRoles()" style="display:none;font-size:11px;padding:6px 12px">
+          <i class="fas fa-id-badge"></i> Roles
+        </button>
+        <button id="pullout-close" onclick="closePullout()"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    <div id="pullout-filter-bar" class="hidden">
+      <select id="pullout-role-filter" onchange="applyPulloutRoleFilter()">
+        <option value="">— All Roles —</option>
+      </select>
+    </div>
+    <div id="pullout-body">
+      <!-- filled by renderPullout() -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SETUP MODE (vector capture) ═══════════ -->
+<div id="setup-hud" class="hidden">
+  <div id="setup-instructions">
+    <div id="setup-step-label">Walk to the OUT point</div>
+    <div id="setup-step-desc">Stand where the target prop should appear and face the direction it should be reached from.</div>
+    <div id="setup-keys">
+      <span class="setup-key"><kbd>Enter</kbd> Confirm point</span>
+      <span class="setup-key"><kbd>Backspace</kbd> Cancel</span>
+    </div>
+  </div>
+  <div id="setup-coords">
+    <div class="setup-coord-row"><span>X</span><b id="setup-cx">0.00</b></div>
+    <div class="setup-coord-row"><span>Y</span><b id="setup-cy">0.00</b></div>
+    <div class="setup-coord-row"><span>Z</span><b id="setup-cz">0.00</b></div>
+    <div class="setup-coord-row"><span>Heading</span><b id="setup-cw">0.00</b></div>
+  </div>
+</div>
+
+<div id="setup-done-overlay" class="hidden">
+  <div id="setup-done-panel">
+    <div id="setup-done-header">
+      <i class="fas fa-crosshairs"></i>
+      <span>Garage Points Captured</span>
+    </div>
+    <div class="setup-done-body">
+      <div class="setup-result">
+        <div class="setup-result-label">Out (target prop)</div>
+        <code id="setup-result-out">vec4(0.0, 0.0, 0.0, 0.0)</code>
+        <button class="btn-icon" onclick="copySetupVec('out')"><i class="fas fa-copy"></i></button>
+      </div>
+      <div class="setup-result">
+        <div class="setup-result-label">Spawn (vehicle appears)</div>
+        <code id="setup-result-spawn">vec4(0.0, 0.0, 0.0, 0.0)</code>
+        <button class="btn-icon" onclick="copySetupVec('spawn')"><i class="fas fa-copy"></i></button>
+      </div>
+    </div>
+    <div class="setup-done-footer">
+      <button class="btn-secondary" onclick="closeSetupDone()">Close</button>
+      <button class="btn-primary" onclick="applySetupToForm()"><i class="fas fa-arrow-right"></i> Use in New Garage Form</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════ LIGHTBOX (vehicle image zoom) ═══════════ -->
+<div id="lightbox-overlay" class="hidden">
+  <div id="lightbox-panel">
+    <div id="lightbox-header">
+      <span id="lb-title"></span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button id="lb-signout-btn" class="btn-primary" onclick="lbSignOut()" style="display:none">
+          <i class="fas fa-key"></i> Sign Vehicle Out
+        </button>
+        <button onclick="closeLightbox()" style="background:none;border:none;cursor:pointer;color:#888;font-size:18px;padding:4px 8px;border-radius:6px;transition:color .15s" onmouseover="this.style.color='#ff6b6b'" onmouseout="this.style.color='#888'">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+    <div id="lightbox-body">
+      <img id="lb-img" alt="">
+    </div>
+    <div id="lightbox-hint"><i class="fas fa-search-plus"></i> Scroll to zoom</div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

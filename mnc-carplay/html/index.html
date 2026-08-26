@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MnC Carplay</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div id="cp-nowplaying-hud" class="cp-np-hud hidden">
+        <span class="cp-np-hud-icon"><i class="fa-solid fa-music"></i></span>
+        <span class="cp-np-hud-title" id="cp-np-hud-title">—</span>
+    </div>
+
+    <div id="cp-frame" class="frame hidden" data-skin="silver">
+        <div class="cp-tablet">
+            <!-- Front camera dot on the bezel -->
+            <div class="cp-cam"></div>
+
+            <div class="cp-screen">
+                <!-- Status bar -->
+                <div class="cp-statusbar">
+                    <span id="cp-clock">12:00</span>
+                    <span class="cp-status-mid">CARPLAY</span>
+                    <div class="cp-statusbar-right">
+                        <span id="cp-radius-badge" title="Broadcast radius">15m</span>
+                        <button id="cp-position-btn" class="cp-position-btn" title="Position prop" onclick="cpOpenPositionModal()"><i class="fa-solid fa-crosshairs"></i></button>
+                    </div>
+                </div>
+
+                <!-- Now Playing view -->
+                <div id="cp-view-nowplaying" class="cp-view">
+                    <div class="cp-artwork-wrap">
+                        <img id="cp-artwork" src="" alt="" onerror="this.style.display='none'" />
+                        <div class="cp-artwork-ph" id="cp-artwork-ph">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="cp-song-title-viewport">
+                        <div class="cp-song-title marquee" id="cp-song-title">No song playing</div>
+                    </div>
+                    <div class="cp-song-sub" id="cp-song-sub">—</div>
+
+                    <!-- Scrubber -->
+                    <div class="cp-scrub-row">
+                        <span class="cp-scrub-time" id="cp-time-elapsed">0:00</span>
+                        <input type="range" id="cp-scrub" class="cp-scrub-slider" min="0" max="0" step="1" value="0" disabled />
+                        <span class="cp-scrub-time" id="cp-time-total">--:--</span>
+                    </div>
+
+                    <!-- Transport controls (touch buttons, no click-wheel) -->
+                    <div class="cp-transport-row">
+                        <button class="cp-transport-btn" id="cp-skip-back" title="Previous / restart">
+                            <i class="fa-solid fa-backward-step"></i>
+                        </button>
+                        <button class="cp-transport-btn cp-transport-play" id="cp-pp-btn" onclick="cpCenterPress()">
+                            <i class="fa-solid fa-play" id="cp-pp-icon"></i>
+                        </button>
+                        <button class="cp-transport-btn" id="cp-skip-fwd" title="Next song">
+                            <i class="fa-solid fa-forward-step"></i>
+                        </button>
+                    </div>
+
+                    <div class="cp-url-row">
+                        <input id="cp-url-input" type="text" placeholder="YouTube URL…" />
+                        <button class="cp-url-go" onclick="playFromInput()">Go</button>
+                    </div>
+
+                    <!-- Volume slider -->
+                    <div class="cp-slider-row">
+                        <span class="cp-slider-ic"><i class="fa-solid fa-volume-high"></i></span>
+                        <input type="range" id="cp-vol-slider" class="cp-touch-slider" min="1" max="100" value="50" />
+                        <span class="cp-slider-val" id="cp-vol-val">50%</span>
+                    </div>
+
+                    <!-- Radius slider — up to 50m -->
+                    <div class="cp-slider-row">
+                        <span class="cp-slider-ic"><i class="fa-solid fa-satellite-dish"></i></span>
+                        <input type="range" id="cp-radius-slider" class="cp-touch-slider" min="5" max="50" value="15" />
+                        <span class="cp-slider-val" id="cp-radius-val">15m</span>
+                    </div>
+                </div>
+
+                <!-- Playlists view -->
+                <div id="cp-view-playlists" class="cp-view hidden">
+                    <div id="cp-pl-subview-list" class="cp-pl-subview">
+                        <div class="cp-pl-toolbar">
+                            <span class="cp-pl-toolbar-title">Playlists</span>
+                            <button class="cp-pl-new-btn" onclick="cpShowNewPlaylist()"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <div class="cp-pl-list" id="cp-pl-list">
+                            <p class="cp-pl-empty">No playlists yet.</p>
+                        </div>
+                    </div>
+
+                    <div id="cp-pl-subview-new" class="cp-pl-subview hidden">
+                        <div class="cp-pl-toolbar">
+                            <button class="cp-pl-back-btn" onclick="cpShowPlList()"><i class="fa-solid fa-chevron-left"></i></button>
+                            <span class="cp-pl-toolbar-title">New Playlist</span>
+                        </div>
+                        <input id="cp-pl-name-input" type="text" class="cp-pl-input" placeholder="Name…" maxlength="100" />
+                        <div class="cp-pl-songs-list" id="cp-pl-songs-new"></div>
+                        <div class="cp-pl-add-row">
+                            <input id="cp-pl-song-input" type="text" class="cp-pl-input cp-pl-song-url" placeholder="YouTube URL…" />
+                            <button class="cp-pl-add-btn" onclick="cpAddSongToNew()"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <button class="cp-pl-save-btn" onclick="cpSaveNewPlaylist()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+                    </div>
+
+                    <div id="cp-pl-subview-edit" class="cp-pl-subview hidden">
+                        <div class="cp-pl-toolbar">
+                            <button class="cp-pl-back-btn" onclick="cpShowPlList()"><i class="fa-solid fa-chevron-left"></i></button>
+                            <span class="cp-pl-toolbar-title cp-pl-edit-name" id="cp-pl-edit-title">Edit</span>
+                        </div>
+                        <div class="cp-pl-songs-list" id="cp-pl-songs-edit"></div>
+                        <div class="cp-pl-add-row">
+                            <input id="cp-pl-edit-url" type="text" class="cp-pl-input cp-pl-song-url" placeholder="Add YouTube URL…" />
+                            <button class="cp-pl-add-btn" onclick="cpAddSongToEdit()"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Android-style bottom dock -->
+            <div class="cp-dock">
+                <button class="cp-dock-btn active" id="cp-dock-music" onclick="cpShowNowPlaying()">
+                    <span class="cp-dock-ic"><i class="fa-solid fa-music"></i></span><span>Music</span>
+                </button>
+                <button class="cp-dock-btn" id="cp-dock-playlists" onclick="cpShowMenu()">
+                    <span class="cp-dock-ic"><i class="fa-solid fa-list"></i></span><span>Playlists</span>
+                </button>
+                <button class="cp-dock-btn cp-dock-close" onclick="closeUI()">
+                    <span class="cp-dock-ic"><i class="fa-solid fa-xmark"></i></span><span>Close</span>
+                </button>
+            </div>
+            <div class="cp-home-indicator"></div>
+        </div>
+    </div>
+
+    <div id="cp-position-modal" class="cp-modal-overlay hidden">
+        <div class="cp-modal">
+            <h2 class="cp-modal-title">Position Carplay Prop</h2>
+            <p class="cp-modal-sub">Adjust the tablet's model and placement on the dash. Changes preview live and only save once you press Save.</p>
+
+            <div class="cp-modal-group">
+                <span class="cp-modal-group-title">Tablet Model</span>
+                <div class="cp-prop-options" id="cp-prop-options"></div>
+            </div>
+
+            <div class="cp-modal-group">
+                <span class="cp-modal-group-title">Offset (m)</span>
+                <label class="cp-modal-row"><span>X</span><input type="range" id="cp-pos-x" min="-5" max="5" step="0.01" value="0" /><span class="cp-modal-val" id="cp-pos-x-val">0.00</span></label>
+                <label class="cp-modal-row"><span>Y</span><input type="range" id="cp-pos-y" min="-5" max="5" step="0.01" value="0" /><span class="cp-modal-val" id="cp-pos-y-val">0.00</span></label>
+                <label class="cp-modal-row"><span>Z</span><input type="range" id="cp-pos-z" min="-5" max="5" step="0.01" value="0" /><span class="cp-modal-val" id="cp-pos-z-val">0.00</span></label>
+            </div>
+
+            <div class="cp-modal-group">
+                <span class="cp-modal-group-title">Rotation (°)</span>
+                <label class="cp-modal-row"><span>X</span><input type="range" id="cp-rot-x" min="-180" max="180" step="1" value="0" /><span class="cp-modal-val" id="cp-rot-x-val">0°</span></label>
+                <label class="cp-modal-row"><span>Y</span><input type="range" id="cp-rot-y" min="-180" max="180" step="1" value="0" /><span class="cp-modal-val" id="cp-rot-y-val">0°</span></label>
+                <label class="cp-modal-row"><span>Z</span><input type="range" id="cp-rot-z" min="-180" max="180" step="1" value="0" /><span class="cp-modal-val" id="cp-rot-z-val">0°</span></label>
+            </div>
+
+            <div class="cp-modal-group">
+                <span class="cp-modal-group-title">Physical Prop</span>
+                <label class="cp-toggle-row">
+                    <span>Hide physical prop</span>
+                    <span class="cp-toggle-switch">
+                        <input type="checkbox" id="cp-prop-hidden" />
+                        <span class="cp-toggle-track"></span>
+                    </span>
+                </label>
+                <p class="cp-modal-hint">Hides the dash tablet model — useful if this prop model never quite lines up right.</p>
+            </div>
+
+            <div class="cp-modal-group">
+                <span class="cp-modal-group-title">Now Playing HUD</span>
+                <label class="cp-toggle-row">
+                    <span>Hide now-playing HUD</span>
+                    <span class="cp-toggle-switch">
+                        <input type="checkbox" id="cp-worldui-enabled" />
+                        <span class="cp-toggle-track"></span>
+                    </span>
+                </label>
+            </div>
+
+            <div class="cp-modal-actions">
+                <button class="cp-modal-btn cp-modal-btn-cancel" onclick="cpCancelPosition()">Cancel</button>
+                <button class="cp-modal-btn cp-modal-btn-save" onclick="cpSavePosition()">Save Position</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

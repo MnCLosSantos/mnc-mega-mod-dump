@@ -1,0 +1,665 @@
+/* ═══════════════════════════════════════════════════════════
+   mnc-ppod  |  style.css
+   ═══════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --cp-bg:        #0e1015;
+    --cp-surface:   #151821;
+    --cp-card:      #1b1f2a;
+    --cp-accent:    #2563eb;
+    --cp-accent-d:  #1d4ed8;
+    --cp-accent-soft: rgba(37,99,235,.16);
+    --cp-text:      #e7e9f0;
+    --cp-muted:     #7d8494;
+    --cp-border:    #262b38;
+    --cp-danger:    #ef4444;
+    --cp-radius:    14px;
+    --cp-shadow:    0 8px 32px rgba(0,0,0,.55);
+
+    /* iPod palette — overridden per-skin below via #ipod-frame[data-skin] */
+    --ip-chrome:    #d2d3d8;
+    --ip-chrome-d:  #a9abb3;
+    --ip-chrome-dd: #888a92;
+    --ip-screen:    #16181d;
+    --ip-accent:    #2563eb;
+    --ip-wheel:     #c2c3ca;
+    --ip-wheel-d:   #92949c;
+    --ip-text:      #e4e6ec;
+    --ip-shell-bg-image: none;
+
+    /* Shared scrollbar tokens */
+    --sb-width:     4px;
+    --sb-track:     transparent;
+    --sb-thumb:     #262b38;
+    --sb-thumb-h:   #3a4055;
+    --sb-radius:    4px;
+}
+
+html, body {
+    width: 100%; height: 100%;
+    background: transparent;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: var(--cp-text);
+    overflow: hidden;
+    user-select: none;
+}
+
+
+::-webkit-scrollbar {
+    width: var(--sb-width);
+    height: var(--sb-width);
+}
+::-webkit-scrollbar-track {
+    background: var(--sb-track);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb);
+    border-radius: var(--sb-radius);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--sb-thumb-h);
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--sb-thumb) var(--sb-track);
+}
+
+/* ── Shared frame wrapper ───────────────────────────────────── */
+.frame {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inset: 0;
+    pointer-events: none;
+}
+.frame.hidden { display: none; }
+.frame:not(.hidden) { pointer-events: all; }
+
+/* Visible focus ring for keyboard/controller navigation */
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid var(--cp-accent);
+    outline-offset: 2px;
+}
+
+
+#ipod-frame,
+#ipod-frame:not(.hidden) {
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0 24px 24px 0;
+    background: transparent;
+    pointer-events: none;
+}
+
+.ipod-shell {
+    position: relative;
+    pointer-events: all;
+    width: 230px;
+    background-color: var(--ip-chrome);
+    background-image: var(--ip-shell-bg-image);
+    background-size: cover;
+    border-radius: 28px;
+    padding: 18px 18px 28px;
+    box-shadow: 0 2px 0 var(--ip-chrome-dd), 0 12px 40px rgba(0,0,0,.7),
+                inset 0 1px 0 rgba(255,255,255,.7);
+    display: flex; flex-direction: column; gap: 14px;
+    transition: background-color .2s, box-shadow .2s;
+}
+
+
+.ipod-power-tab {
+    position: absolute;
+    top: -7px;
+    left: 25%;
+    transform: translateX(-50%);
+    width: 64px;
+    height: 14px;
+    border: none;
+    border-radius: 7px;
+    background: linear-gradient(180deg, var(--ip-chrome-d), var(--ip-chrome-dd));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.3), 0 2px 5px rgba(0,0,0,.5);
+    cursor: pointer;
+    z-index: -9993;
+    padding: 0;
+    transition: filter .15s, transform .1s;
+}
+.ipod-power-tab:hover { filter: brightness(1.15); }
+.ipod-power-tab:active { transform: translateX(-50%) scale(.94); }
+
+/* Screen */
+.ipod-screen {
+    background: var(--ip-screen);
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,.8);
+    position: relative;
+    overflow: hidden;
+    height: 280px;       /* fixed — shell size stays constant no matter how many playlist songs exist */
+    display: flex;
+    flex-direction: column;
+}
+.ipod-screen-bar {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: #777; margin-bottom: 8px;
+    font-family: monospace;
+    flex-shrink: 0;
+}
+
+#ipod-battery {
+    transition: color .2s;
+}
+#ipod-battery.battery-low {
+    color: var(--cp-danger);
+    font-weight: 700;
+}
+
+.ipod-artwork-wrap {
+    position: relative;
+    width: 120px; height: 90px;
+    margin: 0 auto 8px;
+    border-radius: 6px; overflow: hidden;
+    background: #111;
+    flex-shrink: 0;
+}
+#ipod-artwork { width: 100%; height: 100%; object-fit: cover; display: none; }
+#ipod-artwork[src]:not([src=""]) { display: block; }
+.ipod-artwork-ph {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+}
+.ipod-artwork-ph svg { width: 36px; height: 36px; fill: #444; }
+
+.ipod-song-title-viewport {
+    width: 100%;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 2px;
+    flex-shrink: 0;
+}
+.ipod-song-title {
+    display: inline-block;
+    font-size: 12px; font-weight: 700;
+    color: var(--ip-text); white-space: nowrap;
+}
+.ipod-song-sub { text-align: center; font-size: 10px; color: #777; margin-bottom: 8px; flex-shrink: 0; }
+
+/* Scrubber row: elapsed/total time labels flank the draggable seek
+   slider — same clock math as the CarPlay scrubber, just sized down
+   for the iPod's smaller screen. */
+.ipod-scrub-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+.ipod-scrub-time {
+    width: 24px;
+    font-size: 9px;
+    color: #777;
+    flex-shrink: 0;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.ipod-scrub-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 3px;
+    background: #333;
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+.ipod-scrub-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--ip-accent);
+    cursor: pointer;
+    transition: transform .1s;
+}
+.ipod-scrub-slider:active::-webkit-slider-thumb { transform: scale(1.2); }
+.ipod-scrub-slider:disabled {
+    cursor: not-allowed;
+    opacity: .4;
+}
+
+.ipod-url-row input {
+    width: 100%;
+    padding: 5px 8px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 5px;
+    color: #ccc;
+    font-size: 10px;
+    outline: none;
+    margin-bottom: 8px;
+    flex-shrink: 0;
+}
+.ipod-url-row input:focus { border-color: var(--ip-accent); }
+
+.ipod-vol-bar {
+    display: flex; align-items: center; gap: 5px; font-size: 10px;
+    flex-shrink: 0;
+}
+.ipod-vol-track {
+    flex: 1; height: 4px; background: #333; border-radius: 2px;
+}
+.ipod-vol-fill { height: 100%; background: var(--ip-accent); border-radius: 2px; transition: width .2s; }
+
+/* Click wheel */
+.ipod-wheel-wrap { display: flex; justify-content: center; }
+.ipod-wheel {
+    position: relative;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, var(--ip-wheel), var(--ip-wheel-d));
+    box-shadow: 0 3px 0 var(--ip-chrome-dd),
+                0 6px 18px rgba(0,0,0,.4),
+                inset 0 1px 0 rgba(255,255,255,.5);
+    cursor: pointer;
+}
+
+
+.ipod-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, var(--ip-chrome), var(--ip-chrome-d));
+    box-shadow: 0 2px 4px rgba(0,0,0,.35),
+                inset 0 1px 0 rgba(255,255,255,.6);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 2;
+    transition: background .2s;
+}
+.ipod-center svg { width: 22px; height: 22px; fill: var(--ip-accent); transition: fill .2s; }
+.ipod-center:active { filter: brightness(.9); }
+
+/* Cardinal labels */
+.ipod-lbl {
+    position: absolute;
+    font-size: 16px;
+    color: var(--ip-chrome-dd);
+    cursor: pointer;
+    z-index: 1;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ipod-lbl svg { fill: currentColor; }
+.ipod-lbl:active { color: #555; }
+.ipod-lbl-top    { top: 10px;  left: 50%; transform: translateX(-50%); font-size: 22px; font-weight: 700; }
+.ipod-lbl-right  { right: 12px; top: 50%; transform: translateY(-50%); }
+.ipod-lbl-bottom { bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 22px; font-weight: 700; }
+.ipod-lbl-left   { left: 12px;  top: 50%; transform: translateY(-50%); }
+
+.ipod-btn-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.ipod-menu-btn {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    padding: 6px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    background: var(--ip-chrome-dd);
+    color: var(--ip-text);
+    text-align: center;
+}
+.ipod-menu-btn:active { filter: brightness(.9); }
+.ipod-menu-btn.active { background: var(--ip-accent); color: #fff; }
+
+/* iPod screen views */
+.ipod-view {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+.ipod-view.hidden { display: none; }
+
+.ipod-pl-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    font-size: 10px;
+    padding-right: 4px;
+    /* iPod screen scrollbar — slightly lighter thumb to show on dark bg */
+    scrollbar-width: thin;
+    scrollbar-color: #3a3f50 transparent;
+}
+.ipod-pl-list::-webkit-scrollbar { width: 3px; }
+.ipod-pl-list::-webkit-scrollbar-track { background: transparent; }
+.ipod-pl-list::-webkit-scrollbar-thumb { background: #3a3f50; border-radius: 3px; }
+.ipod-pl-list::-webkit-scrollbar-thumb:hover { background: #4a4f62; }
+
+.ipod-pl-empty { color: #777; text-align: center; padding: 12px 0; }
+
+.ipod-pl-card { border-bottom: 1px solid #2a2a2a; }
+.ipod-pl-card-header {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 2px; cursor: pointer;
+}
+
+.ipod-pl-card-play {
+    background: none;
+    border: none;
+    color: var(--ip-accent);
+    cursor: pointer;
+    font-size: 10px;
+    padding: 2px 4px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.ipod-pl-card-play:hover { filter: brightness(1.3); }
+
+.ipod-pl-card-name {
+    flex: 1; color: var(--ip-text); font-weight: 700;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ipod-pl-card-count { color: #777; font-size: 9px; }
+.ipod-pl-card-del {
+    background: none; border: none; color: #a55; cursor: pointer;
+    font-size: 11px; padding: 2px 4px;
+}
+.ipod-pl-card-del.ipod-pl-del-armed { color: #f55; font-weight: 700; }
+
+/* ── iPod playlist song rows with tiny thumbnail ────────── */
+.ipod-pl-songs { padding-left: 4px; }
+.ipod-pl-songs.hidden { display: none; }
+
+.ipod-pl-song-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 2px;
+    cursor: pointer;
+    border-top: 1px solid #232323;
+}
+.ipod-pl-song-item:active { background: rgba(37,99,235,.18); border-radius: 3px; }
+
+/* Tiny thumbnail — 24×18 px. Fixed size so layout never shifts. */
+.ipod-song-thumb {
+    width: 24px;
+    height: 18px;
+    border-radius: 2px;
+    object-fit: cover;
+    flex-shrink: 0;
+    display: block;
+}
+.ipod-song-thumb-ph {
+    background: #2a2a2a;
+}
+
+.ipod-song-label {
+    flex: 1;
+    color: #bbb;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
+}
+.ipod-pl-song-item:active .ipod-song-label { color: var(--ip-accent); }
+
+/* ── iPod playlist sub-views ─────────────────────────────────── */
+.ipod-pl-subview {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+.ipod-pl-subview.hidden { display: none; }
+
+.ipod-pl-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+.ipod-pl-toolbar-title {
+    flex: 1;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ip-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.ipod-pl-new-btn {
+    background: var(--ip-accent);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.ipod-pl-back-btn {
+    background: none;
+    border: none;
+    color: var(--ip-accent);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0 4px 0 0;
+    flex-shrink: 0;
+}
+
+.ipod-pl-input {
+    width: 100%;
+    padding: 4px 7px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #ccc;
+    font-size: 9px;
+    outline: none;
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+.ipod-pl-input:focus { border-color: var(--ip-accent); }
+.ipod-pl-song-url { margin-bottom: 0; flex: 1; }
+
+.ipod-pl-songs-list {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    margin-bottom: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #3a3f50 transparent;
+}
+.ipod-pl-songs-list::-webkit-scrollbar { width: 3px; }
+.ipod-pl-songs-list::-webkit-scrollbar-track { background: transparent; }
+.ipod-pl-songs-list::-webkit-scrollbar-thumb { background: #3a3f50; border-radius: 3px; }
+
+.ipod-pl-add-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-bottom: 5px;
+}
+.ipod-pl-add-btn {
+    background: var(--ip-accent);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.ipod-pl-save-btn {
+    width: 100%;
+    padding: 5px;
+    background: var(--ip-accent);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* Per-song delete button inside iPod song lists */
+.ipod-pl-song-del {
+    background: none;
+    border: none;
+    color: #a55;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 0 2px;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.ipod-pl-song-del:hover { color: #f55; }
+
+
+.ipod-pl-song-del.ipod-pl-song-del-armed {
+    color: #f55;
+    font-weight: 700;
+}
+
+/* ── Shared marquee ─────────────────────────────────────────── */
+@keyframes marquee {
+    0%   { transform: translateX(0); }
+    15%  { transform: translateX(0); }
+    85%  { transform: translateX(var(--marquee-dist, 0px)); }
+    100% { transform: translateX(var(--marquee-dist, 0px)); }
+}
+
+.marquee.marquee-active {
+    animation: marquee 7s linear infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+    .marquee.marquee-active { animation: none; }
+}
+
+/* iPod wheel skip labels — subtle press feedback */
+#ipod-skip-back,
+#ipod-skip-fwd,
+.ipod-lbl-top,
+.ipod-lbl-bottom {
+    transition: color .1s;
+}
+#ipod-skip-back:hover,
+#ipod-skip-fwd:hover,
+.ipod-lbl-top:hover,
+.ipod-lbl-bottom:hover {
+    color: var(--ip-accent);
+}
+#ipod-skip-back:active,
+#ipod-skip-fwd:active {
+    color: #555;
+}
+
+
+/* ── Solid colours (10) ──────────────────────────────────── */
+#ipod-frame[data-skin="silver"] {
+    --ip-chrome:#d2d3d8; --ip-chrome-d:#a9abb3; --ip-chrome-dd:#888a92;
+    --ip-wheel:#c2c3ca; --ip-wheel-d:#92949c; --ip-accent:#2563eb;
+}
+#ipod-frame[data-skin="black"] {
+    --ip-chrome:#2b2d33; --ip-chrome-d:#1c1d21; --ip-chrome-dd:#131315;
+    --ip-wheel:#3a3c42; --ip-wheel-d:#202124; --ip-accent:#3b82f6;
+    --ip-text:#f2f3f7;
+}
+#ipod-frame[data-skin="white"] {
+    --ip-chrome:#f5f6f8; --ip-chrome-d:#dcdde2; --ip-chrome-dd:#c3c5cb;
+    --ip-wheel:#eceef2; --ip-wheel-d:#d5d7dc; --ip-accent:#2563eb;
+}
+#ipod-frame[data-skin="red"] {
+    --ip-chrome:#c2373c; --ip-chrome-d:#9c2b2f; --ip-chrome-dd:#7f2226;
+    --ip-wheel:#d1494d; --ip-wheel-d:#a3383c; --ip-accent:#ef4444;
+}
+#ipod-frame[data-skin="blue"] {
+    --ip-chrome:#3b6cc9; --ip-chrome-d:#2d549e; --ip-chrome-dd:#234480;
+    --ip-wheel:#4d7cd4; --ip-wheel-d:#33599e; --ip-accent:#60a5fa;
+}
+#ipod-frame[data-skin="green"] {
+    --ip-chrome:#3f9e5b; --ip-chrome-d:#317e48; --ip-chrome-dd:#28653a;
+    --ip-wheel:#4bab68; --ip-wheel-d:#337a4b; --ip-accent:#4ade80;
+}
+#ipod-frame[data-skin="yellow"] {
+    --ip-chrome:#e8c94a; --ip-chrome-d:#c9ab2f; --ip-chrome-dd:#a68c22;
+    --ip-wheel:#f0d55f; --ip-wheel-d:#c9ab2f; --ip-accent:#eab308;
+}
+#ipod-frame[data-skin="purple"] {
+    --ip-chrome:#8354c9; --ip-chrome-d:#66409e; --ip-chrome-dd:#513180;
+    --ip-wheel:#9366d4; --ip-wheel-d:#6a459e; --ip-accent:#a855f7;
+}
+#ipod-frame[data-skin="orange"] {
+    --ip-chrome:#d97a3a; --ip-chrome-d:#b1602c; --ip-chrome-dd:#8f4d23;
+    --ip-wheel:#e2893f; --ip-wheel-d:#b1602c; --ip-accent:#fb923c;
+}
+#ipod-frame[data-skin="pink"] {
+    --ip-chrome:#e478b0; --ip-chrome-d:#c2578e; --ip-chrome-dd:#9e4373;
+    --ip-wheel:#ec8ec2; --ip-wheel-d:#c2578e; --ip-accent:#f472b6;
+}
+
+
+/* Vehicle: Racing Stripes — dual stripe over a dark body */
+#ipod-frame[data-skin="racing"] {
+    --ip-chrome:#1c1d21; --ip-chrome-d:#131315; --ip-chrome-dd:#0c0c0d;
+    --ip-wheel:#2b2d33; --ip-wheel-d:#131315; --ip-accent:#ef4444;
+    --ip-text:#f2f3f7;
+    --ip-shell-bg-image: url('img/ppod_racing.png');
+}
+
+/* Vehicle: Carbon Fiber — woven carbon texture */
+#ipod-frame[data-skin="carbon"] {
+    --ip-chrome:#232428; --ip-chrome-d:#17181b; --ip-chrome-dd:#0f1012;
+    --ip-wheel:#2c2d31; --ip-wheel-d:#151619; --ip-accent:#9ca3af;
+    --ip-text:#f2f3f7;
+    --ip-shell-bg-image: url('img/ppod_carbon.png');
+}
+
+/* Gun: Tactical Camo — blotched olive/tan pattern */
+#ipod-frame[data-skin="camo"] {
+    --ip-chrome:#5b5a3f; --ip-chrome-d:#46452f; --ip-chrome-dd:#363524;
+    --ip-wheel:#5f5e42; --ip-wheel-d:#403f2c; --ip-accent:#84cc16;
+    --ip-text:#f2f3f7;
+    --ip-shell-bg-image: url('img/ppod_camo.png');
+}
+
+/* Gun: Gunmetal Engraved — engraved scrollwork over gunmetal */
+#ipod-frame[data-skin="engraved"] {
+    --ip-chrome:#4b4f56; --ip-chrome-d:#383b40; --ip-chrome-dd:#2a2c30;
+    --ip-wheel:#565a61; --ip-wheel-d:#33353a; --ip-accent:#cbd5e1;
+    --ip-text:#f2f3f7;
+    --ip-shell-bg-image: url('img/ppod_engraved.png');
+}
+
+/* Drug: Green Haze — abstract smoky green haze, purely decorative */
+#ipod-frame[data-skin="haze"] {
+    --ip-chrome:#1f3324; --ip-chrome-d:#16251a; --ip-chrome-dd:#0f1a12;
+    --ip-wheel:#233d29; --ip-wheel-d:#152418; --ip-accent:#22c55e;
+    --ip-text:#f2f3f7;
+    --ip-shell-bg-image: url('img/ppod_haze.png');
+}

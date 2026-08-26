@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MNC Vehicle Placer</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-left">
+      <img src="logo.png" alt="MNC Logo" class="topbar-logo">
+      <div>
+        <div class="topbar-title">Vehicle Placement Manager</div>
+        <div class="topbar-sub">Server Tool </div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="stat-chip"><span id="statTotal">0</span> total</div>
+      <div class="stat-chip live"><span id="statLive">0</span> live</div>
+      <button id="btnClose" class="close-btn" title="Close"><i class="fas fa-times"></i></button>
+    </div>
+  </div>
+  
+  <div class="layout">
+    <div class="sidebar">
+      <div class="sidebar-toolbar">
+        <input id="searchBox" class="search-input" type="text" placeholder="Search…" autocomplete="off"/>
+        <button id="btnShowAdd" class="btn btn-accent"><i class="fas fa-plus"></i> Add</button>
+      </div>
+      <div id="listMeta" class="list-meta">—</div>
+      <div id="vehicleList" class="vehicle-list"></div>
+    </div>
+    
+    <div class="main" id="mainPanel">
+      <div id="emptyState" class="empty-state">
+        <!-- Using your logo.png here too -->
+        <img src="logo.png" alt="MNC Logo" class="empty-logo">
+        
+        <p><strong>TAG MEANINGS</strong></p>
+        <p><strong>SQL</strong> = A vehicle placement set up within the server (editable)</p>
+        <p><strong>CONFIG</strong> = A vehicle placement set up within the config.lua (not editable)</p>
+        <p><strong>WITHIN PROX</strong> = Your within the spawn distance of the vehicles</p>
+        <p><strong>NOT WITHIN PROX</strong> = Your not within the spawn distance of the vehicles</p>
+        <p> </p>
+		<p> </p>
+        <p><strong>WARNING: READ ME</strong></p>
+        <p>Too many vehicles in one area will make it so you are not able to spawn vehicles, </p>
+        <p>using /car ect ect ect within the area of the placed vehicles until the area is left </p>
+        <p> </p>
+		<p> </p>
+        <p>To avoid this for players do not spawn more than 4 in an area that has a public/private garage, </p>
+        <p>to avoid this for admin/dev just no clip away to spawn </p>
+        <p> </p>
+		<p> </p>
+        <p>To start adding placements click the blue add button and fill out the info then save, </p>
+        <p>Sometimes you may need to refresh the script (only during adding placements) </p>
+      </div>
+      
+      <!-- Detail -->
+      <div id="detailView" class="panel" style="display:none">
+        <div class="panel-header">
+          <div>
+            <div id="dName" class="panel-title">—</div>
+            <div id="dModel" class="panel-sub">—</div>
+          </div>
+          <div id="dDist" class="dist-badge">—</div>
+        </div>
+        <div class="hero-wrap">
+          <img id="heroImg" src="" alt=""/>
+          <div class="hero-fallback" id="heroFallback"><i class="fas fa-car fa-5x"></i></div>
+        </div>
+        <table class="data-table">
+          <tbody>
+            <tr><td class="dt-label">X</td><td id="dX" class="dt-value">—</td></tr>
+            <tr><td class="dt-label">Y</td><td id="dY" class="dt-value">—</td></tr>
+            <tr><td class="dt-label">Z</td><td id="dZ" class="dt-value">—</td></tr>
+            <tr><td class="dt-label">Heading</td><td id="dH" class="dt-value">—</td></tr>
+            <tr><td class="dt-label">Type</td><td id="dType" class="dt-value">—</td></tr>
+            <tr><td class="dt-label">Status</td><td id="dStatus" class="dt-value">—</td></tr>
+          </tbody>
+        </table>
+        
+        <div id="placeBanner" class="place-banner" style="display:none">
+          <div class="place-banner-row">
+            <span class="pulse-dot"></span>
+            <strong>Placement Mode Active</strong>
+          </div>
+          <p>Drive the vehicle into position, then confirm.</p>
+          <div class="place-keys">
+            <span class="key-tag">W A S D</span> Drive &nbsp;
+            <span class="key-tag">NUM 4/6</span> Rotate &nbsp;
+            <span class="key-tag">ESC</span> Cancel
+          </div>
+          <div class="btn-row" style="margin-top:10px">
+            <button id="btnConfirmPlace" class="btn btn-success"><i class="fas fa-check"></i> Confirm Position</button>
+            <button id="btnCancelPlace" class="btn btn-ghost">Cancel</button>
+          </div>
+        </div>
+        <div class="btn-row" id="detailActions"></div>
+      </div>
+      
+      <!-- Form -->
+      <div id="formView" class="panel" style="display:none">
+        <div class="panel-header">
+          <div id="formTitle" class="panel-title">Add Placement</div>
+        </div>
+        <input type="hidden" id="editId"/>
+        <table class="form-table">
+          <tbody>
+            <tr>
+              <td class="ft-label">Name</td>
+              <td><input id="fName" class="field-input" type="text" placeholder="Display name"/></td>
+            </tr>
+            <tr>
+              <td class="ft-label">Model</td>
+              <td><input id="fModel" class="field-input" type="text" placeholder="e.g. stretch"/></td>
+            </tr>
+            <tr>
+              <td class="ft-label">X</td>
+              <td><input id="fX" class="field-input" type="number" step="0.01" placeholder="0.0"/></td>
+            </tr>
+            <tr>
+              <td class="ft-label">Y</td>
+              <td><input id="fY" class="field-input" type="number" step="0.01" placeholder="0.0"/></td>
+            </tr>
+            <tr>
+              <td class="ft-label">Z</td>
+              <td><input id="fZ" class="field-input" type="number" step="0.01" placeholder="0.0"/></td>
+            </tr>
+            <tr>
+              <td class="ft-label">Heading</td>
+              <td><input id="fH" class="field-input" type="number" step="0.01" placeholder="0.0"/></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="btn-row">
+          <button id="btnUseCoords" class="btn btn-ghost"><i class="fas fa-location-dot"></i> Use My Position</button>
+        </div>
+        <div class="preview-wrap">
+          <div class="preview-label">Model Preview</div>
+          <div class="preview-img-box">
+            <img id="previewImg" src="" alt=""/>
+          </div>
+        </div>
+		<p><strong>Once you click save you have 15s before the vehicle spawns.</strong></p>
+        <div class="btn-row" style="margin-top:auto;padding-top:16px;border-top:1px solid var(--border)">
+          <button id="btnSave" class="btn btn-accent"><i class="fas fa-save"></i> Save</button>
+          <button id="btnCancelForm" class="btn btn-ghost">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete -->
+<div id="confirmOverlay" class="overlay">
+  <div class="dialog">
+    <div class="dialog-title">Delete Placement</div>
+    <p id="confirmText" class="dialog-body">Are you sure?</p>
+    <div class="btn-row">
+      <button id="confirmYes" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+      <button id="confirmNo" class="btn btn-ghost">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

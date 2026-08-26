@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MnC Ppod</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!--  iPod frame                                        -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <div id="ipod-frame" class="frame hidden" data-skin="silver">
+        <div class="ipod-shell">
+            <!-- Top power tab — old-iPhone-style top edge button.
+                 Press it to close (power off) the ppod UI. -->
+            <button class="ipod-power-tab" onclick="closeUI()" title="Power off" aria-label="Power off"></button>
+
+            <!-- Screen -->
+            <div class="ipod-screen">
+                <div class="ipod-screen-bar">
+                    <span>ppod</span>
+                    <span id="ipod-battery">100%</span>
+                </div>
+
+                <!-- Now Playing view -->
+                <div id="ipod-view-nowplaying" class="ipod-view">
+                    <div class="ipod-artwork-wrap">
+                        <img id="ipod-artwork" src="" alt="" onerror="this.style.display='none'" />
+                        <div class="ipod-artwork-ph" id="ipod-artwork-ph">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3z"/></svg>
+                        </div>
+                    </div>
+                    <div class="ipod-song-title-viewport">
+                        <div class="ipod-song-title marquee" id="ipod-song-title">No song playing</div>
+                    </div>
+                    <div class="ipod-song-sub" id="ipod-song-sub">—</div>
+
+                    <!-- Scrubber -->
+                    <div class="ipod-scrub-row">
+                        <span class="ipod-scrub-time" id="ipod-time-elapsed">0:00</span>
+                        <input type="range" id="ipod-scrub" class="ipod-scrub-slider" min="0" max="0" step="1" value="0" disabled />
+                        <span class="ipod-scrub-time" id="ipod-time-total">--:--</span>
+                    </div>
+
+                    <div class="ipod-url-row">
+                        <input id="ipod-url-input" type="text" placeholder="YouTube URL ONLY …" />
+                    </div>
+                    <!-- Volume display -->
+                    <div class="ipod-vol-bar">
+                        <span>🔈</span>
+                        <div class="ipod-vol-track">
+                            <div class="ipod-vol-fill" id="ipod-vol-fill" style="width:50%"></div>
+                        </div>
+                        <span>🔊</span>
+                    </div>
+                </div>
+
+                <!-- Playlists view -->
+                <div id="ipod-view-playlists" class="ipod-view hidden">
+                    <!-- Sub-views: list / new / edit -->
+                    <div id="ipod-pl-subview-list" class="ipod-pl-subview">
+                        <div class="ipod-pl-toolbar">
+                            <span class="ipod-pl-toolbar-title">Playlists</span>
+                            <button class="ipod-pl-new-btn" onclick="ipodShowNewPlaylist()">+</button>
+                        </div>
+                        <div class="ipod-pl-list" id="ipod-pl-list">
+                            <p class="ipod-pl-empty">No playlists yet.</p>
+                        </div>
+                    </div>
+
+                    <!-- New playlist sub-view -->
+                    <div id="ipod-pl-subview-new" class="ipod-pl-subview hidden">
+                        <div class="ipod-pl-toolbar">
+                            <button class="ipod-pl-back-btn" onclick="ipodShowPlList()">‹</button>
+                            <span class="ipod-pl-toolbar-title">New Playlist</span>
+                        </div>
+                        <input id="ipod-pl-name-input" type="text" class="ipod-pl-input" placeholder="Name…" maxlength="100" />
+                        <div class="ipod-pl-songs-list" id="ipod-pl-songs-new"></div>
+                        <div class="ipod-pl-add-row">
+                            <input id="ipod-pl-song-input" type="text" class="ipod-pl-input ipod-pl-song-url" placeholder="YouTube URL…" />
+                            <button class="ipod-pl-add-btn" onclick="ipodAddSongToNew()">+</button>
+                        </div>
+                        <button class="ipod-pl-save-btn" onclick="ipodSaveNewPlaylist()">💾 Save</button>
+                    </div>
+
+                    <!-- Edit existing playlist sub-view -->
+                    <div id="ipod-pl-subview-edit" class="ipod-pl-subview hidden">
+                        <div class="ipod-pl-toolbar">
+                            <button class="ipod-pl-back-btn" onclick="ipodShowPlList()">‹</button>
+                            <span class="ipod-pl-toolbar-title ipod-pl-edit-name" id="ipod-pl-edit-title">Edit</span>
+                        </div>
+                        <div class="ipod-pl-songs-list" id="ipod-pl-songs-edit"></div>
+                        <div class="ipod-pl-add-row">
+                            <input id="ipod-pl-edit-url" type="text" class="ipod-pl-input ipod-pl-song-url" placeholder="Add YouTube URL…" />
+                            <button class="ipod-pl-add-btn" onclick="ipodAddSongToEdit()">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu row — sits above the dial, under the screen.
+                 Power is now the top tab above, so this row just holds
+                 Menu, left-aligned. -->
+            <div class="ipod-btn-row">
+                <button class="ipod-menu-btn" id="ipod-menu-btn" onclick="ipodToggleMenu()">MENU</button>
+            </div>
+
+            <!-- Click wheel -->
+            <div class="ipod-wheel-wrap">
+                <div class="ipod-wheel" id="ipod-wheel">
+                    <!-- Center button -->
+                    <div class="ipod-center" id="ipod-pp-center" onclick="ipodCenterPress()">
+                        <svg id="ipod-pp-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                    <!-- Cardinal labels -->
+                    <span class="ipod-lbl ipod-lbl-top"    onclick="ipodVolumeUp()">+</span>
+                    <span class="ipod-lbl ipod-lbl-right"  id="ipod-skip-fwd" title="Next song">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z" fill="currentColor"/></svg>
+                    </span>
+                    <span class="ipod-lbl ipod-lbl-bottom" onclick="ipodVolumeDown()">−</span>
+                    <span class="ipod-lbl ipod-lbl-left"   id="ipod-skip-back" title="Previous song">
+                        <svg viewBox="0 0 24 24" width="18" height="18"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z" fill="currentColor"/></svg>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
