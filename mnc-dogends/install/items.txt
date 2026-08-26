@@ -1,0 +1,22 @@
+    -- main items
+    ['paper']            = {['name'] = 'paper',         ['label'] = 'Rolling Papers', ['weight'] = 100, ['unique'] = false, ['description'] = 'Papers for rolling hand-made cigarettes'},
+    ['cig_butt']         = {['name'] = 'cig_butt',      ['label'] = 'Cigarette Butt', ['weight'] = 200, ['unique'] = false, ['image'] = 'cigs3.png', ['description'] = 'A used cigarette butt — can be reused'},
+    ['rolling_machine']  = {['name'] = 'rolling_machine',['label'] = 'Rolling Machine', ['weight'] = 500, ['type'] = 'item',   ['image'] = 'rollingm.png', ['unique'] = false, ['useable'] = true, ['shouldClose'] = true, ['combinable'] = nil, ['description'] = 'Used to roll cigarettes'},
+    ['roll_up']          = {['name'] = 'roll_up',       ['label'] = 'Hand-Rolled Cigarette', ['weight'] = 100, ['unique'] = false, ['image'] = 'cigs2.png', ['description'] = 'A freshly hand-rolled cigarette'},
+    ['roll_up_mint']     = {['name'] = 'roll_up_mint',  ['label'] = 'Hand-Rolled Mint Cigarette', ['weight'] = 100, ['unique'] = false, ['image'] = 'cigsmint.png', ['description'] = 'A freshly hand-rolled cigarette with mint filter'},
+
+    -- Tobacco (unique=true, weights in mg? adjust if needed)
+    ['tobacco_classic_125'] = {['name'] = 'tobacco_classic_125', ['label'] = 'Classic Tobacco Pouch (12.5g)', ['weight'] = 1250, ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '12.5 grams of classic blend. Remaining: 12.50g'},
+    ['tobacco_normal_125']  = {['name'] = 'tobacco_normal_125',  ['label'] = 'Normal Tobacco Pouch (12.5g)',  ['weight'] = 1250, ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '12.5 grams of normal blend. Remaining: 12.50g'},
+    ['tobacco_mature_125']  = {['name'] = 'tobacco_mature_125',  ['label'] = 'Mature Tobacco Pouch (12.5g)',  ['weight'] = 1250, ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '12.5 grams of mature blend. Remaining: 12.50g'},
+    ['tobacco_classic_30']  = {['name'] = 'tobacco_classic_30',  ['label'] = 'Classic Tobacco Pouch (30g)',    ['weight'] = 3000,  ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '30 grams of classic blend. Remaining: 30.0g'},
+    ['tobacco_normal_30']   = {['name'] = 'tobacco_normal_30',   ['label'] = 'Normal Tobacco Pouch (30g)',    ['weight'] = 3000,  ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '30 grams of normal blend. Remaining: 30.0g'},
+    ['tobacco_mature_30']   = {['name'] = 'tobacco_mature_30',   ['label'] = 'Mature Tobacco Pouch (30g)',    ['weight'] = 3000,  ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '30 grams of mature blend. Remaining: 30.0g'},
+    ['tobacco_classic_50']  = {['name'] = 'tobacco_classic_50',  ['label'] = 'Classic Tobacco Pouch (50g)',    ['weight'] = 5000,  ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '50 grams of classic blend. Remaining: 50.0g'},
+    ['tobacco_normal_50']   = {['name'] = 'tobacco_normal_50',   ['label'] = 'Normal Tobacco Pouch (50g)',    ['weight'] = 5000,  ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '50 grams of normal blend. Remaining: 50.0g'},
+    ['tobacco_mature_50']   = {['name'] = 'tobacco_mature_50',   ['label'] = 'Mature Tobacco Pouch (50g)',    ['weight'] = 5000,  ['unique'] = true, ['image'] = 'tobacco.png', ['description'] = '50 grams of mature blend. Remaining: 50.0g'},
+
+    -- Filters (unique=true)
+    ['filter_pack_slim']   = {['name'] = 'filter_pack_slim',   ['label'] = 'Slim Filter Tips Pack (45)',   ['weight'] = 500, ['unique'] = true, ['image'] = 'filters.png', ['description'] = 'Pack of slim cigarette filters. Remaining: 45'},
+    ['filter_pack_normal'] = {['name'] = 'filter_pack_normal', ['label'] = 'Normal Filter Tips Pack (30)', ['weight'] = 500, ['unique'] = true, ['image'] = 'filters.png', ['description'] = 'Pack of normal cigarette filters. Remaining: 30'},
+    ['filter_pack_mint']   = {['name'] = 'filter_pack_mint',   ['label'] = 'Mint Filter Tips Pack (25)',   ['weight'] = 500, ['unique'] = true, ['image'] = 'filters.png', ['description'] = 'Pack of mint cigarette filters. Remaining: 25'},

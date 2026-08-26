@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MNC Custom Plate</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div id="overlay" class="hidden">
+        <div id="modal">
+
+            <!-- Header -->
+            <div class="modal-header">
+                <div class="header-left">
+                    <span class="header-icon"> </span>
+                    <div>
+                        <h1>Custom Plate</h1>
+                        <p class="subtitle">Personalize your vehicle license plate</p>
+                    </div>
+                </div>
+                <button id="closeBtn" title="Close">✕</button>
+            </div>
+
+            <!-- Warning Banner -->
+            <div class="warning-banner">
+                <span class="warning-icon">⚠️</span>
+                <div class="warning-text">
+                    <strong>Important:</strong> All vehicle upgrades and modifications will be removed during the plate swap. Please remove any items or upgrades from your vehicle before proceeding.
+                </div>
+            </div>
+			
+			<!-- Warning Banner 2 -->
+			<div class="warning-banner">
+                <span class="warning-icon">⚠️</span>
+                <div class="warning-text">
+                    <strong>Important:</strong> All vehicles must be stored in a garage right after updating the plate.
+                </div>
+            </div>
+
+            <!-- USA Plate Preview -->
+            <div class="section">
+                <span class="section-label">LIVE PREVIEW</span>
+                <div class="plate-wrapper">
+                    <div class="plate" id="plateEl">
+                        <div class="plate-inner">
+                            <div class="plate-state"  id="plateState">MNC STATE</div>
+                            <div class="plate-number" id="plateNumber">CUSTOM</div>
+                            <div class="plate-strip">
+                                <div class="strip-bolt"></div>
+                                <span class="strip-text">★ PERSONALIZED ★</span>
+                                <div class="strip-bolt"></div>
+                            </div>
+                        </div>
+                        <div class="plate-bolt tl"></div>
+                        <div class="plate-bolt tr"></div>
+                        <div class="plate-bolt bl"></div>
+                        <div class="plate-bolt br"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input -->
+            <div class="section">
+                <div class="label-row">
+                    <span class="section-label">PLATE TEXT</span>
+                    <span class="char-count" id="charCount">0 / 8</span>
+                </div>
+                <input
+                    type="text"
+                    id="plateInput"
+                    class="plate-input"
+                    placeholder="Enter plate text..."
+                    maxlength="8"
+                    autocomplete="off"
+                    spellcheck="false"
+                />
+                <p class="input-hint">Letters, numbers and spaces only · Max 8 characters</p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="actions">
+                <button id="cancelBtn" class="btn btn-cancel">Cancel</button>
+                <button id="applyBtn"  class="btn btn-apply" disabled>Apply Plate</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

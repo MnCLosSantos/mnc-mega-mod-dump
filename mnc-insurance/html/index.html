@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance UI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <div id="insuranceContainer" class="hidden">
+        <div class="insurance-card">
+            <div class="card-header">
+                <div class="logo-wrap">
+                    <img class="logo" src="logo.png" alt="Logo" id="insuranceLogo">
+                    <div class="header-text">
+                        <h1 id="insuranceTitle"><i class="fas fa-shield-alt"></i> Insurance Overview</h1>
+                        <div id="insuranceDates" class="dates">—</div>
+                    </div>
+                </div>
+                <div class="status-section">
+                    <div id="insuranceStatus" class="status uninsured">Uninsured</div>
+                </div>
+                <div class="actions">
+                    <button class="ghost close-btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="left">
+                    <h2><i class="fas fa-car"></i> Vehicle Details</h2>
+                    <ul class="info-list">
+                        <li><span class="label"><i class="fas fa-user"></i> Player Name</span><span id="playerName" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-tags"></i> Category</span><span id="category" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-car-side"></i> Model</span><span id="name" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-id-card"></i> Plate</span><span id="plate" class="value mono">—</span></li>
+                        <li><span class="label"><i class="fas fa-paint-roller"></i> Colour</span><span id="color" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-fingerprint"></i> Citizen ID</span><span id="citizenid" class="value mono">—</span></li>
+                        <li><span class="label"><i class="fas fa-cogs"></i> Mod Tier</span>
+                            <select id="modTier">
+                                <option value="1">1 (Stock)</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5 (Max)</option>
+                            </select>
+                        </li>
+                        <li><span class="label"><i class="fas fa-briefcase"></i> Business Use</span>
+                            <select id="isBusiness">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </li>
+                        <li><span class="label"><i class="fas fa-shield-alt"></i> Insurance Company</span>
+                            <select id="insuranceCompany">
+                                <option value="MNC">MnC Insurance Co</option>
+                                <option value="LSIC">Los Santos Insurance Co</option>
+                                <option value="MAZE">Maze Insurance Co</option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <div class="right">
+                    <h2><i class="fas fa-dollar-sign"></i> Cost Breakdown</h2>
+                    <ul class="cost-list">
+                        <li><span class="label"><i class="fas fa-tags"></i> Category Cost</span><span id="categoryCost" class="money">$0</span></li>
+                        <li><span class="label"><i class="fas fa-cogs"></i> Mod Cost</span><span id="modCost" class="money">$0</span></li>
+                        <li><span class="label"><i class="fas fa-briefcase"></i> Business Cost</span><span id="businessCost" class="money">$0</span></li>
+                        <li><span class="label"><i class="fas fa-file-alt"></i> Processing Fee</span><span id="processFee" class="money">$0</span></li>
+                        <li><span class="label"><i class="fas fa-receipt"></i> Flat Fees</span><span id="fees" class="money">$0</span></li>
+                        <li><span class="label"><i class="fas fa-percentage"></i> Tax (5%)</span><span id="tax" class="money">$0</span></li>
+                        <li><span class="label"><i class="fas fa-shield-alt"></i> Premium</span><span id="premium" class="money">$0</span></li>
+                        <li class="total-row"><span class="label"><i class="fas fa-calculator"></i> Total</span><span id="total" class="total-money">$0</span></li>
+                    </ul>
+                    <div class="cost-breakdown">
+                        <button id="purchaseBtnBottom" class="primary"><i class="fas fa-shield-alt"></i> Purchase Insurance</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                This slip is valid for 1 month. Use /insurance while in a vehicle or /checkinsurance near a vehicle.
+            </div>
+        </div>
+    </div>
+
+    <div id="checkInsuranceContainer" class="hidden">
+        <div class="insurance-card">
+            <div class="card-header">
+                <div class="logo-wrap">
+                    <img class="logo" src="logo.png" alt="Logo" id="checkInsuranceLogo">
+                    <div class="header-text">
+                        <div id="checkInsuranceDates" class="dates">—</div>
+                    </div>
+                </div>
+                <div class="status-section">
+                    <div id="checkInsuranceStatus" class="status uninsured">Uninsured</div>
+                </div>
+                <div class="actions">
+                    <button class="ghost close-btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="left full-width">
+                    <h2><i class="fas fa-car"></i> Vehicle Details</h2>
+                    <ul class="info-list">
+                        <li><span class="label"><i class="fas fa-user"></i> Player Name</span><span id="checkPlayerName" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-tags"></i> Category</span><span id="checkCategory" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-car-side"></i> Model</span><span id="checkName" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-id-card"></i> Plate</span><span id="checkPlate" class="value mono">—</span></li>
+                        <li><span class="label"><i class="fas fa-paint-roller"></i> Colour</span><span id="checkColor" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-fingerprint"></i> Citizen ID</span><span id="checkCitizenid" class="value mono">—</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-footer">
+                This slip is valid for 1 month.
+            </div>
+        </div>
+    </div>
+
+    <div id="registrationContainer" class="hidden">
+        <div class="insurance-card">
+            <div class="card-header">
+                <div class="logo-wrap">
+                    <img class="logo" src="logo2.png" alt="Logo">
+                    <div class="header-text">
+                        <h1><i class="fas fa-file-alt"></i> Vehicle Registration</h1>
+                        <div id="registrationDate" class="dates">—</div>
+                    </div>
+                </div>
+                <div class="status-section">
+                    <div id="registrationStatus" class="status uninsured">Unregistered</div>
+                </div>
+                <div class="actions">
+                    <button class="ghost close-btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="left">
+                    <h2><i class="fas fa-car"></i> Vehicle Details</h2>
+                    <ul class="info-list">
+                        <li><span class="label"><i class="fas fa-user"></i> Player Name</span><span id="regPlayerName" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-tags"></i> Category</span><span id="regCategory" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-car-side"></i> Model</span><span id="regName" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-id-card"></i> Plate</span><span id="regPlate" class="value mono">—</span></li>
+                        <li><span class="label"><i class="fas fa-paint-roller"></i> Colour</span><span id="regColor" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-fingerprint"></i> Citizen ID</span><span id="regCitizenid" class="value mono">—</span></li>
+                    </ul>
+                </div>
+                <div class="right" id="registrationCostSection">
+                    <h2><i class="fas fa-dollar-sign"></i> Cost Breakdown</h2>
+                    <ul class="cost-list">
+                        <li><span class="label"><i class="fas fa-file-alt"></i> Registration Fee</span><span id="regFee" class="money">$250</span></li>
+                        <li class="total-row"><span class="label"><i class="fas fa-calculator"></i> Total</span><span id="regTotal" class="total-money">$250</span></li>
+                    </ul>
+                    <div class="cost-breakdown">
+                        <button id="registerBtn" class="primary"><i class="fas fa-file-alt"></i> Register Vehicle</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                Vehicle registration is required before insuring. Use /registration while in a vehicle.
+            </div>
+        </div>
+    </div>
+
+    <div id="inspectionContainer" class="hidden">
+        <div class="insurance-card">
+            <div class="card-header">
+                <div class="logo-wrap">
+                    <img class="logo" src="logo2.png" alt="Logo">
+                    <div class="header-text">
+                        <h1><i class="fas fa-search"></i> Vehicle Inspection</h1>
+                        <div id="inspectionDate" class="dates">—</div>
+                    </div>
+                </div>
+                <div class="status-section">
+                    <div id="inspectionStatus" class="status uninsured">Not Inspected</div>
+                </div>
+                <div class="actions">
+                    <button class="ghost close-btn"><i class="fas fa-times"></i> Close</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="left">
+                    <h2><i class="fas fa-car"></i> Vehicle Details</h2>
+                    <ul class="info-list">
+                        <li><span class="label"><i class="fas fa-user"></i> Player Name</span><span id="inspPlayerName" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-tags"></i> Category</span><span id="inspCategory" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-car-side"></i> Model</span><span id="inspName" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-id-card"></i> Plate</span><span id="inspPlate" class="value mono">—</span></li>
+                        <li><span class="label"><i class="fas fa-paint-roller"></i> Colour</span><span id="inspColor" class="value">—</span></li>
+                        <li><span class="label"><i class="fas fa-fingerprint"></i> Citizen ID</span><span id="inspCitizenid" class="value mono">—</span></li>
+                    </ul>
+                </div>
+                <div class="right">
+                    <h2><i class="fas fa-dollar-sign"></i> Cost Breakdown</h2>
+                    <ul class="cost-list">
+                        <li><span class="label"><i class="fas fa-search"></i> Inspection Fee</span><span id="inspFee" class="money">$350</span></li>
+                        <li class="total-row"><span class="label"><i class="fas fa-calculator"></i> Total</span><span id="inspTotal" class="total-money">$350</span></li>
+                    </ul>
+                    <div class="cost-breakdown">
+                        <button id="inspectBtn" class="primary"><i class="fas fa-search"></i> Pay for Inspection</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                Vehicle inspection is required before registration. Use /registration while in a vehicle.
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

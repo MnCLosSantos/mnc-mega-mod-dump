@@ -1,0 +1,1 @@
+['custom_plate_kit'] = { name        = 'custom_plate_kit', label       = 'Custom Plate Kit', weight      = 200, type        = 'item', image       = 'custom_plate_kit.png', unique      = false, useable     = true, shouldClose = true, combinable  = nil, description = 'Apply a custom license plate to your vehicle.', },

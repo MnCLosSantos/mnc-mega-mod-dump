@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drift HUD</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+  <!-- Drift HUD elements -->
+  <div id="score" class="hud-box" style="display: none;">
+    <i class="fas fa-tachometer-alt"></i>
+    <span class="label">Score:</span>
+    <span class="value">0</span>
+  </div>
+  
+  <div id="multiplier" class="hud-box" style="display: none;">
+    <i class="fas fa-times"></i>
+    <span class="label">Multiplier:</span>
+    <span class="value">x1.0</span>
+  </div>
+  
+  <div id="combo" class="hud-box" style="display: none;">
+    <i class="fas fa-star"></i>
+    <span class="label">Combo:</span>
+    <span class="value"></span>
+  </div>
+
+  <div id="reputation" class="hud-box" style="display: none;">
+    <i class="fas fa-star"></i>
+    <span class="label">Reputation:</span>
+    <span class="value">0</span>
+  </div>
+
+  <div id="coins" class="hud-box" style="display: none;">
+    <i class="fas fa-coins"></i>
+    <span class="label">Drift Coins:</span>
+    <span class="value">0</span>
+  </div>
+
+  <div id="notificationContainer"></div>
+
+  <!-- Help Modal -->
+  <div id="helpModal" class="modal">
+    <div class="modal-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0; color: var(--accent);">Drift HUD Help & Settings</h2>
+        <button id="closeModal" style="background:none;border:none;color:var(--text);font-size:32px;cursor:pointer;font-weight:bold;">&times;</button>
+      </div>
+      
+      <div id="helpContent">
+        <p><strong>Commands:</strong></p>
+        <ul style="padding-left: 20px; margin: 8px 0 24px 0; line-height: 1.6;">
+          <li><code>/driftscore</code> — Toggle Show/Hide the entire HUD</li>
+          <li><code>/driftstyle [1-20]</code> — Change visual style</li>
+          <li><code>/driftboard</code> — Open the drift leaderboard (weekly / monthly / all-time / store)</li>
+          <li><code>/drifthudhelp</code> — Open this help menu</li>
+        </ul>
+
+        <p><strong>Current Style:</strong> <span id="currentStyleName">Loading...</span></p>
+
+        <h3 style="margin: 28px 0 12px 0;">Available Styles</h3>
+        <div id="styleGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 28px;">
+          <!-- Styles will be populated here -->
+        </div>
+
+        <h3 style="margin: 28px 0 12px 0;">How Scoring Works</h3>
+        <ul style="padding-left: 20px; line-height: 1.6;">
+          <li>Minimum drift angle: <strong>15°</strong></li>
+          <li>Spin-out (excessive angle/rotation) or collision = chain reset (chain is lost, no Reputation earned)</li>
+          <li>Chain ends after <strong>2 seconds</strong> without drifting — if it isn't lost to a reset, it's <strong>saved</strong> into your total</li>
+          <li>Many different combos stack multipliers (angle, speed, proximity, duration...)</li>
+          <li>Advanced combos: Tandem, Reverse Entry, Clutch Kick, Chicane, Donut, E-Brake, Link Drift</li>
+          <li>Style changes are saved between sessions</li>
+          <li>Your best score is tracked on the Weekly, Monthly and All-Time leaderboards</li>
+        </ul>
+
+        <h3 style="margin: 28px 0 12px 0;">Reputation & Drift Coins</h3>
+        <ul style="padding-left: 20px; line-height: 1.6;">
+          <li>Every <strong>saved</strong> chain earns Reputation — 100 chain points = 1 Reputation</li>
+          <li>Every <strong>10 Reputation</strong> also earns you 1 Drift Coin</li>
+          <li>Reputation and Drift Coins are persistent and always visible in the HUD and on <code>/driftboard</code></li>
+          <li>Spend Drift Coins in the <strong>Store</strong> tab on <code>/driftboard</code> for items and bank rewards</li>
+        </ul>
+
+        <p style="margin-top: 32px; font-size: 0.9em; opacity: 0.75; text-align: center;">
+          Keep it sideways • Drift responsibly 🎯
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard Modal -->
+  <div id="leaderboardModal" class="modal">
+    <div class="modal-content leaderboard-content">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 12px; flex-wrap: wrap;">
+        <h2 style="margin: 0; color: var(--accent);"><i class="fas fa-trophy"></i> Drift Leaderboard</h2>
+        <div id="lbCurrencyBar" class="lb-currency-bar">
+          <span><i class="fas fa-star"></i> <span id="lbRepValue">0</span> RP</span>
+          <span><i class="fas fa-coins"></i> <span id="lbCoinValue">0</span> Coins</span>
+        </div>
+        <button id="closeLeaderboard" style="background:none;border:none;color:var(--text);font-size:32px;cursor:pointer;font-weight:bold;">&times;</button>
+      </div>
+
+      <div class="lb-tabs">
+        <button class="lb-tab active" data-period="weekly">Weekly</button>
+        <button class="lb-tab" data-period="monthly">Monthly</button>
+        <button class="lb-tab" data-period="alltime">All-Time</button>
+        <button class="lb-tab" data-period="store">Store</button>
+      </div>
+
+      <div id="lbResetTimer" class="lb-reset-timer"></div>
+
+      <div class="lb-table-wrap" id="lbTableWrap">
+        <table class="lb-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody id="lbTableBody">
+            <tr><td colspan="3" class="lb-empty">No scores yet — go drift!</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lb-store-wrap" id="lbStoreWrap" style="display: none;">
+        <div id="lbStoreGrid" class="lb-store-grid"></div>
+      </div>
+
+      <div id="lbYourRank" class="lb-your-rank"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

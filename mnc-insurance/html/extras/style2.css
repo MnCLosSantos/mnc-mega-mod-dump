@@ -1,0 +1,325 @@
+/* style.css - redline style insurance, registration, and inspection UI */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --redline-red: #d32f2f;
+    --redline-dark-red: #b71c1c;
+    --redline-white: #ffffff;
+    --redline-grey: #e0e0e0;
+    --redline-dark-grey: #616161;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --muted: #757575;
+    --accent: var(--redline-red);
+    --accent-dark: var(--redline-dark-red);
+    --glass-blur: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* container */
+#insuranceContainer, #checkInsuranceContainer, #registrationContainer, #inspectionContainer {
+    width: 880px;
+    max-width: 95vw;
+    animation: slideIn 300ms ease-out;
+    background: transparent;
+    border-radius: 12px;
+}
+
+.hidden { display: none; }
+
+#inspectionContainer.checkInspection .right {
+    display: none;
+}
+
+#registrationContainer.checkRegistration .right {
+    display: none;
+}
+
+#registrationContainer.checkRegistration #registrationCostSection {
+    display: none;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.insurance-card {
+    background: var(--card-bg);
+    border-radius: 12px !important;
+    padding: 18px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--redline-grey) !important;
+    overflow: hidden;
+}
+
+/* header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--redline-grey);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+}
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 48px;
+    width: auto;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--redline-dark-grey);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dates {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+/* status section */
+.status-section {
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 2px solid;
+    background: var(--redline-white);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.status.uninsured {
+    color: var(--redline-red);
+    border-color: var(--redline-red);
+}
+
+.status.insured {
+    color: green;
+    border-color: green;
+}
+
+/* actions */
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+button.ghost {
+    background: transparent;
+    color: var(--redline-dark-grey);
+    border: 1px solid var(--redline-grey);
+}
+
+button.primary {
+    background: var(--redline-red);
+    color: var(--redline-white);
+}
+
+button.primary:hover {
+    background: var(--redline-dark-red);
+    box-shadow: 0 0 8px rgba(211, 47, 47, 0.3);
+}
+
+button.close-btn:hover {
+    background: var(--redline-red) !important;
+    color: var(--redline-white) !important;
+    border-color: var(--redline-red) !important;
+}
+
+/* select dropdowns */
+select {
+    background: var(--redline-white);
+    color: var(--redline-dark-grey);
+    border: 1px solid var(--redline-grey);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--redline-red);
+}
+
+select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* body layout */
+.card-body {
+    display: flex;
+    gap: 18px;
+    padding-top: 12px;
+}
+
+.left, .right {
+    background: var(--redline-white);
+    padding: 14px;
+    border-radius: 12px;
+    flex: 1;
+    min-height: 260px;
+}
+
+.left {
+    flex: 1.1;
+}
+
+.right {
+    flex: 0.9;
+}
+
+.left.full-width {
+    flex: 1;
+}
+
+h2 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--redline-red);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-list, .cost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.info-list li, .cost-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 6px;
+    border-bottom: 1px dashed var(--redline-grey);
+    align-items: center;
+}
+
+.label {
+    color: var(--muted);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.value {
+    font-weight: 600;
+    color: var(--redline-dark-grey);
+}
+
+.mono {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--redline-dark-grey);
+}
+
+.money {
+    color: var(--redline-red);
+}
+
+.total-row {
+    border-top: 2px solid var(--redline-red);
+    margin-top: 6px;
+    padding-top: 10px;
+}
+
+.total-money {
+    font-size: 20px;
+    color: var(--redline-red);
+    font-weight: 800;
+}
+
+.cost-breakdown {
+    margin-top: 10px;
+}
+
+.cost-breakdown button.primary {
+    margin-top: 12px;
+    width: 100%;
+}
+
+/* footer */
+.card-footer {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .card-body {
+        flex-direction: column;
+    }
+    .right {
+        order: 2;
+    }
+    .left {
+        order: 1;
+    }
+    .card-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+    }
+    .status {
+        font-size: 18px;
+        padding: 4px 10px;
+    }
+    .logo-wrap {
+        justify-content: center;
+    }
+}

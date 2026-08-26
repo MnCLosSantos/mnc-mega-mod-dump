@@ -1,0 +1,327 @@
+/* style.css - NoPixel-inspired insurance, registration, and inspection UI */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+    --primary-dark: #1a1a1a;
+    --secondary-dark: #2c2c2c;
+    --accent-blue: #2a4b7c;
+    --accent-blue-dark: #1e3559;
+    --text-primary: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --highlight-green: #4caf50;
+    --highlight-red: #d32f2f;
+    --border-color: #3a3a3a;
+    --card-bg: rgba(28, 28, 28, 0.9);
+    --glass-blur: 6px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', system-ui, -apple-system, 'Segoe UI', Arial;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+/* container */
+#insuranceContainer, #checkInsuranceContainer, #registrationContainer, #inspectionContainer {
+    width: 880px;
+    max-width: 95vw;
+    animation: slideIn 300ms ease-out;
+    background: transparent;
+    border-radius: 8px;
+}
+
+.hidden { display: none; }
+
+#inspectionContainer.checkInspection .right {
+    display: none;
+}
+
+#registrationContainer.checkRegistration .right {
+    display: none;
+}
+
+#registrationContainer.checkRegistration #registrationCostSection {
+    display: none;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.insurance-card {
+    background: var(--card-bg);
+    border-radius: 8px !important;
+    padding: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-color) !important;
+    overflow: hidden;
+}
+
+/* header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+}
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 48px;
+    width: auto;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dates {
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+/* status section */
+.status-section {
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid;
+    background: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.status.uninsured {
+    color: var(--highlight-red);
+    border-color: var(--highlight-red);
+}
+
+.status.insured {
+    color: var(--highlight-green);
+    border-color: var(--highlight-green);
+}
+
+/* actions */
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+button.ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--accent-blue);
+}
+
+button.primary {
+    background: var(--highlight-green);
+    color: #fff;
+}
+
+button.primary:hover {
+    background: #388e3c;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+button.close-btn:hover {
+    background: var(--highlight-red) !important;
+    color: #fff !important;
+    border-color: var(--highlight-red) !important;
+}
+
+/* select dropdowns */
+select {
+    background: var(--secondary-dark);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+}
+
+select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* body layout */
+.card-body {
+    display: flex;
+    gap: 16px;
+    padding-top: 12px;
+}
+
+.left, .right {
+    background: var(--secondary-dark);
+    padding: 14px;
+    border-radius: 6px;
+    flex: 1;
+    min-height: 260px;
+}
+
+.left {
+    flex: 1.1;
+}
+
+.right {
+    flex: 0.9;
+}
+
+.left.full-width {
+    flex: 1;
+}
+
+h2 {
+    margin: 0 0 10px 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--accent-blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-list, .cost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.info-list li, .cost-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+}
+
+.label {
+    color: var(--text-muted);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.value {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.mono {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--highlight-green);
+}
+
+.money {
+    color: var(--highlight-green);
+}
+
+.total-row {
+    border-top: 2px solid var(--accent-blue);
+    margin-top: 6px;
+    padding-top: 10px;
+}
+
+.total-money {
+    font-size: 18px;
+    color: var(--highlight-green);
+    font-weight: 700;
+}
+
+.cost-breakdown {
+    margin-top: 10px;
+}
+
+.cost-breakdown button.primary {
+    margin-top: 12px;
+    width: 100%;
+}
+
+/* footer */
+.card-footer {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .card-body {
+        flex-direction: column;
+    }
+    .right {
+        order: 2;
+    }
+    .left {
+        order: 1;
+    }
+    .card-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+    }
+    .status {
+        font-size: 16px;
+        padding: 4px 10px;
+    }
+    .logo-wrap {
+        justify-content: center;
+    }
+}

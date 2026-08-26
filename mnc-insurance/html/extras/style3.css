@@ -1,0 +1,313 @@
+/* style.css - modern racing UI with carbon-fiber texture */
+
+/* Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --accent-red: #d62828;
+    --accent-green: #00cc66;
+    --accent-yellow: #ffd60a;
+    --card-bg: #1b1b1b;
+    --muted: rgba(255, 255, 255, 0.75);
+    --accent: var(--accent-red);
+    --accent-dark: #a71d1d;
+    --glass-blur: 6px;
+}
+
+/* Global reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+/* Carbon fiber pattern background */
+.carbon-bg {
+    background-color: #1b1b1b;
+    background-image:
+        linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.03) 75%);
+    background-size: 8px 8px;
+}
+
+/* container */
+#insuranceContainer, 
+#checkInsuranceContainer, 
+#registrationContainer, 
+#inspectionContainer {
+    width: 880px;
+    max-width: 95vw;
+    animation: slideIn 300ms ease-out;
+    background: transparent;
+    border-radius: 16px;
+}
+
+.hidden { display: none; }
+
+#inspectionContainer.checkInspection .right,
+#registrationContainer.checkRegistration .right {
+    display: none;
+}
+
+#registrationContainer.checkRegistration #registrationCostSection {
+    display: none;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.insurance-card {
+    background: var(--card-bg);
+    border-radius: 16px !important;
+    padding: 18px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--accent);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Apply carbon-fiber texture to main card */
+.insurance-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    z-index: 0;
+    opacity: 0.7;
+}
+.insurance-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+}
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 48px;
+    width: auto;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.dates {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+/* status section */
+.status-section {
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 2px solid;
+    background: rgba(0, 0, 0, 0.4);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.status.uninsured {
+    color: #ff4d4d;
+    border-color: #ff4d4d;
+}
+
+.status.insured {
+    color: var(--accent-green);
+    border-color: var(--accent-green);
+}
+
+/* actions */
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+button.ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--accent);
+}
+
+button.primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+button.primary:hover {
+    background: var(--accent-dark);
+    box-shadow: 0 0 8px var(--accent);
+}
+
+button.close-btn:hover {
+    background: var(--accent-red) !important;
+    color: #fff !important;
+    border-color: var(--accent-red) !important;
+}
+
+/* select dropdowns */
+select {
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--muted);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accent-yellow);
+}
+
+select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* body layout */
+.card-body {
+    display: flex;
+    gap: 18px;
+    padding-top: 12px;
+}
+
+.left, .right {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 14px;
+    border-radius: 12px;
+    flex: 1;
+    min-height: 260px;
+}
+
+.left { flex: 1.1; }
+.right { flex: 0.9; }
+
+h2 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent-yellow);
+}
+
+/* lists */
+.info-list, .cost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.info-list li, .cost-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 6px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    align-items: center;
+}
+
+.label {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.value {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.mono {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--accent-green);
+}
+
+.money {
+    color: var(--accent-green);
+}
+
+.total-row {
+    border-top: 2px solid var(--accent);
+    margin-top: 6px;
+    padding-top: 10px;
+}
+
+.total-money {
+    font-size: 20px;
+    color: var(--accent-green);
+    font-weight: 800;
+}
+
+/* footer */
+.card-footer {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .card-body { flex-direction: column; }
+    .right { order: 2; }
+    .left { order: 1; }
+    .card-header { flex-direction: column; gap: 8px; align-items: center; }
+    .status { font-size: 18px; padding: 4px 10px; }
+    .logo-wrap { justify-content: center; }
+}

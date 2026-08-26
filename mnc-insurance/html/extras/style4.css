@@ -1,0 +1,334 @@
+/* style.css - neon retro synthwave insurance, registration, and inspection UI */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --neon-pink: #ff2a6d;
+    --neon-blue: #05d9e8;
+    --neon-purple: #6b2bff;
+    --neon-red: #ff0000;
+    --neon-green: #00ff00;
+    --card-bg: rgba(26, 11, 46, 0.7);
+    --muted: rgba(255, 255, 255, 0.7);
+    --accent: var(--neon-blue);
+    --accent-dark: #04b7c9;
+    --glass-blur: 8px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+}
+
+/* container */
+#insuranceContainer, #checkInsuranceContainer, #registrationContainer, #inspectionContainer {
+    width: 880px;
+    max-width: 95vw;
+    animation: slideIn 300ms ease-out;
+    background: transparent;
+    border-radius: 16px;
+}
+
+.hidden { display: none; }
+
+#inspectionContainer.checkInspection .right {
+    display: none;
+}
+
+#registrationContainer.checkRegistration .right {
+    display: none;
+}
+
+#registrationContainer.checkRegistration #registrationCostSection {
+    display: none;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.insurance-card {
+    background: linear-gradient(135deg, var(--neon-purple) 0%, var(--neon-pink) 50%, var(--neon-blue) 100%);
+    background-size: 200% 200%;
+    animation: gradientFlow 15s ease infinite;
+    border-radius: 16px !important;
+    padding: 18px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    border: 2px solid var(--neon-blue) !important;
+    overflow: hidden;
+}
+
+/* header */
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+}
+
+.logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    height: 48px;
+    width: auto;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.header-text h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dates {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+/* status section */
+.status-section {
+    display: flex;
+    align-items: center;
+}
+
+.status {
+    font-size: 20px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 2px solid;
+    background: rgba(0, 0, 0, 0.3);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.status.uninsured {
+    color: var(--neon-red);
+    border-color: var(--neon-red);
+}
+
+.status.insured {
+    color: var(--neon-green);
+    border-color: var(--neon-green);
+}
+
+/* actions */
+.actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+button {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+button.ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--neon-blue);
+}
+
+button.primary {
+    background: var(--neon-green);
+    color: #000;
+}
+
+button.primary:hover {
+    background: #00cc00;
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+button.close-btn:hover {
+    background: var(--neon-pink) !important;
+    color: #000 !important;
+    border-color: var(--neon-pink) !important;
+}
+
+/* select dropdowns */
+select {
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--muted);
+    border: 1px solid var(--neon-blue);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--neon-pink);
+}
+
+select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* body layout */
+.card-body {
+    display: flex;
+    gap: 18px;
+    padding-top: 12px;
+}
+
+.left, .right {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 14px;
+    border-radius: 12px;
+    flex: 1;
+    min-height: 260px;
+}
+
+.left {
+    flex: 1.1;
+}
+
+.right {
+    flex: 0.9;
+}
+
+.left.full-width {
+    flex: 1;
+}
+
+h2 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--neon-blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.info-list, .cost-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.info-list li, .cost-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 6px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    align-items: center;
+}
+
+.label {
+    color: var(--muted);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.value {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.mono {
+    font-family: monospace;
+    font-size: 13px;
+    color: var(--neon-green);
+}
+
+.money {
+    color: var(--neon-green);
+}
+
+.total-row {
+    border-top: 2px solid var(--neon-blue);
+    margin-top: 6px;
+    padding-top: 10px;
+}
+
+.total-money {
+    font-size: 20px;
+    color: var(--neon-green);
+    font-weight: 800;
+}
+
+.cost-breakdown {
+    margin-top: 10px;
+}
+
+.cost-breakdown button.primary {
+    margin-top: 12px;
+    width: 100%;
+}
+
+/* footer */
+.card-footer {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+    .card-body {
+        flex-direction: column;
+    }
+    .right {
+        order: 2;
+    }
+    .left {
+        order: 1;
+    }
+    .card-header {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+    }
+    .status {
+        font-size: 18px;
+        padding: 4px 10px;
+    }
+    .logo-wrap {
+        justify-content: center;
+    }
+}
