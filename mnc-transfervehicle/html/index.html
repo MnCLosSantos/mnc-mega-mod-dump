@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Transfer Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-icon error-icon">⚠️</span>
+                <h2 id="modalTitle">Error</h2>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="modalCloseBtn" class="btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-icon confirm-icon">❓</span>
+                <h2 id="confirmTitle">Confirm Action</h2>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmYesBtn" class="btn-success">Yes</button>
+                <button id="confirmNoBtn" class="btn-danger">No</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seller UI -->
+    <div id="sellerUI" class="document-container" style="display: none;">
+        <div class="document">
+            <div class="document-header">
+                <h1>VEHICLE TRANSFER DOCUMENT</h1>
+                <div class="header-line"></div>
+            </div>
+
+            <div class="document-body">
+                <!-- Seller Information -->
+                <div class="section">
+                    <h2>SELLER INFORMATION</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name:</label>
+                            <span id="sellerName"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone:</label>
+                            <span id="sellerPhone"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Citizen ID:</label>
+                            <span id="sellerCID"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Information -->
+                <div class="section">
+                    <h2>VEHICLE INFORMATION</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Make/Model:</label>
+                            <span id="vehicleInfo"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Plate Number:</label>
+                            <span id="vehiclePlate" class="highlight"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Mileage:</label>
+                            <span id="vehicleMileage"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buyer Information Input -->
+                <div class="section">
+                    <h2>BUYER INFORMATION</h2>
+                    <div class="input-group">
+                        <label>Buyer ID:</label>
+                        <input type="number" id="buyerIdInput" placeholder="Enter player ID">
+                        <button id="fetchBuyerBtn" class="btn-primary">Fetch Info</button>
+                    </div>
+                    <div id="buyerInfoDisplay" style="display: none;">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>Full Name:</label>
+                                <span id="buyerName"></span>
+                            </div>
+                            <div class="info-item">
+                                <label>Phone:</label>
+                                <span id="buyerPhone"></span>
+                            </div>
+                            <div class="info-item">
+                                <label>Citizen ID:</label>
+                                <span id="buyerCID"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction Details -->
+                <div class="section">
+                    <h2>TRANSACTION DETAILS</h2>
+                    <div class="input-group">
+                        <label>Sale Amount:</label>
+                        <input type="number" id="amountInput" placeholder="Enter amount (0 for gift)">
+                    </div>
+                    <div id="fundsWarning" class="warning" style="display: none;">
+                        ⚠️ Buyer has insufficient funds!
+                    </div>
+                </div>
+            </div>
+
+            <div class="document-footer">
+                <button id="sendToBuyerBtn" class="btn-success" disabled>Send to Buyer</button>
+                <button id="cancelSellerBtn" class="btn-danger">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buyer UI -->
+    <div id="buyerUI" class="document-container" style="display: none;">
+        <div class="document">
+            <div class="document-header">
+                <h1>VEHICLE TRANSFER DOCUMENT</h1>
+                <div class="header-line"></div>
+                <p class="document-id">Document ID: <span id="docID"></span></p>
+            </div>
+
+            <div class="document-body">
+                <!-- Seller Information -->
+                <div class="section">
+                    <h2>SELLER INFORMATION</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name:</label>
+                            <span id="buyerViewSellerName"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone:</label>
+                            <span id="buyerViewSellerPhone"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Citizen ID:</label>
+                            <span id="buyerViewSellerCID"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vehicle Information -->
+                <div class="section">
+                    <h2>VEHICLE INFORMATION</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Make/Model:</label>
+                            <span id="buyerViewVehicle"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Plate Number:</label>
+                            <span id="buyerViewPlate" class="highlight"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Mileage:</label>
+                            <span id="buyerViewMileage"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buyer Information -->
+                <div class="section">
+                    <h2>BUYER INFORMATION (YOU)</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name:</label>
+                            <span id="buyerViewBuyerName"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone:</label>
+                            <span id="buyerViewBuyerPhone"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Citizen ID:</label>
+                            <span id="buyerViewBuyerCID"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction Details -->
+                <div class="section">
+                    <h2>TRANSACTION DETAILS</h2>
+                    <div class="info-grid">
+                        <div class="info-item full-width">
+                            <label>Sale Amount:</label>
+                            <span id="buyerViewAmount" class="amount-large"></span>
+                        </div>
+                        <div class="info-item full-width">
+                            <label>Date:</label>
+                            <span id="buyerViewDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Signature Section -->
+                <div class="section signature-section">
+                    <h2>BUYER SIGNATURE</h2>
+                    <p class="signature-instruction">Please sign below to confirm this transaction:</p>
+                    <canvas id="signatureCanvas"></canvas>
+                    <button id="clearSignatureBtn" class="btn-secondary">Clear Signature</button>
+                </div>
+            </div>
+
+            <div class="document-footer">
+                <button id="acceptBtn" class="btn-success">Accept & Sign</button>
+                <button id="denyBtn" class="btn-danger">Deny Transfer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Document UI -->
+    <div id="viewDocumentUI" class="document-container" style="display: none;">
+        <div class="document">
+            <div class="document-header">
+                <h1>VEHICLE TRANSFER DOCUMENT</h1>
+                <div class="header-line"></div>
+                <p class="document-id">Document ID: <span id="viewDocID"></span></p>
+                <div class="completed-stamp">COMPLETED</div>
+            </div>
+
+            <div class="document-body">
+                <!-- All information sections -->
+                <div class="section">
+                    <h2>SELLER INFORMATION</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name:</label>
+                            <span id="viewSellerName"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone:</label>
+                            <span id="viewSellerPhone"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Citizen ID:</label>
+                            <span id="viewSellerCID"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>VEHICLE INFORMATION</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Make/Model:</label>
+                            <span id="viewVehicle"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Plate Number:</label>
+                            <span id="viewPlate" class="highlight"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Mileage:</label>
+                            <span id="viewMileage"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>BUYER INFORMATION</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Full Name:</label>
+                            <span id="viewBuyerName"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone:</label>
+                            <span id="viewBuyerPhone"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Citizen ID:</label>
+                            <span id="viewBuyerCID"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>TRANSACTION DETAILS</h2>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Sale Amount:</label>
+                            <span id="viewAmount" class="amount-large"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Payment Method:</label>
+                            <span id="viewPaymentMethod"></span>
+                        </div>
+                        <div class="info-item">
+                            <label>Completed Date:</label>
+                            <span id="viewCompletedDate"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>BUYER SIGNATURE</h2>
+                    <img id="viewSignature" class="signature-image" alt="Buyer Signature">
+                </div>
+            </div>
+
+            <div class="document-footer">
+                <button id="closeViewBtn" class="btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Catalog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Proximity UI (initially hidden, positioned outside main container) -->
+    <div id="proximity-ui" class="proximity-ui" style="display: none;">
+        <div class="proximity-content">
+            <div class="proximity-header">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="proximity-title">Shop</span>
+            </div>
+            <p class="proximity-text">
+                Press <span class="key-indicator">E</span> to open
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search items...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <div class="header-buttons">
+                <button class="cart-header-btn" onclick="openCartViewModal()">
+                    <i class="fas fa-shopping-cart"></i> Cart
+                </button>
+                <button class="close-btn" onclick="closeUI()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="dashboard-content">
+            <div class="dashboard-sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">
+                        <i class="fas fa-layer-group"></i>
+                        Categories
+                    </div>
+                </div>
+                <div class="category-items" id="category-list"></div>
+            </div>
+            <div class="dashboard-main">
+                <div class="main-header">
+                    <h2 id="current-category">
+                        <i class="fas fa-layer-group"></i>
+                        All Items
+                    </h2>
+                    <span class="results-count" id="results-count">0 items available</span>
+                </div>
+                <div class="item-grid" id="item-list"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
