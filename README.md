@@ -9,7 +9,7 @@
 
 ## 🌟 Overview
 
-**MNC Mega Mod Dump** is a large collection of 71 independent QBCore/FiveM resources — vehicle ownership and logistics tools, handling and cosmetic vehicle mods, job and economy systems, HUDs, admin utilities, and assorted roleplay scripts — built and maintained by **MnC Los Santos**. Every resource in this dump has its own dedicated README covering installation, configuration, controls, and troubleshooting; this root README is the index that ties them all together.
+**MNC Mega Mod Dump** is a large collection of 71 independent QBCore/FiveM resources — vehicle ownership and logistics tools, handling and cosmetic vehicle mods, job and economy systems, HUDs, admin utilities, and assorted roleplay scripts — built and maintained by **Stan Leigh of MnCLosSantos**. Every resource in this dump has its own dedicated README covering installation, configuration, controls, and troubleshooting; this root README is the index that ties them all together.
 
 A handful of tools in this dump ship in **more than one build** (a `-v1`/`-v2`/`-v3` naming pattern, or two differently-named builds of the same script). Where that's the case, **install only ONE build of that tool** — running two builds of the same resource at once means duplicate command/export registrations and, in some cases, corrupted shared database tables. The [Choosing Between Versions](#-choosing-between-versions) section below lists every one of these groups explicitly, and each affected resource's own README repeats the same warning with a side-by-side comparison table.
 
