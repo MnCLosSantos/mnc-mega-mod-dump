@@ -19,40 +19,6 @@ A **fully-featured collectible trading card system** for QBCore-based FiveM serv
 
 <img width="1920" height="1080" alt="Screenshot (110)" src="https://github.com/user-attachments/assets/c7cadbe8-8a0d-4b1d-9a90-24507ae0cb79" />
 
-<img width="1920" height="1080" alt="Screenshot (111)" src="https://github.com/user-attachments/assets/3fd499db-159f-4bb0-8827-161014eab9af" />
-
-<img width="1920" height="1080" alt="Screenshot (112)" src="https://github.com/user-attachments/assets/6e820298-c3b6-4012-a713-dec1159e081d" />
-
-<img width="1920" height="1080" alt="Screenshot (113)" src="https://github.com/user-attachments/assets/27471155-4a54-4581-bd63-8f47cac0d1d1" />
-
-<img width="1920" height="1080" alt="Screenshot (114)" src="https://github.com/user-attachments/assets/1a7c3755-0119-46ed-b971-38c2cb4c7735" />
-
-<img width="1920" height="1080" alt="Screenshot (115)" src="https://github.com/user-attachments/assets/3831ad1e-f56b-4d8c-ac08-d6ed527bc3ef" />
-
-<img width="1920" height="1080" alt="Screenshot (116)" src="https://github.com/user-attachments/assets/00803f07-3f94-42f4-9539-9210d28985d6" />
-
-<img width="1920" height="1080" alt="Screenshot (117)" src="https://github.com/user-attachments/assets/778cc035-f50d-43c9-acb3-be2d7b8e0d71" />
-
-<img width="1920" height="1080" alt="Screenshot (118)" src="https://github.com/user-attachments/assets/3f579d47-cf89-4b9f-a88f-5ece522f99e5" />
-
-<img width="1920" height="1080" alt="Screenshot (119)" src="https://github.com/user-attachments/assets/a22b3c1e-88da-4e3f-94fa-e4f96942a1ac" />
-
-<img width="1920" height="1080" alt="Screenshot (120)" src="https://github.com/user-attachments/assets/bef0c05c-88be-40c5-9117-9a62648647a7" />
-
-<img width="1920" height="1080" alt="Screenshot (121)" src="https://github.com/user-attachments/assets/a2c7bd9b-2536-47d3-a148-a8359f1dd7a4" />
-
-<img width="1920" height="1080" alt="Screenshot (122)" src="https://github.com/user-attachments/assets/85f2dfd6-d1d1-4b22-8873-86cb7c9281e4" />
-
-<img width="1920" height="1080" alt="Screenshot (123)" src="https://github.com/user-attachments/assets/f7d098f3-8611-439b-bbd3-488076b96b99" />
-
-<img width="1920" height="1080" alt="Screenshot (124)" src="https://github.com/user-attachments/assets/159952c7-ae54-421d-85a2-6c72c6db89d1" />
-
-<img width="1920" height="1080" alt="Screenshot (125)" src="https://github.com/user-attachments/assets/e74ce9f3-c3ba-424e-bd37-af6a1f2225e6" />
-
-<img width="1920" height="1080" alt="Screenshot (126)" src="https://github.com/user-attachments/assets/fb0a978d-04e6-4b52-a2a3-37471572927a" />
-
-<img width="1920" height="1080" alt="Screenshot (127)" src="https://github.com/user-attachments/assets/7c8eaae9-aa35-47a0-aee7-2ae8d3922399" />
-
 ---
 
 ## ✨ Key Features
