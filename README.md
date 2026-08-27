@@ -208,7 +208,7 @@ These resources exist in more than one build in this dump. **Install only one bu
 **Author**: Stan Leigh
 **Collection Amount**: 71 resources
 
-This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see [`MNC_LICENSE_NDFTEAU`](MNC_LICENSE_NDFTEAU) at the root of this dump for the full text. Every individual resource in this dump is covered by the same license.
+This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see [`MNC_LICENSE_NDFTEAU`]([MNC_LICENSE_NDFTEAU](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)) at the root of this dump for the full text. Every individual resource in this dump is covered by the same license.
 
 - ✅ Use and edit any resource in this dump freely on your own personal or paid server(s)
 - ✅ Modify the code however you need to fit your server
