@@ -10,7 +10,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 MnC Engine Swap adds job-restricted engine shops where players browse a huge NUI catalog of engine sounds, pay for one from their bank account, wait for a crate delivery, and physically install it on a nearby vehicle through a multi-stage progress sequence (with an optional skill-check minigame). The purchased engine sound is saved per vehicle plate and automatically re-applied whenever the player gets back in.
 
 ---
