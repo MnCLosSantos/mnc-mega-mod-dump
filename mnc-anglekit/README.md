@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_3" src="https://github.com/user-attachments/assets/b11f581f-c8e4-490f-af68-0c1c63a9c780" />
 A **comprehensive vehicle angle kit system** for QBCore-based FiveM servers featuring tiered steering lock modifications, persistent database storage, job-restricted installation, per-wheel progress animations, custom angle adjustments for pro kits, and admin tools. Built with performance and realism in mind for enhanced drifting mechanics.
 
 ---
