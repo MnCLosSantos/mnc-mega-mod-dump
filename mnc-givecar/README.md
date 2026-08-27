@@ -7,7 +7,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 The **MNC GiveCar System** allows admins or automated systems (like Tebex) to **instantly grant vehicles to players**.
 It automatically detects the installed **garage system**, supports all modern **QBCore** builds, and adapts to your `player_vehicles` table automatically — even if it doesn’t include the `mileage` column.
 
