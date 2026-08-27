@@ -1,6 +1,6 @@
 # 🚗 MNC Custom Plate System
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)]()
@@ -66,10 +66,11 @@ A **fully-featured custom license plate system** for QBCore-based FiveM servers.
 ### 1️⃣ Download & Place Resource
 
 ```bash
-# Clone from GitHub
-git clone https://github.com/YourUsername/mnc-customplate.git
+# Clone the full mod dump from GitHub (this resource lives inside the mnc-mega-mod-dump monorepo)
+git clone https://github.com/MnCLosSantos/mnc-mega-mod-dump.git
+# then copy the `mnc-customplate/` folder into your server's resources directory
 
-# OR download ZIP from Releases
+# OR download the ZIP from https://github.com/MnCLosSantos/mnc-mega-mod-dump/releases and extract just the `mnc-customplate/` folder
 ```
 
 Place into your resources folder:
@@ -243,26 +244,25 @@ Config.ProgressDuration = 5000
 
 ## 📝 Credits & License
 
-**Author**: MNC Scripts  
-**Version**: 1.0.0  
-**Framework**: QBCore  
+**Author**: Stan Leigh/MnC Los Santos
+**Version**: 1.0.0
+**Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
 
-### Contributing
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request with a detailed description
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
 ## 📞 Support & Community
 
-For support, bug reports, or feature requests:
-- Open an issue on GitHub
-- Join our Discord community
-- Check existing documentation
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
 
 ---
 
