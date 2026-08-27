@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A job-based invoicing system: any qualifying job member can send a nearby player a payment request for a set amount and reason, the target gets a pop-up to pay or decline, and unanswered invoices auto-expire. Job bosses get a **ledger tab** showing every invoice their job has ever sent, whether it was paid, declined, or expired.
 
 ---
