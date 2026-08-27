@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A full vehicle paperwork system covering three separate documents — **insurance**, **registration**, and **inspection** — each priced by vehicle category and modification tier, each with its own purchase and lookup commands, and each persisted per-plate in the database. Emergency-category vehicles are automatically underwritten by "LosSantosGov" instead of the standard "MNC" insurer.
 
 ---
