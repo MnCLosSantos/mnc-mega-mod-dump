@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A full replacement for a static job-garage script: per-job vehicle fleets with grade and custom-role gating, an image-driven NUI pull-out grid (not a text menu), live checkout tracking so everyone can see who has which unit out, and an in-game admin panel that can create, edit, and delete garages, vehicles, and roles without ever touching `config.lua`. Includes an in-world visual setup tool for placing new garage spawn/exit points.
 
 ---
