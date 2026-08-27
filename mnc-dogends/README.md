@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **scavenging and crafting system** for QBCore-based FiveM servers that allows players to pick up cigarette butts from the ground, collect lighters, and roll their own cigarettes using butts, tobacco pouches, filter packs, and rolling papers. Features immersive animations, progress bars, minigames, and persistent item metadata for realistic resource management. Built with performance and roleplay immersion in mind.
 
 ---
