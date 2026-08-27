@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **realistic vehicle differential system** for QBCore-based FiveM servers. Install **Welded** or **Limited-Slip Differential (LSD)** upgrades that permanently modify rear-wheel traction in real-time using only safe handling floats (`fTractionCurveMin` + `fTractionLossMult`). No wheel mesh glitches, no fTractionBiasFront changes — just pure, performant, RPM-scaled physics that feel exactly like a locked spool or true LSD.
 
 Built for car meets, drag nights, and street racing servers. Fully persistent, job-restricted, and admin-friendly.
