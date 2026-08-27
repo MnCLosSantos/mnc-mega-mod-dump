@@ -7,20 +7,6 @@
 
 ---
 
-<img width="1920" height="1080" alt="Screenshot (128)" src="https://github.com/user-attachments/assets/de6e6227-6481-4909-ae98-e5f1e8bf6183" />
-
-<img width="1920" height="1080" alt="Screenshot (129)" src="https://github.com/user-attachments/assets/1f6c9eec-fa87-4374-b30d-e482836e0e65" />
-
-<img width="1920" height="1080" alt="Screenshot (130)" src="https://github.com/user-attachments/assets/24dd6abb-c074-4684-b7ab-ef6bd43051fd" />
-
-<img width="1920" height="1080" alt="Screenshot (136)" src="https://github.com/user-attachments/assets/cd11d822-05f4-4a68-aa73-c6ea32a1fc47" />
-
-<img width="1920" height="1080" alt="Screenshot (137)" src="https://github.com/user-attachments/assets/a60b7365-116e-472d-8b49-28cf68e49e94" />
-
-<img width="1920" height="1080" alt="Screenshot (138)" src="https://github.com/user-attachments/assets/d4c5f288-f58c-4d8c-aee5-13c1eb764df5" />
-
-
-
 ## 🌟 Overview
 
 A **polished scratch card minigame** for QBCore-based FiveM servers featuring 5 unique card tiers, a fully interactive canvas-based scratch mechanic, per-card win tables with configurable odds, and themed NUI with animated effects. Players buy and use scratch cards from their inventory to reveal prizes — all validated server-side to prevent exploitation.
