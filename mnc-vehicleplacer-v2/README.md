@@ -1,14 +1,38 @@
 # 🚗 MNC Vehicle Placer
 
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
-[![Version](https://img.shields.io/badge/Version-3.2.0-brightgreen.svg)]()
+[![Version](https://img.shields.io/badge/Version-2.1.9-brightgreen.svg)]()
+
+> ⚠️ **Multiple versions of this script exist in this dump — install only ONE.** `mnc-vehicleplacer-v2` is one of several builds of this tool alongside `mnc-vehicleplacer`. Running more than one at the same time will register the same commands/exports twice and can corrupt shared data. This version is the full-featured build with an in-game admin UI, SQL persistence, and image previews. mnc-vehicleplacer (no suffix) is a lighter, config-only static placement script with no in-game management. See "Choosing a Version" below.
 
 ---
 
 ## 🌟 Overview
 
 A **persistent vehicle placement manager** for QBCore-based FiveM servers. Allows admins to define static vehicle placements via config or dynamically add them through an in-game UI, with automatic proximity-based spawning/despawning, anti-drift protection, and full SQL persistence. Built with performance and ease of use in mind.
+
+---
+
+## 🔀 Choosing a Version
+
+This dump contains two builds of the vehicle placer. **Install only one** — both register the same `mnc-vehicleplacer` event namespace.
+
+| | `mnc-vehicleplacer` | `mnc-vehicleplacer-v2` (this one) |
+|---|---|---|
+| Static placements from `config.lua` | ✅ | ✅ |
+| Auto-respawn watchdog for missing/deleted vehicles | ✅ | ✅ |
+| In-game admin UI (`/vehplacer`) — add/edit/delete placements | ❌ | ✅ |
+| SQL-backed dynamic placements (persist beyond config) | ❌ | ✅ |
+| Drive-to-place workflow with live position confirm | ❌ | ✅ |
+| Vehicle image previews (docs.fivem.net + GitHub fallback chain) | ❌ | ✅ |
+| Proximity spawn/despawn with anti-drift detection | ❌ (interval respawn watchdog only) | ✅ |
+| Admin permission model | ACE-style `Config.AdminGroups` (declared, unused by the code) | QBCore `Config.AdminGroups` enforced on `/vehplacer` |
+| Database | Declared (`oxmysql`) but never queried | Fully used — `mnc_vehicle_placements` table |
+| Version | 1.0.8 | 2.1.9 |
+
+`mnc-vehicleplacer-v2` is a strict superset — it keeps every static-placement/respawn behavior of the original and adds a full management UI and dynamic SQL placements on top. Pick the base version only if you want the smallest possible footprint and are happy hand-editing `config.lua` for every placement; pick **v2** for anything you'll want to manage or reposition in-game.
 
 ---
 
@@ -63,15 +87,16 @@ A **persistent vehicle placement manager** for QBCore-based FiveM servers. Allow
 ### 1️⃣ Download & Extract
 
 ```bash
-# Clone from GitHub
-git clone https://github.com/MnCLosSantos/mnc-vehicleplacer-v2.git
+# Clone the full mod dump from GitHub (this resource lives inside the mnc-mega-mod-dump monorepo)
+git clone https://github.com/MnCLosSantos/mnc-mega-mod-dump.git
+# then copy the `mnc-vehicleplacer-v2/` folder into your server's resources directory
 
-# OR download ZIP from Releases
+# OR download the ZIP from https://github.com/MnCLosSantos/mnc-mega-mod-dump/releases and extract just the `mnc-vehicleplacer-v2/` folder
 ```
 
 Place into your resources folder:
 ```
-[server-data]/resources/[custom]/mnc-vehicleplacer/
+[server-data]/resources/[custom]/mnc-vehicleplacer-v2/
 ```
 
 ### 2️⃣ Database Setup
@@ -88,7 +113,7 @@ No manual SQL import needed!
 # server.cfg
 ensure oxmysql
 ensure ox_lib
-ensure mnc-vehicleplacer
+ensure mnc-vehicleplacer-v2
 ```
 
 ### 4️⃣ Configure Settings
@@ -245,26 +270,27 @@ Select any placement and click **🚀 Teleport** to jump directly to its coordin
 
 ---
 
-## 📝 Credits
+## 📝 Credits & License
 
-**Author**: Stan Leigh  
-**Version**: 2.1.9  
-**Framework**: QBCore  
+**Author**: Stan Leigh/MnC Los Santos
+**Version**: 2.1.9
+**Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-### Contributing
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request with a detailed description of changes
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
 ## 📞 Support & Community
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6)
-
-[![GitHub](https://img.shields.io/badge/GitHub-View%20Script-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/MnCLosSantos/mnc-vehiclespawner-v2)
-
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
 
 ---
 
