@@ -1,6 +1,6 @@
 Config = {
 
-    EnableJobLock = false, -- Set to false to disable job/grade restrictions
+    EnableJobLock = true, -- Set to false to disable job/grade restrictions
 
     AllowedJobs = { -- Job name as key, minimum grade as value
         ['admin'] = 4,
