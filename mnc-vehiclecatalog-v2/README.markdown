@@ -10,7 +10,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A multi-dealership vehicle browsing UI for QBCore, self-contained enough to run without depending on your server's shared vehicle data being fully filled out. Each configured zone shows an NUI catalog of the vehicles assigned to that shop, using a bundled ~500-vehicle database with shop/price/category data already populated, plus admin-only live price editing and a more resilient multi-source image fallback chain.
 
 ---
