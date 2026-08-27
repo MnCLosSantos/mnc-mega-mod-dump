@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 `mnc-forkliftfix` gives GTA's forklift real, network-synced lifting: pick up vehicles or props on its forks, raise and lower them smoothly, and carry them anywhere without the load desyncing, freezing, or falling through the map for other players. On top of the core forks it adds a **lift-platform mode** (attach the forklift itself onto the back of a flatbed/utility vehicle) and a **vehicle stacking system** (stack cars directly on top of each other, multiple levels deep) — both fully synced across every client, with a small NUI helper panel that shows the relevant controls only when they're actually usable.
 
 ---
