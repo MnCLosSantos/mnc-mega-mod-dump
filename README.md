@@ -216,7 +216,7 @@ This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distributi
 - ✅ Use and edit any resource in this dump freely on your own personal or paid server(s)
 - ✅ Modify the code however you need to fit your server
 - ❌ Do not redistribute, resell, or re-upload this dump or any individual resource from it (modified or not) as your own work
-- ❌ Do not publish forks or copies of this dump outside of channels authorized by MnCLosSantos / carrot
+- ❌ Do not publish forks or copies of this dump outside of channels authorized by MnCLosSantos / Stan Leigh
 
 ---
 
@@ -236,6 +236,3 @@ This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distributi
 4. **Compatibility**: this entire collection targets QBCore — none of it is guaranteed compatible with ESX
 5. **Legal**: For use on FiveM servers only, respect Rockstar's Terms of Service
 
----
-
-**71 resources, one collection, one license. Pick what fits your server. 🏙️**
