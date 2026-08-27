@@ -82,10 +82,11 @@ A **fully-featured 2-step and launch control system** for QBCore-based FiveM ser
 ### 1️⃣ Download & Extract
 
 ```bash
-# Clone from GitHub
-git clone https://github.com/YourUsername/mnc-2step.git
+# Clone the full mod dump from GitHub (this resource lives inside the mnc-mega-mod-dump monorepo)
+git clone https://github.com/MnCLosSantos/mnc-mega-mod-dump.git
+# then copy the `mnc-2step/` folder into your server's resources directory
 
-# OR download ZIP from Releases
+# OR download the ZIP from https://github.com/MnCLosSantos/mnc-mega-mod-dump/releases and extract just the `mnc-2step/` folder
 ```
 
 Place into your resources folder:
