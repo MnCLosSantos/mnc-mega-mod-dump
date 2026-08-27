@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A complete vehicle delivery job for QBCore: players find a randomly-modded car parked at a pickup location, claim the keys, and drive it to a drop-off point within a time limit while keeping damage under control. Payout scales with how clean and how fast the delivery was. Every vehicle spawn, key claim, and completion is network-synced through server-owned network IDs, and admins get an in-game **route builder** with a free-fly placement camera to add or edit delivery routes without ever touching `config.lua` or restarting the resource.
 
 ---
