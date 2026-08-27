@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **fully-featured anti-lag and exhaust flame system** for QBCore-based FiveM servers. Mechanics install tiered anti-lag kits onto turbo-equipped vehicles, producing realistic exhaust flames and audio pops when the driver lifts off the throttle at high RPM. Flames spawn directly from each exhaust bone using accurate world-space rotation, sounds play through a pooled NUI audio engine, and all kit data persists by license plate across sessions.
 
 ---
