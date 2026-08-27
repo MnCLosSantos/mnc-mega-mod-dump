@@ -205,8 +205,8 @@ These resources exist in more than one build in this dump. **Install only one bu
 
 ## 📝 Credits & License
 
-**Author**: MnC Los Santos
-**Collection Version**: 71 resources
+**Author**: Stan Leigh
+**Collection Amount**: 71 resources
 
 This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see [`MNC_LICENSE_NDFTEAU`](MNC_LICENSE_NDFTEAU) at the root of this dump for the full text. Every individual resource in this dump is covered by the same license.
 
@@ -219,7 +219,7 @@ This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distributi
 
 ## 📞 Support & Community
 
-- 💬 **Discord**: [discord.gg/zAtBfs8MT4](https://discord.gg/zAtBfs8MT4) — join for support, bug reports, and update announcements
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6)
 - 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
 - 📖 Each resource's own README covers its configuration and troubleshooting in depth — check there first
 
