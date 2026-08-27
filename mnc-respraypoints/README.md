@@ -15,19 +15,6 @@ Players can pay to fully customize their vehicle at public respray stations, whi
 
 Built with **ox_lib** for clean menus, live preview, and modern notifications.
 
-## 🌟 Preview Images
-
-<img width="1920" height="1080" alt="Screenshot (24)" src="https://github.com/user-attachments/assets/73c5c9d0-f844-4046-b012-2d5772491eb2" />
-
-<img width="1920" height="1080" alt="Screenshot (25)" src="https://github.com/user-attachments/assets/aac2c84a-b767-480c-9fc8-ddc87b35d371" />
-
-<img width="1920" height="1080" alt="Screenshot (26)" src="https://github.com/user-attachments/assets/9bc95c55-26d1-43bd-9318-81e03791d0c0" />
-
-<img width="1920" height="1080" alt="Screenshot (27)" src="https://github.com/user-attachments/assets/7bce1d0c-244c-4b0b-963a-e927c874c778" />
-
-<img width="1920" height="1080" alt="Screenshot (28)" src="https://github.com/user-attachments/assets/227c8b28-e928-47ab-a5ae-f15979e5bf8f" />
-
-
 ---
 
 ## ✨ Key Features
