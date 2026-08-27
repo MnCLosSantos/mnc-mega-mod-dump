@@ -1,5 +1,6 @@
 # 🚗 MNC Respray Points
 
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.1.0-brightgreen.svg)]()
@@ -140,12 +141,37 @@ Public points show a red warning: “Mechanic on duty – visit customs!”
 
 ---
 
-## 📝 Credits
+## 📝 Credits & License
 
-**Author**: Stan Leigh  
-**Version**: 1.1.0  
-**Framework**: QBCore + ox_lib
+**Author**: Stan Leigh/MnC Los Santos
+**Version**: 1.1.0
+**Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
+
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
-**Enjoy clean, professional vehicle resprays on your server!** 🚗💨
+## 📞 Support & Community
+
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide first — most questions are answered above
+
+---
+
+## ⚠️ Important Notes
+
+1. **No database required**: this is a pure config/session-driven resource
+2. **Compatibility**: QBCore only — not compatible with ESX
+3. **Legal**: For use on FiveM servers only, respect Rockstar's ToS
+
+---
+
+**Enjoy clean, professional vehicle resprays on your server! 🚗💨**
+
