@@ -1,8 +1,11 @@
-# 📦 MnC Item Spawner (Auto/Full Catalog)
+# 📦 MNC Item Spawner (Locked Access Default)
 
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)]()
+
+> ⚠️ **Multiple versions of this script exist in this dump — install only ONE.** `mnc-itemluaspawner` is one of several builds of this tool alongside `mnc-itemspawner`. Running more than one at the same time will register the same commands/exports twice and can corrupt shared data. This build ships with Config.EnableJobLock = true (locked) by default, vs. false (open) on mnc-itemspawner. See "Choosing a Version" below.
 
 ---
 
@@ -32,6 +35,18 @@ MnC Item Spawner gives authorized staff a themed NUI browser that auto-populates
 - Auto-detects whether `ox_inventory` or `qb-inventory` is running and uses the matching add-item / carry-capacity check
 - Falls back to a manual weight calculation against `Config.MaxWeight` if neither is detected
 - Notifies the player if their inventory is full instead of silently failing
+
+---
+
+## 🔀 Choosing a Version
+
+| | `mnc-itemluaspawner` (this one) | `mnc-itemspawner` |
+|---|---|---|
+| Code | Identical | Identical |
+| Default `Config.EnableJobLock` | `true` (locked to `Config.AllowedJobs` out of the box) | `false` (open to everyone out of the box) |
+| Best for | Servers that want the tool locked down immediately after install | Servers that will configure access themselves before going live |
+
+Pick **one**, install it, and set `Config.EnableJobLock` to whatever you actually want — the two builds are otherwise byte-for-byte the same script.
 
 ---
 
@@ -105,8 +120,35 @@ Opens the NUI browser. Click an item to spawn a single stack, or add multiple it
 
 ## 📝 Credits & License
 
-**Author**: Stan Leigh
+**Author**: Stan Leigh/MnC Los Santos
 **Version**: 1.0.0
 **Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-Distributed as part of the MnCLosSantos mod-dump collection — open source, please credit the original author if you edit and re-release.
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
+
+---
+
+## 📞 Support & Community
+
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
+
+---
+
+## ⚠️ Important Notes
+
+1. **Pick one build**: install either `mnc-itemluaspawner` or `mnc-itemspawner`, never both — see "Choosing a Version" above
+2. **Compatibility**: QBCore only — not compatible with ESX
+3. **Legal**: For use on FiveM servers only, respect Rockstar's ToS
+
+---
+
+**Spawn what you need, exactly when you need it. 📦**
+
