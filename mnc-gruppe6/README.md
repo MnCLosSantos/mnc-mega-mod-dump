@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **fully immersive Gruppe 6 security job system** for QBCore-based FiveM servers.  
 This script provides a **realistic two-phase collection route** with **loan agreements** and **cash pickups**, featuring a **custom tablet UI with fingerprint lock screen**, **GPS waypoint system**, **uniform management**, and **skill-based minigames**.  
 Fully optimized for **ox_lib**, **qb-target**, and includes **persistent route tracking** with completion states.
