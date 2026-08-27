@@ -1,106 +1,184 @@
 # 🚗 MNC Vehicle Catalog
 
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-3.0.0-brightgreen.svg)]()
+
+> ⚠️ **Multiple versions of this script exist in this dump — install only ONE.** `mnc-vehiclecatalog` is one of two builds of this tool alongside `mnc-vehiclecatalog-v2`. Running more than one at the same time will register the same commands/exports twice and can corrupt shared data. See "Choosing a Version" below.
 
 ---
 
 ## 🌟 Overview
 
-MNC Vehicle Catalog is a multi-dealership browsing UI for QBCore. Each configured zone (dealership location) shows an NUI catalog listing only the vehicles assigned to that shop (via `qb-core`'s `shop` field on each vehicle), each with its own visual theme, custom title, and category grouping pulled from `QBCore.Shared.Vehicles`. An admin command can also open a catalog showing every vehicle in the game regardless of shop.
+A multi-dealership vehicle browsing UI for QBCore. Each configured zone (dealership location) shows an NUI catalog listing only the vehicles assigned to that shop — matched by `qb-core`'s `shop` field on each vehicle entry — with its own visual theme, custom title, and category grouping pulled straight from `QBCore.Shared.Vehicles`. An admin command can also open a catalog showing every vehicle in the game regardless of shop.
+
+---
+
+## 🔀 Choosing a Version
+
+This dump contains two builds of the vehicle catalog. **Install only one** — both register the same `mnc-vehiclecatalog` command/event namespace.
+
+| | `mnc-vehiclecatalog` (this one) | `mnc-vehiclecatalog-v2` |
+|---|---|---|
+| Zone-based dealership catalogs, 5 UI themes | ✅ | ✅ |
+| qb-target or E-keypress interaction | ✅ | ✅ |
+| Staff job hooks + pre-order submission | ✅ | ✅ |
+| Vehicle data source | Relies entirely on `QBCore.Shared.Vehicles` already having `shop`/`price`/`category` set | Ships its own bundled ~500-vehicle database (`shared/vehicles.lua`) pre-assigned to shops, usable even if your `qb-core` shared vehicles aren't fully configured |
+| Admin-only live price editing in the catalog UI | ❌ | ✅ |
+| Admin access check | ACE-style `Config.AdminGroups` | QBCore `HasPermission(src, 'admin')` |
+| Image fallback chain | `docs.fivem.net` → local `./images/{model}.png` → `fallback.png` | `docs.fivem.net` → 2 GitHub image-repo mirrors → local `fallback.png` |
+| Version | 3.0.0 | 2.3.0 |
+
+Both versions share the same dealership/theming/pre-order feature set — the real difference is data portability and admin tooling. Pick this version if your `qb-core/shared/vehicles.lua` already has accurate `shop` and `price` fields for every vehicle you want listed. Pick **v2** if you'd rather not touch your shared vehicles file at all, or if you want in-catalog price editing for admins.
 
 ---
 
 ## ✨ Key Features
 
-**Zone-based dealership catalogs**
-- `Config.Zones` defines any number of dealership locations, each with its own coordinates, interaction radius, UI color style, and display title.
-- Interaction can use either `qb-target` circle zones or a proximity keybind: players near a zone see a proximity prompt and can press **E** to open the catalog (`RegisterKeyMapping('open_catalog', ...)`), toggled by `Config.UseTarget`.
-- Vehicles shown per-zone are filtered by matching each `QBCore.Shared.Vehicles` entry's `shop` field against the zone name; categories/brand/price data are read straight from the shared vehicle table.
+### 🏬 Zone-Based Dealership Catalogs
+- `Config.Zones` defines any number of dealership locations, each with its own coordinates, interaction radius, UI color style, and display title
+- Interaction can use either `qb-target` circle zones or a proximity keybind — players near a zone see a prompt and press **E** to open the catalog (`RegisterKeyMapping('open_catalog', ...)`), toggled by `Config.UseTarget`
+- Vehicles shown per-zone are filtered by matching each `QBCore.Shared.Vehicles` entry's `shop` field against the zone name; category, brand, and price data are read straight from the shared vehicle table
 
-**Theming**
-- Five built-in glass-style UI themes (`style1`–`style5`, e.g. Dark Modern Glass, Neon Night Glass, Oceanic Glass) defined in `Config.UIStyles` and assignable per zone via `uiStyle`.
+### 🎨 Five Built-In Themes
+- Dark Modern Glass, Light Clean Glass, Neon Night Glass, Retro Glass, and Oceanic Glass (`style1`–`style5`), defined in `Config.UIStyles` and assignable per zone via `uiStyle`
 
-**Admin catalog**
-- A `lib.addCommand` command (name set by `Config.Command`, default `vehiclecatalog`, restricted to `Config.AdminGroups`) opens an "All Vehicles Catalog" view showing every vehicle in `QBCore.Shared.Vehicles` regardless of shop assignment.
+### 🔑 Admin "All Vehicles" Catalog
+- A `lib.addCommand` command (name set by `Config.Command`, default `vehiclecatalog`, restricted to `Config.AdminGroups`) opens an "All Vehicles Catalog" view showing every vehicle in `QBCore.Shared.Vehicles` regardless of shop assignment
 
-**Staff / pre-order UI hooks**
-- The client checks `hasStaffAccess` per zone against a `zone.staffJobs` list and flags it to the NUI.
-- The NUI can submit vehicle pre-orders (`submitPreOrder`) and request/update an orders list (`getOrders`, `updateOrderStatus`) — these fire `TriggerServerEvent` calls intended for a staff order-management flow.
+### 👔 Staff & Pre-Order Hooks
+- The client checks `hasStaffAccess` per zone against a `zone.staffJobs` list and flags it to the NUI
+- The NUI can submit vehicle pre-orders (`submitPreOrder`) and request/update an orders list (`getOrders`, `updateOrderStatus`) — these fire `TriggerServerEvent` calls intended for a staff order-management flow
 
 ---
 
 ## 📋 Requirements
 
-| Dependency | Required |
-|---|---|
-| qb-core | Yes |
-| ox_lib | Yes |
-| qb-target | Optional (only if `Config.UseTarget = true`) |
+| Dependency | Version | Required |
+|------------|---------|----------|
+| QBCore Framework | Latest | ✅ Yes |
+| ox_lib | Latest | ✅ Yes |
+| qb-target | Latest | ⚠️ Optional — only needed if `Config.UseTarget = true` |
 
 ---
 
 ## 🚀 Installation
 
-```bash
-# Place into your resources folder
+### 1️⃣ Download & Extract
+
+Place the resource in your resources folder:
+```
 [server-data]/resources/[custom]/mnc-vehiclecatalog/
 ```
 
+### 2️⃣ Add to Server Config
+
 ```lua
 # server.cfg
+ensure ox_lib
 ensure mnc-vehiclecatalog
 ```
 
-No database setup is required. Set up each dealership by adding an entry to `Config.Zones` and make sure the corresponding vehicles in `qb-core/shared/vehicles.lua` have a matching `shop` value.
+No database setup required.
+
+### 3️⃣ Configure Settings
+
+Edit `config.lua` to define your dealership zones and confirm every vehicle you want listed already has an accurate `shop` (and ideally `price`/`category`) field in your `qb-core/shared/vehicles.lua`.
 
 ---
 
 ## ⚙️ Configuration Guide
 
 ```lua
-Config.Command = 'vehiclecatalog'
-Config.AdminGroups = {'group.admin'}
-Config.UseTarget = false -- qb-target circle zone (true) vs keypress E (false)
+Config = {
+    Command = 'vehiclecatalog', -- Command to open UI with all vehicles
+    AdminGroups = {'group.admin'}, -- Admin groups for command access
 
-Config.Zones = {
-    {
-        name = 'pdm',
-        coords = vector3(-55.17, -1089.85, 26.92),
-        radius = 2.0,
-        uiStyle = 'style1',
-        title = 'Adams Apple PDM Catalogue',
-        useAnywhere = false,
+    UseTarget = false, -- Use qb-target (true) or keypress E (false)
+
+    Zones = {
+        {
+            name = 'pdm', -- Dealership name from qb-vehicleshop
+            coords = vector3(-55.17, -1089.85, 26.92),
+            radius = 2.0,
+            uiStyle = 'style1', -- Options: style1, style2, style3, style4, style5
+            title = 'Adams Apple PDM Catalogue',
+            useAnywhere = false, -- leave false
+        },
+        -- Add more zones as needed
     },
-    -- additional dealership zones...
+
+    UIStyles = {
+        style1 = { -- Dark Modern Glass
+            -- colors...
+        },
+        -- style2..style5
+    },
 }
 ```
 
-Each `Zones` entry maps a dealership's coordinates and interaction radius to a display title and one of the five `Config.UIStyles` themes; `useAnywhere` (when true) registers the catalog as a chat command instead of a location-based zone. `Config.Command`/`Config.AdminGroups` control the admin "show everything" command.
+- `Config.Zones` — each zone's `name` must match the `shop` field used by the vehicles you want it to display
+- `Config.AdminGroups` — controls who can run the all-vehicles admin command
+- `Config.UseTarget` — set `true` to use `qb-target` interaction zones instead of the proximity E-keypress prompt
 
 ---
 
 ## 🎮 Controls & Usage
 
-- **E key** (or `qb-target` interaction, per `Config.UseTarget`) — open the dealership catalog when standing near a configured zone.
-- `/vehiclecatalog` (configurable via `Config.Command`) — admin-only, opens a catalog showing all vehicles regardless of dealership.
+| Input | Description |
+|---|---|
+| Approach a zone, press **E** (or use `qb-target` if enabled) | Opens that dealership's catalog |
+| `/vehiclecatalog` (or your `Config.Command`) | Admin-only — opens the all-vehicles catalog regardless of shop |
 
 ---
 
 ## 🔧 Troubleshooting
 
-- **Catalog shows no vehicles for a dealership** — the `shop` field on the relevant entries in `qb-core/shared/vehicles.lua` must exactly match the zone's `name`.
-- **E prompt doesn't appear / target option missing** — check `Config.UseTarget` matches the interaction method you have installed (`qb-target` must be running if set to `true`).
-- **UI won't open near a zone** — confirm the player is within the zone's configured `radius` and that `mnc-vehiclecatalog` started after `qb-core`.
-- **Admin command says permission denied** — the account's group must be listed in `Config.AdminGroups`.
+**A zone shows no vehicles:**
+- Confirm the zone's `name` matches the exact `shop` value on the vehicles in `QBCore.Shared.Vehicles` you expect to see there
+
+**Vehicle images don't load:**
+- The fallback chain tries `docs.fivem.net` first, then a local `./images/{model}.png`, then `fallback.png` — add missing images to the `web/images/` folder for any custom vehicles
+
+**Admin command says access denied:**
+- Check `Config.AdminGroups` matches an ACE group your admin account is actually in
+
+**Zone doesn't respond to E:**
+- Confirm `Config.UseTarget` matches whether you actually have `qb-target` installed and running
 
 ---
 
 ## 📝 Credits & License
 
-**Author**: Stan Leigh
+**Author**: Stan Leigh/MnC Los Santos
 **Version**: 3.0.0
 **Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-Distributed as part of the MnCLosSantos mod-dump collection — open source, please credit the original author if you edit and re-release.
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
+
+---
+
+## 📞 Support & Community
+
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
+
+---
+
+## ⚠️ Important Notes
+
+1. **Data dependency**: This version does not ship its own vehicle database — it depends entirely on `shop`/`price`/`category` already being set correctly in your `qb-core/shared/vehicles.lua`
+2. **Compatibility**: QBCore only — not compatible with ESX
+3. **Legal**: For use on FiveM servers only, respect Rockstar's ToS
+
+---
+
+**Browse the lot, pick your ride. 🚗**
