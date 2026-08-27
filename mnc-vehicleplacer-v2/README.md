@@ -10,7 +10,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **persistent vehicle placement manager** for QBCore-based FiveM servers. Allows admins to define static vehicle placements via config or dynamically add them through an in-game UI, with automatic proximity-based spawning/despawning, anti-drift protection, and full SQL persistence. Built with performance and ease of use in mind.
 
 ---
