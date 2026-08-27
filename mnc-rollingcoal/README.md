@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **comprehensive vehicle smoke kit system** for QBCore-based FiveM servers featuring realistic exhaust smoke effects, EGR/DPF delete prerequisites, adjustable smoke levels, auto-kit support for specific vehicle classes, and persistent database storage. Built with performance and realism in mind, allowing players to "roll coal" with thick, trailing exhaust particles.
 
 ---
