@@ -1,14 +1,36 @@
 # 🎥 MnC Free Cam
 
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)]()
+
+> ⚠️ **Multiple versions of this script exist in this dump — install only ONE.** `mnc-freecam-v1` is one of several builds of this tool alongside `mnc-freecam-v2`, `mnc-freecam-v3`. Running more than one at the same time will register the same commands/exports twice and can corrupt shared data. All three register the same /freecam command. See "Choosing a Version" below.
 
 ---
 
 ## 🌟 Overview
 
 MnC Free Cam is a lightweight, standalone free/spectator camera tool. A single command toggles a fly-around camera with full mouse look, adjustable zoom, roll, and the ability to cycle through 30 built-in screen-effect and timecycle filters, all mirrored to a small NUI overlay.
+
+---
+
+## 🔀 Choosing a Version
+
+This dump contains three builds of the free camera. **Install only one** — all three bind the same `/freecam` command and ship the same NUI page.
+
+| | `mnc-freecam-v1` (this one) | `mnc-freecam-v2` | `mnc-freecam-v3` |
+|---|---|---|---|
+| Fly cam, mouse look, roll, zoom, 30 filters | ✅ | ✅ | ✅ |
+| Depth of field / camera shake / cinematic bars / timecycle strength | ❌ | ✅ | ✅ |
+| Vehicle camera mode customization (8 modes, per-vehicle-model saved offsets) | ❌ | ❌ | ✅ |
+| Cinematic keyframe sequence editor (record, loop/pingpong playback) | ❌ | ❌ | ✅ |
+| Share-code import/export for cinematics | ❌ | ❌ | ✅ |
+| 20-slot presets, custom cam slots, database persistence | ❌ | ❌ | ✅ |
+| Dependencies | none | none | qb-core, oxmysql |
+| Version | 1.0.0 | 1.0.0 | 3.0.0 |
+
+v3 is a strict superset of v1 and v2's camera and cinematography tools, plus a much larger vehicle-camera-customization and cinematic-editor suite on top. Pick v1 only if you want the smallest possible footprint with zero dependencies; pick v2 for the DOF/shake/bars cinematography extras without a database; pick **v3** for the full feature set (requires qb-core + oxmysql).
 
 ---
 
@@ -97,8 +119,25 @@ Config.CameraRange = 100.0
 
 ## 📝 Credits & License
 
-**Author**: MnCLosSantos
+**Author**: Stan Leigh/MnC Los Santos
 **Version**: 1.0.0
 **Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-Distributed as part of the MnCLosSantos mod-dump collection — open source, please credit the original author if you edit and re-release.
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
+
+---
+
+## 📞 Support & Community
+
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
+
+---
+
