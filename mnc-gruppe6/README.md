@@ -1,6 +1,6 @@
 # 💼 MNC Gruppe 6 Collection Job
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-2.2.0-brightgreen.svg)]()
@@ -95,10 +95,11 @@ qb-clothing            Latest    ✅ Yes (for uniforms)
 ### 1️⃣ Download & Extract
 
 ```bash
-# Clone from GitHub
-git clone https://github.com/YourUsername/mnc-gruppe6.git
+# Clone the full mod dump from GitHub (this resource lives inside the mnc-mega-mod-dump monorepo)
+git clone https://github.com/MnCLosSantos/mnc-mega-mod-dump.git
+# then copy the `mnc-gruppe6/` folder into your server's resources directory
 
-# OR download ZIP from Releases
+# OR download the ZIP from https://github.com/MnCLosSantos/mnc-mega-mod-dump/releases and extract just the `mnc-gruppe6/` folder
 ```
 
 Place into your resources folder:
@@ -480,33 +481,38 @@ Replace `html/lockscreen.png` with your custom image (recommended: 880x520px).
 
 ---
 
-## 🤝 Credits
+## 📝 Credits & License
 
-- **Author**: Stan Leigh
-- **Framework**: QBCore
-- **UI Libraries**: ox_lib, qb-menu, qb-target
+**Author**: Stan Leigh/MnC Los Santos
+**Version**: 2.2.0
+**Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
+
+Built with ox_lib, qb-menu, and qb-target.
+
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
 ## 📞 Support & Community
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/your-link)
-
-**Need Help?**
-- Open an issue on GitHub
-- Join our Discord server
-- Check the troubleshooting section above
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Troubleshooting section first — most questions are answered above
 
 ---
 
-## 📜 License
+## ⚠️ Important Notes
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+1. **Database**: uses QBCore's own player data and cooldown tracking — no extra tables required
+2. **Compatibility**: QBCore only — not compatible with ESX
+3. **Legal**: For use on FiveM servers only, respect Rockstar's ToS
 
 ---
 
-## ⭐ Show Your Support
-
-If you like this script, please give it a ⭐ on GitHub!
-
-**Enjoy your Gruppe 6 collection routes!** 💼🚚💰
+**Enjoy your Gruppe 6 collection routes! 💼🚚💰**
