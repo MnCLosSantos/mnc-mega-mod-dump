@@ -1,6 +1,6 @@
 # 🔥 MNC 2-Step / Launch Control System
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MNC_LICENSE_NDFTEAU](https://img.shields.io/badge/License-MNC__LICENSE__NDFTEAU-red.svg)](../MNC_LICENSE_NDFTEAU)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)]()
@@ -330,26 +330,25 @@ Config.KitTier = {
 
 ## 📝 Credits & License
 
-**Author**: Stan Leigh  
-**Version**: 1.0.0  
+**Author**: Stan Leigh
+**Version**: 1.0.0
 **Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see [`MNC_LICENSE_NDFTEAU`](../MNC_LICENSE_NDFTEAU) at the root of the dump for the full text.
 
-### Contributing
-Contributions are welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request with a detailed description
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
 ## 📞 Support & Community
 
-For support, bug reports, or feature requests:
-- Open an issue on GitHub
-- Join our Discord community
-- Check existing documentation
+- 💬 **Discord**: [discord.gg/zAtBfs8MT4](https://discord.gg/zAtBfs8MT4) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
 
 ---
 
