@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **comprehensive drift scoring system** for QBCore-based FiveM servers featuring an immersive HUD with score tracking, combo multipliers, advanced drift detection, customizable visual styles, and persistent player preferences. Built with performance and realism in mind for engaging drift gameplay.
 
 ---
