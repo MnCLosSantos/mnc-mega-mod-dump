@@ -206,7 +206,10 @@ These resources exist in more than one build in this dump. **Install only one bu
 ## 📝 Credits & License
 
 **Author**: Stan Leigh
+
 **Collection Amount**: 71 resources
+
+
 
 This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — Every individual resource in this dump is covered by the same license.
 
