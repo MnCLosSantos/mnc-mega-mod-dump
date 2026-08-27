@@ -14,14 +14,6 @@ Players can repair their vehicles at public repair stations (when no mechanics a
 
 Built with **ox_lib** for menus, notifications, and confirmation dialogs.
 
-## 🌟 Preview Images
-
-<img width="1920" height="1080" alt="Screenshot (22)" src="https://github.com/user-attachments/assets/3b0bef37-0c48-4834-890b-7aa716b9b761" />
-
-<img width="1920" height="1080" alt="Screenshot (23)" src="https://github.com/user-attachments/assets/727f84b4-63ac-4a58-a2bd-8ddab9841b76" />
-
-<img width="1920" height="1080" alt="Screenshot (29)" src="https://github.com/user-attachments/assets/85f4dc9a-496b-4331-b0a2-d316429bf11d" />
-
 ---
 
 ## ✨ Key Features
