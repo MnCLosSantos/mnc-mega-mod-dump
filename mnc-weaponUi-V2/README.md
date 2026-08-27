@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A live on-screen HUD that shows your currently equipped weapon's name, icon, and ammo count, updating in real time as you switch weapons or fire. Ships with 25 selectable visual themes saved per player, and auto-hides itself whenever a weapon HUD shouldn't be showing (unarmed, in a vehicle, game paused).
 
 ---
