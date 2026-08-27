@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A one-time "pick your first car" showroom for new characters. Three vehicles sit on permanent display; a marker at a central selection point opens a browser UI where a player picks one, signs a pink-slip style ownership document, and is delivered their new vehicle — fully owned, keyed, and registered to `player_vehicles` — at a configurable delivery point away from the showroom. Each character can only ever claim one starter vehicle, enforced server-side by a unique database constraint, not just a client-side flag.
 
 ---
