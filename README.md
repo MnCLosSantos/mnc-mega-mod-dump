@@ -1,6 +1,6 @@
 # 🏙️ MNC Mega Mod Dump
 
-[![License: MNC](https://img.shields.io/badge/License-MNC__LICENSE__NDFTEAU-purple.svg)](MNC_LICENSE_NDFTEAU)
+[![License: MNC](https://img.shields.io/badge/License-MNC__LICENSE__NDFTEAU-purple.svg)](MNC)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Resources](https://img.shields.io/badge/Resources-71-brightgreen.svg)]()
