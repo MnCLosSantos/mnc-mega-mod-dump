@@ -1,17 +1,17 @@
-# 🎥 MnC Free Cam
+# 🎬 MnC Free Cam (Cinematic Edition)
 
 [![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)]()
 
-> ⚠️ **Multiple versions of this script exist in this dump — install only ONE.** `mnc-freecam-v1` is one of several builds of this tool alongside `mnc-freecam-v2`, `mnc-freecam-v3`. Running more than one at the same time will register the same commands/exports twice and can corrupt shared data. All three register the same /freecam command. See "Choosing a Version" below.
+> ⚠️ **Multiple versions of this script exist in this dump — install only ONE.** `mnc-freecam-v2` is one of several builds of this tool alongside `mnc-freecam-v1`, `mnc-freecam-v3`. Running more than one at the same time will register the same commands/exports twice and can corrupt shared data. All three register the same /freecam command. See "Choosing a Version" below.
 
 ---
 
 ## 🌟 Overview
 
-MnC Free Cam is a lightweight, standalone free/spectator camera tool. A single command toggles a fly-around camera with full mouse look, adjustable zoom, roll, and the ability to cycle through 30 built-in screen-effect and timecycle filters, all mirrored to a small NUI overlay.
+The cinematic build of MnC Free Cam keeps the original fly-cam, mouse look, roll, zoom, and 30-filter cycling from v1, and adds a set of cinematography tools: depth of field, camera shake, cinematic letterbox bars, and adjustable timecycle strength — all controlled with modifier-key + scroll-wheel combos so nothing needs a menu.
 
 ---
 
@@ -19,7 +19,7 @@ MnC Free Cam is a lightweight, standalone free/spectator camera tool. A single c
 
 This dump contains three builds of the free camera. **Install only one** — all three bind the same `/freecam` command and ship the same NUI page.
 
-| | `mnc-freecam-v1` (this one) | `mnc-freecam-v2` | `mnc-freecam-v3` |
+| | `mnc-freecam-v1` | `mnc-freecam-v2` (this one) | `mnc-freecam-v3` |
 |---|---|---|---|
 | Fly cam, mouse look, roll, zoom, 30 filters | ✅ | ✅ | ✅ |
 | Depth of field / camera shake / cinematic bars / timecycle strength | ❌ | ✅ | ✅ |
@@ -30,27 +30,22 @@ This dump contains three builds of the free camera. **Install only one** — all
 | Dependencies | none | none | qb-core, oxmysql |
 | Version | 1.0.0 | 1.0.0 | 3.0.0 |
 
-v3 is a strict superset of v1 and v2's camera and cinematography tools, plus a much larger vehicle-camera-customization and cinematic-editor suite on top. Pick v1 only if you want the smallest possible footprint with zero dependencies; pick v2 for the DOF/shake/bars cinematography extras without a database; pick **v3** for the full feature set (requires qb-core + oxmysql).
+v3 is a strict superset of this build's cinematography tools, plus a much larger vehicle-camera-customization and cinematic-editor suite on top of that. Stick with v2 if you want the DOF/shake/bars extras with zero dependencies and no database; move to **v3** if you also want per-vehicle camera presets, a shareable cinematic sequence editor, and persistence.
 
 ---
 
 ## ✨ Key Features
 
-**Camera Toggle**
-- `Config.ActivationCommand` (default `freecam`) creates and activates a scripted camera at the player's position, hides the HUD/radar, freezes the player, and shows the NUI overlay
-- Running the command again destroys the camera, clears any active filter, and restores the player and HUD
+**Core Camera (same as v1)**
+- `Config.ActivationCommand` (default `freecam`) toggles the camera, hides HUD/radar, freezes the player, shows the NUI overlay
+- `W/A/S/D` move, `Q/E` up/down, mouse look, `◄/►` roll, mouse wheel zoom (10–120 FOV), `▲/▼` cycle 30 filters, `Backspace` toggles HUD
 
-**Movement & Look**
-- `W/A/S/D` fly forward/back/strafe left/right relative to camera facing
-- `Q` / `E` move straight up/down
-- Free mouse look while active
-- Left/Right arrow keys roll the camera
-- Mouse scroll wheel zooms (FOV clamped between 30–120)
-
-**Filters**
-- 30 predefined filters (screen effects like `SniperOverlay`, `Rampage`, `PPFilter`/`PPGreen`/`PPOrange`/`PPPink`/`PPPurple`, `LostTimeDay`/`Night`, `BikerFilter`, etc., plus one timecycle modifier)
-- Up/Down arrow keys cycle forward/backward through the filter list
-- **Backspace** toggles the NUI HUD panel on/off
+**Cinematic Tools (new in v2)**
+- **Depth of Field** — hold `Z` + scroll to adjust near-focus distance, hold `X` + scroll to adjust far-focus distance (auto-enables DOF); tap `Z` alone to toggle DOF on/off
+- **Camera Shake** — hold `C` + scroll to dial hand-shake amplitude from 0.0–3.0
+- **Timecycle Strength** — hold `G` + scroll to adjust the active filter's timecycle strength (0.0–5.0)
+- **Cinematic Bars** — hold `B` + scroll to resize letterbox bars (0–30% of screen height); tap `B` alone to toggle bars on/off
+- All cinematic effects (DOF, shake, bars, filter) automatically reset when the camera is closed
 
 ---
 
@@ -66,12 +61,12 @@ v3 is a strict superset of v1 and v2's camera and cinematography tools, plus a m
 
 ```bash
 # Place into your resources folder
-[server-data]/resources/[custom]/mnc-freecam-v1/
+[server-data]/resources/[custom]/mnc-freecam-v2/
 ```
 
 ```lua
 # server.cfg
-ensure mnc-freecam-v1
+ensure mnc-freecam-v2
 ```
 
 No database or item setup required — this is a pure client-side camera tool.
@@ -90,7 +85,7 @@ Config.ActivationCommand = "freecam"
 Config.CameraRange = 100.0
 ```
 
-`Config.ActivationCommand` sets the chat command that toggles the camera. `Config.CameraRange` is declared for limiting how far the camera can roam from its starting point.
+Same two config keys as v1: the activation command and a declared camera range limit.
 
 ---
 
@@ -99,21 +94,25 @@ Config.CameraRange = 100.0
 | Input | Action |
 |---|---|
 | `/freecam` | Toggle free camera on/off |
-| `W A S D` | Move forward / back / strafe |
-| `Q` / `E` | Move up / down |
+| `W A S D` / `Q` `E` | Move / strafe / up / down |
 | Mouse | Look around |
-| Mouse wheel | Zoom (FOV) |
+| Mouse wheel (no modifier) | Zoom (FOV) |
 | `◄` / `►` | Roll camera |
-| `▲` / `▼` | Cycle filters forward / backward |
+| `▲` / `▼` | Cycle filters |
+| Hold `Z` + scroll | DOF near distance (tap alone = toggle DOF) |
+| Hold `X` + scroll | DOF far distance |
+| Hold `C` + scroll | Camera shake amplitude |
+| Hold `G` + scroll | Timecycle strength |
+| Hold `B` + scroll | Cinematic bar size (tap alone = toggle bars) |
 | `Backspace` | Toggle HUD overlay |
 
 ---
 
 ## 🔧 Troubleshooting
 
-- **Command does nothing** — verify the resource actually started (`ensure mnc-freecam-v1` in server.cfg) and that no other resource is also bound to the `/freecam` command.
-- **Camera controls feel unresponsive** — free cam disables most player controls while active; if movement still leaks through, check for conflicting keybind resources.
-- **Filters look wrong in-game** — some entries are screen effects and one (`yell_tunnel_nodirect`) is a timecycle modifier; both are cleared automatically when you cycle away or close the camera.
+- **DOF looks wrong/blurry everywhere** — DOF requires `SetUseHiDof()` to run every frame while active, which the script already handles; make sure no other camera resource is also managing DOF.
+- **Modifier keys not registering** — the hold keys (Z/X/C/G/B) use `IsDisabledControlPressed`, so they should work even with other controls disabled; confirm no other resource is stealing those raw control indexes.
+- **Effects persist after closing free cam** — `resetEffects()` runs on close; if bars/shake linger, check for script errors in the F8 console.
 
 ---
 
