@@ -10,7 +10,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 An admin NUI tool that browses every vehicle defined in `QBCore.Shared.Vehicles` (grouped by category, with brand/price shown) and spawns the selected model at the player's current position, with optional random or fixed performance mods, paint color/finish, and automatic key/fuel setup.
 
 ---
