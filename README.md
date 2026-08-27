@@ -206,7 +206,6 @@ These resources exist in more than one build in this dump. **Install only one bu
 ## 📝 Credits & License
 
 **Author**: Stan Leigh/MnC Los Santos
-**Collection Version**: 71 resources
 
 This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text. Every individual resource in this dump is covered by the same license.
 
@@ -234,5 +233,3 @@ This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distributi
 5. **Legal**: For use on FiveM servers only, respect Rockstar's Terms of Service
 
 ---
-
-**71 resources, one collection, one license. Pick what fits your server. 🏙️**
