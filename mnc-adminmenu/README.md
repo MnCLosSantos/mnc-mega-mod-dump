@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_2" src="https://github.com/user-attachments/assets/2aa976e8-aa79-459d-bb4b-ad5fe49b4efb" />
 A single NUI panel for the day-to-day admin work that would otherwise need half a dozen separate commands: look up a player and manage their jobs, money, vehicles, and inventory from one screen. Also bundles a completely separate, all-players self-service command for moving your own vehicle between garages.
 
 ---
