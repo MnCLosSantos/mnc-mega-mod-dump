@@ -1,6 +1,6 @@
 # 🔥 MNC 2-Step / Launch Control System
 
-[![License: MNC_LICENSE_NDFTEAU](https://img.shields.io/badge/License-MNC__LICENSE__NDFTEAU-red.svg)](../MNC_LICENSE_NDFTEAU)
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)]()
@@ -330,12 +330,12 @@ Config.KitTier = {
 
 ## 📝 Credits & License
 
-**Author**: Stan Leigh
+**Author**: Stan Leigh/MnC Los Santos
 **Version**: 1.0.0
 **Framework**: QBCore
 **Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see [`MNC_LICENSE_NDFTEAU`](../MNC_LICENSE_NDFTEAU) at the root of the dump for the full text.
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
 
 - ✅ Use and edit this resource freely on your own personal or paid server(s)
 - ✅ Modify the code however you need to fit your server
@@ -346,7 +346,7 @@ This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free 
 
 ## 📞 Support & Community
 
-- 💬 **Discord**: [discord.gg/zAtBfs8MT4](https://discord.gg/zAtBfs8MT4) — join for support, bug reports, and update announcements
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
 - 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
 - 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
 
