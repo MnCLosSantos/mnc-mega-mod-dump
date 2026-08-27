@@ -9,12 +9,6 @@
 
 ## 🌟 Overview
 
-## lockscreen
-![alt text](<FiveM® by Cfx.re - Midnight Club Los Santo's 22_11_2025 15_01_31.png>)
-
-## Routes Sheet
-![alt text](<FiveM® by Cfx.re - Midnight Club Los Santo's 22_11_2025 15_01_42.png>)
-
 A **fully immersive Gruppe 6 security job system** for QBCore-based FiveM servers.  
 This script provides a **realistic two-phase collection route** with **loan agreements** and **cash pickups**, featuring a **custom tablet UI with fingerprint lock screen**, **GPS waypoint system**, **uniform management**, and **skill-based minigames**.  
 Fully optimized for **ox_lib**, **qb-target**, and includes **persistent route tracking** with completion states.
