@@ -13,14 +13,6 @@ A **fully-featured collectible trading card system** for QBCore-based FiveM serv
 
 ---
 
-<img width="1920" height="1080" alt="Screenshot (108)" src="https://github.com/user-attachments/assets/dc3e36c5-50e6-4661-a7ea-1d90dc57dfbf" />
-
-<img width="1920" height="1080" alt="Screenshot (109)" src="https://github.com/user-attachments/assets/e3a72b6a-2a59-4582-b78c-c3f6ef5fdce4" />
-
-<img width="1920" height="1080" alt="Screenshot (110)" src="https://github.com/user-attachments/assets/c7cadbe8-8a0d-4b1d-9a90-24507ae0cb79" />
-
----
-
 ## ✨ Key Features
 
 ### 📦 Pack Opening System
