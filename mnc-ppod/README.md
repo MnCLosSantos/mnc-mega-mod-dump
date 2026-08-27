@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A personal iPod-style music player, distinct from the vehicle-mounted [`mnc-carplay`](../mnc-carplay): 15 physical skins, a battery you have to actually manage and recharge, headphones required to hear it privately, and an optional placeable speaker prop for sharing music with everyone nearby instead.
 
 ---
