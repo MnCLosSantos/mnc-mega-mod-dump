@@ -1,7 +1,6 @@
-```markdown
-<DOCUMENT filename="README.md">
 # 🚗 MNC Parking System
 
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.4.0-brightgreen.svg)]()
@@ -47,6 +46,10 @@ Built with performance, realism, and compatibility in mind.
   - Recall vehicle to garage
 - **No-Park Zones** — configurable restricted areas (PD, hospitals, PDM, Benny's, etc.)
 - **VIP Discord slot system** — extra parking slots for VIP players
+
+### 🚛 Trailer & Unseatable Vehicle Parking
+- `/park` while **not** seated in anything checks for nearby seatless vehicles (trailers, etc.) within `Config.TrailerPark.InteractDistance` and offers a pick-list to park one "where it stands"
+- Works alongside the normal driver-seat parking flow — `Config.TrailerPark.Enabled` toggles it off if you don't want stand-alone trailer parking
 
 ### 🔧 Advanced Mechanics
 - **Session-based spawn handling** for addon vehicles (client-side model streaming)
@@ -261,22 +264,27 @@ Key config options:
 
 ---
 
-## 📝 Credits
+## 📝 Credits & License
 
-**Author**: Stan Leigh  
-**Version**: 1.4.0  
-**Framework**: QBCore  
+**Author**: Stan Leigh/MnC Los Santos
+**Version**: 1.4.0
+**Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-### Contributing
-Contributions welcome! Fork → Branch → Pull Request.
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
-## 📞 Support
+## 📞 Support & Community
 
-For issues or feature requests:
-- Open an issue on GitHub
-- Check the configuration and logs
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
 
 ---
 
