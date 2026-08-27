@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FineVoice Batch TTS</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --panel2: #1e222b;
+    --border: rgba(255,255,255,0.08);
+    --text: #f2f2f2;
+    --dim: rgba(255,255,255,0.55);
+    --dim2: rgba(255,255,255,0.35);
+    --accent: #4aa3ff;
+    --accent-bg: rgba(74,163,255,0.15);
+    --accent-border: rgba(74,163,255,0.4);
+    --green: #3ddc71;
+    --red: #e0473f;
+    --amber: #e8c93a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: var(--dim); font-size: 13px; margin-bottom: 24px; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 18px;
+  }
+  .panel h2 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--dim);
+    margin: 0 0 14px;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+  input[type="text"], input[type="password"], input[type="number"], textarea, select {
+    width: 100%;
+    background: var(--panel2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 11px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+  }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 220px; }
+  .row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 140px; }
+  .hint { font-size: 11px; color: var(--dim2); margin-top: 6px; }
+  button {
+    background: var(--accent-bg);
+    border: 1px solid var(--accent-border);
+    color: #9cc8ff;
+    border-radius: 6px;
+    padding: 9px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  button:hover:not(:disabled) { background: rgba(74,163,255,0.28); }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+  button.primary { background: var(--green); border-color: var(--green); color: #0f1115; }
+  button.primary:hover:not(:disabled) { background: #4fe483; }
+  button.small { padding: 5px 9px; font-size: 11px; }
+  button.ghost { background: transparent; }
+  .voice-current {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap;
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px;
+  }
+  .voice-current .tag {
+    background: rgba(61,220,113,0.15); border: 1px solid rgba(61,220,113,0.4); color: #8ff0ae;
+    border-radius: 5px; padding: 3px 8px; font-size: 11px; font-weight: 700;
+  }
+  .voice-current code { color: #fff; font-size: 13px; flex: 1; }
+  #previewPlayer { height: 32px; max-width: 260px; display: none; margin-top: 8px; }
+  #previewStatus { font-size: 12px; font-weight: 600; margin-top: 6px; }
+  details summary { cursor: pointer; color: var(--dim); font-size: 11px; margin-top: 8px; }
+  details pre { font-size: 10px; color: var(--dim); max-height: 160px; overflow: auto; background: var(--panel2); padding: 8px; border-radius: 6px; }
+  .voice-avatar {
+    width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex: 0 0 auto;
+    background: var(--panel2); border: 1px solid var(--border);
+  }
+  .voice-avatar.placeholder {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #9cc8ff; background: var(--accent-bg);
+  }
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+    display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    width: 100%; max-width: 760px; max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+  }
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 20px; border-bottom: 1px solid var(--border); flex: 0 0 auto;
+  }
+  .modal-header h2 { margin: 0; font-size: 14px; }
+  .modal-body { padding: 16px 20px; overflow-y: auto; }
+  #voiceGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; margin-top: 12px; }
+  .voice-card {
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .voice-card.selected { border-color: var(--accent-border); background: var(--accent-bg); }
+  .voice-card .avatar-row { display: flex; align-items: center; gap: 10px; }
+  .voice-card .avatar-row .voice-avatar { width: 44px; height: 44px; font-size: 14px; }
+  .voice-card .vname { font-size: 13px; font-weight: 700; color: #fff; }
+  .voice-card .vid { font-size: 11px; color: var(--dim); }
+  .voice-card .vmeta { font-size: 11px; color: var(--dim); }
+  .voice-card .actions { display: flex; gap: 6px; margin-top: auto; }
+  .voice-card .actions button { flex: 1; }
+  #counter { font-size: 11px; color: var(--dim); }
+  #counter.over { color: var(--red); font-weight: 700; }
+  #textBoxes { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+  .textbox-item { background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .textbox-item .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+  .textbox-item .num { font-size: 12px; font-weight: 700; color: #fff; }
+  .textbox-item textarea { min-height: 76px; }
+  .textbox-item .charcount { font-size: 11px; color: var(--dim2); margin-top: 4px; text-align: right; }
+  #rows { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+  .file-row { background: var(--panel2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+  .file-row .top { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+  .file-row .fname { font-size: 12px; font-weight: 700; color: #fff; min-width: 90px; }
+  .file-row .text { font-size: 12px; color: var(--dim); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .status { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+  .status.queued { background: rgba(255,255,255,0.08); color: var(--dim); }
+  .status.working { background: rgba(232,201,58,0.15); color: var(--amber); }
+  .status.done { background: rgba(61,220,113,0.15); color: #8ff0ae; }
+  .status.failed { background: rgba(224,71,63,0.15); color: #ff9d97; }
+  .file-row .player { margin-top: 8px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .file-row audio { height: 32px; max-width: 260px; }
+  .file-row .err { color: #ff9d97; font-size: 11px; margin-top: 6px; }
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 14px; }
+  .note { font-size: 11px; color: var(--dim2); }
+  .badge-required { color: #ff9d97; font-size: 11px; margin-left: 6px; }
+  a { color: #9cc8ff; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>FineVoice Batch TTS</h1>
+  <div class="sub">One paragraph per numbered box in, up to 25 separate audio files out — powered by the <a href="https://api.finevoice.ai/" target="_blank">FineVoice API</a>.</div>
+
+  <div class="panel">
+    <h2>1. API Key</h2>
+    <div class="row">
+      <div style="flex:3">
+        <label>FineVoice API Key <span class="badge-required">required</span></label>
+        <input type="password" id="apiKey" placeholder="Paste your FineVoice API key" autocomplete="off" />
+      </div>
+      <div style="flex:0 0 auto">
+        <button id="saveKeyBtn">Save key</button>
+      </div>
+    </div>
+    <div class="hint">
+      Get a key at <a href="https://finevoice.ai/usercenter" target="_blank">finevoice.ai/usercenter</a> → API Tokens.
+      Saved only in this browser's local storage — never sent anywhere except directly to FineVoice's API.
+      <br><b>Heads up:</b> FineVoice's own docs warn against using API keys in client-side code, since anyone with access
+      to this page (or its source) can read the key. That's an inherent tradeoff of a plain HTML tool with no backend —
+      fine for your own local use, just don't publish this file anywhere public with your key saved in it.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>2. Voice</h2>
+    <div class="voice-current">
+      <span class="tag">SELECTED</span>
+      <img id="selectedVoiceImg" class="voice-avatar" style="display:none" alt="" />
+      <code id="selectedVoiceDisplay">(none yet — browse or type below)</code>
+      <button id="testSelectedBtn" class="small">🔊 Test voice</button>
+      <button id="openVoiceModalBtn" class="small">🎭 Browse voices</button>
+    </div>
+    <audio id="previewPlayer" controls preload="auto"></audio>
+    <div class="hint" id="previewStatus"></div>
+
+    <label style="margin-top:12px">Exact voice name / ID (this is what actually gets sent to the API)</label>
+    <input type="text" id="voiceManual" placeholder="e.g. james" />
+    <div class="hint">Standard voice: <b>Rhythm Kade</b>. Click <b>🎭 Browse voices</b> to search FineVoice's library with pictures and confirm its exact API name (voice display names and API IDs aren't always identical) — click "Use this" on a card to fill it in, or just type any known voice name/ID directly.</div>
+
+    <div class="row" style="margin-top:12px">
+      <div>
+        <label>Preview sample text (used by every "Test" button)</label>
+        <input type="text" id="sampleText" value="Hi, this is a quick voice test. One, two, three." />
+      </div>
+    </div>
+  </div>
+
+  <div id="voiceModalOverlay" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Select a voice</h2>
+        <button id="voiceModalCloseBtn" class="small ghost">✕ Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="row" style="align-items:center;">
+          <div>
+            <label>Search by name or ID</label>
+            <input type="text" id="modalVoiceSearch" placeholder="e.g. kade" value="kade" />
+          </div>
+          <div style="flex:0 0 auto">
+            <button id="modalRefreshBtn" class="small">⟳ Refresh library</button>
+          </div>
+        </div>
+        <div class="hint" id="modalStatus"></div>
+        <div id="voiceGrid"></div>
+        <details id="modalRawWrap" style="display:none">
+          <summary>Show raw API response (in case a voice's picture/name isn't loading right)</summary>
+          <pre id="modalRaw"></pre>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>3. Script (each numbered box = one audio file, up to 25)</h2>
+    <div class="hint">Each box below becomes one output audio file — a box can hold a full paragraph, not just a single line. Use <b>+ Add text box</b> to add more, or <b>Remove</b> to delete one. Empty boxes are skipped.</div>
+    <div class="row" style="margin-top:10px; align-items:center;">
+      <div id="counter">0 / 25 boxes</div>
+      <div style="flex:0 0 auto">
+        <select id="emotionTag">
+          <option value="">— insert emotion tag —</option>
+          <option value="[happy]">[happy]</option>
+          <option value="[excited]">[excited]</option>
+          <option value="[calm]">[calm]</option>
+          <option value="[confident]">[confident]</option>
+          <option value="[sad]">[sad]</option>
+          <option value="[angry]">[angry]</option>
+          <option value="[whispering]">[whispering]</option>
+          <option value="[shouting]">[shouting]</option>
+          <option value="[laughing]">[laughing]</option>
+          <option value="[sighing]">[sighing]</option>
+          <option value="[break]">[break]</option>
+        </select>
+      </div>
+      <div style="flex:0 0 auto">
+        <button id="insertTagBtn" class="small">Insert at cursor</button>
+      </div>
+    </div>
+    <div class="hint">Full tag list: <a href="https://api.finevoice.ai/api-reference/emotion-tags" target="_blank">emotion tags reference</a>. Tags go at the start of the box they apply to. "Insert at cursor" inserts into whichever text box you last clicked into.</div>
+
+    <div id="textBoxes"></div>
+    <div class="toolbar" style="margin-top:10px;">
+      <button id="addBoxBtn" class="small">+ Add text box</button>
+      <span class="note" id="boxNote"></span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>4. Output filenames</h2>
+    <div class="row">
+      <div>
+        <label>Prefix</label>
+        <input type="text" id="prefix" value="line" />
+      </div>
+      <div>
+        <label>Start number</label>
+        <input type="number" id="startNum" value="1" min="0" />
+      </div>
+      <div>
+        <label>Zero-pad</label>
+        <select id="zeroPad">
+          <option value="0">No (1, 2, 3…)</option>
+          <option value="2">2 digits (01, 02…)</option>
+        </select>
+      </div>
+      <div>
+        <label>Concurrent requests</label>
+        <select id="concurrency">
+          <option value="1">1 (safest)</option>
+          <option value="2">2</option>
+          <option value="3" selected>3</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+    </div>
+    <div class="hint" id="filenamePreview">Example: line1.mp3, line2.mp3, line3.mp3 …</div>
+  </div>
+
+  <div class="panel">
+    <h2>5. Generate</h2>
+    <div class="toolbar">
+      <button class="primary" id="generateBtn">Generate audio files</button>
+      <button id="downloadZipBtn" disabled>Download all as ZIP</button>
+      <span class="note" id="progressNote"></span>
+    </div>
+    <div id="rows"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Troubleshooting</h2>
+    <div class="hint">
+      <b>Test/preview audio generates but you hear nothing:</b> browsers block auto-playing audio that isn't started
+      by a direct, immediate click — since generating a preview involves a short wait for the API, the browser often
+      refuses to auto-play the result. The player will still appear above the "Test voice" button — press its own
+      ▶ play button once the status line says "ready". This tool no longer assumes autoplay will work.<br><br>
+      <b>Requests fail immediately with a network/CORS error:</b> FineVoice's API may not allow direct browser
+      (cross-origin) calls — their docs are written assuming a server-side client. If that happens here, the fix is a
+      tiny local proxy: run a one-line script that forwards requests from this page to <code>apis.finevoice.ai</code>
+      and adds your key server-side, then point this tool at your proxy's URL instead. Ask me and I'll build that
+      companion script if you hit this.<br><br>
+      <b>401 error:</b> check the API key was pasted correctly and saved.<br>
+      <b>422 error:</b> the voice name/ID is probably wrong — use 🎭 Browse voices to confirm it.<br>
+      <b>"Unexpected task status" error:</b> FineVoice's task-status field doesn't always match their own docs
+      (it can come back as a number like 200, or a string like "completed", "success", or something else entirely).
+      This tool now treats "completed", "success", "succeeded", "done" and "finished" all as success — if you still
+      see this error, open the raw response shown in the error message and tell me the exact status value so the
+      check can be widened further.<br>
+      <b>A file times out:</b> very long lines can take longer than this tool's ~3 minute polling window; try shorter lines.
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+const API_BASE = 'https://apis.finevoice.ai';
+
+const apiKeyInput = document.getElementById('apiKey');
+const saveKeyBtn = document.getElementById('saveKeyBtn');
+const selectedVoiceDisplay = document.getElementById('selectedVoiceDisplay');
+const testSelectedBtn = document.getElementById('testSelectedBtn');
+const previewPlayer = document.getElementById('previewPlayer');
+const previewStatus = document.getElementById('previewStatus');
+const sampleTextInput = document.getElementById('sampleText');
+const voiceManual = document.getElementById('voiceManual');
+const selectedVoiceImg = document.getElementById('selectedVoiceImg');
+const openVoiceModalBtn = document.getElementById('openVoiceModalBtn');
+const voiceModalOverlay = document.getElementById('voiceModalOverlay');
+const voiceModalCloseBtn = document.getElementById('voiceModalCloseBtn');
+const modalVoiceSearch = document.getElementById('modalVoiceSearch');
+const modalRefreshBtn = document.getElementById('modalRefreshBtn');
+const modalStatus = document.getElementById('modalStatus');
+const voiceGrid = document.getElementById('voiceGrid');
+const modalRawWrap = document.getElementById('modalRawWrap');
+const modalRaw = document.getElementById('modalRaw');
+const textBoxesEl = document.getElementById('textBoxes');
+const addBoxBtn = document.getElementById('addBoxBtn');
+const boxNote = document.getElementById('boxNote');
+const counter = document.getElementById('counter');
+const emotionTag = document.getElementById('emotionTag');
+const insertTagBtn = document.getElementById('insertTagBtn');
+const prefixInput = document.getElementById('prefix');
+const startNumInput = document.getElementById('startNum');
+const zeroPadInput = document.getElementById('zeroPad');
+const concurrencyInput = document.getElementById('concurrency');
+const filenamePreview = document.getElementById('filenamePreview');
+const generateBtn = document.getElementById('generateBtn');
+const downloadZipBtn = document.getElementById('downloadZipBtn');
+const progressNote = document.getElementById('progressNote');
+const rowsEl = document.getElementById('rows');
+
+const MAX_LINES = 25;
+let rowsState = []; // { text, filename, status, url, blob, error }
+
+// ---------------------------------------------------------------------
+// API key
+// ---------------------------------------------------------------------
+apiKeyInput.value = localStorage.getItem('finevoice_api_key') || '';
+saveKeyBtn.addEventListener('click', () => {
+  localStorage.setItem('finevoice_api_key', apiKeyInput.value.trim());
+  saveKeyBtn.textContent = 'Saved ✓';
+  setTimeout(() => (saveKeyBtn.textContent = 'Save key'), 1500);
+  if (apiKeyInput.value.trim()) autoLoadVoiceLibrary();
+});
+
+function getApiKey() {
+  return apiKeyInput.value.trim() || localStorage.getItem('finevoice_api_key') || '';
+}
+
+// ---------------------------------------------------------------------
+// Shared helpers (used by both voice preview and batch generation)
+// ---------------------------------------------------------------------
+function pickField(obj, candidates) {
+  for (const c of candidates) {
+    if (obj && obj[c] !== undefined && obj[c] !== null && obj[c] !== '') return obj[c];
+  }
+  return null;
+}
+
+async function safeJson(res) {
+  try { return await res.json(); } catch (e) { return {}; }
+}
+
+function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
+
+function extractResultUrl(data) {
+  const fields = ['url', 'audio_url', 'audioUrl', 'file_url', 'fileUrl', 'download_url', 'downloadUrl'];
+  const direct = pickField(data, fields);
+  if (direct) return direct;
+  if (Array.isArray(data.urls) && data.urls[0]) return data.urls[0];
+  if (data.result && typeof data.result === 'object') {
+    const nested = pickField(data.result, fields);
+    if (nested) return nested;
+  }
+  if (data.data && typeof data.data === 'object') {
+    const nested = pickField(data.data, fields);
+    if (nested) return nested;
+  }
+  return null;
+}
+
+async function pollTask(taskId, key) {
+  for (let attempt = 0; attempt < 90; attempt++) {
+    await sleep(2000);
+    let res;
+    try {
+      res = await fetch(`${API_BASE}/v1/task/${taskId}`, { headers: { 'Authorization': `Bearer ${key}` } });
+    } catch (e) {
+      throw new Error('Network/CORS error while polling task status.');
+    }
+    if (!res.ok) throw new Error(`Poll HTTP ${res.status}`);
+    const data = await safeJson(res);
+    const status = data.status;
+    const statusStr = typeof status === 'string' ? status.toLowerCase() : status;
+
+    // FineVoice's docs are inconsistent about what "done" looks like (integer 200 in the
+    // OpenAPI reference vs a string like "completed" in the quickstart) - and in practice
+    // it can also come back as "success". Treat any of these as done rather than trusting
+    // a single exact value.
+    const isDone = status === 200 || ['completed', 'success', 'succeeded', 'done', 'finished'].includes(statusStr);
+    const isPending = status === 202 || ['processing', 'pending', 'queued', 'running', 'in_progress'].includes(statusStr);
+
+    if (isDone) {
+      const url = extractResultUrl(data);
+      if (!url) throw new Error('Task finished but no download URL was found in the response: ' + JSON.stringify(data));
+      return url;
+    }
+    if (!isPending) {
+      const msg = (data.error && (data.error.message || data.error)) || `Unexpected task status "${status}". Raw response: ${JSON.stringify(data)}`;
+      throw new Error(typeof msg === 'string' ? msg : JSON.stringify(msg));
+    }
+  }
+  throw new Error('Timed out waiting for this file to finish (~3 min).');
+}
+
+// synthesize `text` in `voice`, resolving to a playable/downloadable URL
+async function synthesize(voice, text, key) {
+  let res;
+  try {
+    res = await fetch(`${API_BASE}/v1/audio/speech-synthesis`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ voice, text }),
+    });
+  } catch (e) {
+    throw new Error('Network/CORS error — the browser could not reach FineVoice directly. See Troubleshooting below.');
+  }
+
+  if (!res.ok) {
+    const errData = await safeJson(res);
+    const msg = (errData.error && (errData.error.message || errData.error)) || `HTTP ${res.status}`;
+    throw new Error(typeof msg === 'string' ? msg : JSON.stringify(msg));
+  }
+
+  const data = await safeJson(res);
+  const immediateUrl = extractResultUrl(data);
+  if (immediateUrl) return immediateUrl;
+
+  const taskId = data.taskId || data.task_id;
+  if (!taskId) throw new Error('No taskId/url in response: ' + JSON.stringify(data));
+  return pollTask(taskId, key);
+}
+
+// ---------------------------------------------------------------------
+// Voice preview ("Test voice")
+// ---------------------------------------------------------------------
+function setPreviewStatus(text, color) {
+  previewStatus.textContent = text;
+  previewStatus.style.color = color || '';
+}
+
+async function testVoice(voiceName, triggerBtn) {
+  const key = getApiKey();
+  if (!key) { alert('Enter and save your API key first.'); return; }
+  if (!voiceName) { alert('No voice name to test — pick a search result or type one in manually first.'); return; }
+
+  const sample = (sampleTextInput.value || 'Hi, this is a quick voice test.').trim();
+  const originalLabel = triggerBtn ? triggerBtn.textContent : null;
+  if (triggerBtn) { triggerBtn.disabled = true; triggerBtn.textContent = '…'; }
+  previewPlayer.style.display = 'none';
+  previewPlayer.removeAttribute('src');
+  setPreviewStatus(`Generating preview for "${voiceName}"… this can take several seconds.`, '#e8c93a');
+
+  try {
+    const url = await synthesize(voiceName, sample, key);
+
+    previewPlayer.src = url;
+    previewPlayer.muted = false;
+    previewPlayer.volume = 1;
+    previewPlayer.style.display = 'inline-block';
+    previewPlayer.load();
+
+    // Browsers block auto-playing audio once too much time has passed since the click that
+    // triggered it (which is likely here, since generating the preview involves a network
+    // round-trip) - so we try, but never rely on it. The status message always tells the
+    // user to press play themselves regardless of whether autoplay happens to work.
+    setPreviewStatus(`✅ Preview ready for "${voiceName}" — press ▶ play on the player above.`, '#8ff0ae');
+    previewPlayer.play().catch(() => {
+      // autoplay blocked - the message above already covers this, nothing else to do
+    });
+  } catch (err) {
+    setPreviewStatus(`⚠ Preview of "${voiceName}" failed: ${err.message}`, '#ff9d97');
+  } finally {
+    if (triggerBtn) { triggerBtn.disabled = false; triggerBtn.textContent = originalLabel; }
+  }
+}
+
+testSelectedBtn.addEventListener('click', () => testVoice(voiceManual.value.trim(), testSelectedBtn));
+
+// ---------------------------------------------------------------------
+// Voice selection
+// ---------------------------------------------------------------------
+voiceManual.value = localStorage.getItem('finevoice_selected_voice') || '';
+selectedVoiceDisplay.textContent = voiceManual.value || '(none yet — browse or type below)';
+updateSelectedVoiceImage(localStorage.getItem('finevoice_selected_voice_img') || '');
+
+voiceManual.addEventListener('input', () => {
+  const val = voiceManual.value.trim();
+  localStorage.setItem('finevoice_selected_voice', val);
+  selectedVoiceDisplay.textContent = val || '(none yet — browse or type below)';
+  // typing a voice by hand means we no longer know its picture
+  localStorage.removeItem('finevoice_selected_voice_img');
+  updateSelectedVoiceImage('');
+});
+
+function updateSelectedVoiceImage(url) {
+  if (url) {
+    selectedVoiceImg.src = url;
+    selectedVoiceImg.style.display = 'inline-block';
+    selectedVoiceImg.onerror = () => { selectedVoiceImg.style.display = 'none'; };
+  } else {
+    selectedVoiceImg.removeAttribute('src');
+    selectedVoiceImg.style.display = 'none';
+  }
+}
+
+function selectVoice(name, imgUrl) {
+  voiceManual.value = name;
+  localStorage.setItem('finevoice_selected_voice', name);
+  selectedVoiceDisplay.textContent = name;
+  if (imgUrl) localStorage.setItem('finevoice_selected_voice_img', imgUrl);
+  else localStorage.removeItem('finevoice_selected_voice_img');
+  updateSelectedVoiceImage(imgUrl || '');
+  applyModalFilter(); // re-render so the picked card shows as selected
+}
+
+// ---------------------------------------------------------------------
+// Voice library (powers the "Browse voices" modal)
+// ---------------------------------------------------------------------
+let voiceLibrary = []; // flattened, deduped list of voice objects from the API
+
+function extractVoiceList(data) {
+  if (Array.isArray(data)) return data;
+  const candidates = ['data', 'list', 'voices', 'items', 'records', 'results'];
+  for (const c of candidates) {
+    if (data && Array.isArray(data[c])) return data[c];
+    if (data && data[c] && Array.isArray(data[c].list)) return data[c].list;
+    if (data && data[c] && Array.isArray(data[c].data)) return data[c].data;
+  }
+  return [];
+}
+
+function pickImage(v) {
+  return pickField(v, [
+    'avatarUrl', 'avatar_url', 'avatar', 'imageUrl', 'image_url', 'image',
+    'pictureUrl', 'picture_url', 'picture', 'thumbnailUrl', 'thumbnail_url', 'thumbnail', 'thumb',
+    'coverUrl', 'cover_url', 'cover', 'iconUrl', 'icon_url', 'icon',
+    'photoUrl', 'photo_url', 'photo', 'voiceImage', 'voice_image', 'img',
+  ]);
+}
+
+function voiceKeyOf(v) {
+  return pickField(v, ['name', 'voice', 'id', 'slug', 'voiceName']) || JSON.stringify(v);
+}
+
+function voiceLabelOf(v) {
+  const name = pickField(v, ['name', 'voice', 'id', 'slug', 'voiceName']);
+  return pickField(v, ['displayName', 'title', 'label', 'name']) || name;
+}
+
+// Client-side match so we're not solely dependent on however FineVoice's own
+// `keyword` search param matches internally (that's what was hiding "Rhythm
+// Kade" from a "kade" search) - we fetch the library and match text ourselves.
+function voiceMatchesQuery(v, query) {
+  if (!query) return true;
+  const q = query.trim().toLowerCase();
+  const fields = [
+    pickField(v, ['name', 'voice', 'id', 'slug', 'voiceName']),
+    pickField(v, ['displayName', 'title', 'label']),
+    pickField(v, ['description', 'desc']),
+    pickField(v, ['tags']),
+  ];
+  return fields.some((f) => {
+    if (!f) return false;
+    const text = Array.isArray(f) ? f.join(' ') : String(f);
+    return text.toLowerCase().includes(q);
+  });
+}
+
+async function fetchVoicePage(key, keyword, page, limit) {
+  const res = await fetch(`${API_BASE}/v1/voice/pagevoices?keyword=${encodeURIComponent(keyword)}&tts=true&limit=${limit}&page=${page}`, {
+    headers: { 'Authorization': `Bearer ${key}` },
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return safeJson(res);
+}
+
+async function loadVoiceLibrary() {
+  const key = getApiKey();
+  if (!key) { modalStatus.textContent = 'Enter and save your API key first (see step 1).'; return; }
+
+  modalStatus.textContent = 'Loading voice library…';
+  voiceGrid.innerHTML = '';
+  modalRawWrap.style.display = 'none';
+
+  const pageSize = 50;
+  const maxPages = 8; // up to 400 voices - should comfortably cover most libraries
+  let all = [];
+  const rawSamples = [];
+  let networkError = false;
+
+  // Fetch with an empty keyword first, so we get the whole library rather than
+  // whatever subset the API's own keyword matching would have returned - this
+  // is what fixes voices (like Rhythm Kade) not showing up for a search term
+  // that clearly matches their name.
+  for (let page = 0; page < maxPages; page++) {
+    let data;
+    try {
+      data = await fetchVoicePage(key, '', page, pageSize);
+    } catch (e) {
+      networkError = page === 0;
+      break;
+    }
+    rawSamples.push(data);
+    const list = extractVoiceList(data);
+    if (!list.length) break;
+    all = all.concat(list);
+    if (list.length < pageSize) break;
+  }
+
+  // Fallback for APIs that require a non-empty keyword to return anything.
+  if (!all.length && !networkError) {
+    const kw = modalVoiceSearch.value.trim() || 'kade';
+    try {
+      const data = await fetchVoicePage(key, kw, 0, 25);
+      rawSamples.push(data);
+      all = extractVoiceList(data);
+    } catch (e) { /* handled by the empty-library message below */ }
+  }
+
+  const seen = new Set();
+  voiceLibrary = all.filter((v) => {
+    const k = voiceKeyOf(v);
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+
+  modalRaw.textContent = JSON.stringify(rawSamples, null, 2);
+  modalRawWrap.style.display = rawSamples.length ? 'block' : 'none';
+
+  if (!voiceLibrary.length) {
+    modalStatus.textContent = networkError
+      ? 'Network/CORS error reaching FineVoice — see Troubleshooting below.'
+      : 'No voices returned by the API — check the raw response below, or your API key/plan.';
+  }
+
+  applyModalFilter();
+}
+
+function autoLoadVoiceLibrary() {
+  if (getApiKey() && !voiceLibrary.length) {
+    loadVoiceLibrary().catch(() => {});
+  }
+}
+autoLoadVoiceLibrary();
+
+function makePlaceholderAvatar(text) {
+  const div = document.createElement('div');
+  div.className = 'voice-avatar placeholder';
+  const initials = (text || '?').trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+  div.textContent = initials || '?';
+  return div;
+}
+
+function createVoiceCard(v) {
+  const name = pickField(v, ['name', 'voice', 'id', 'slug', 'voiceName']);
+  const label = voiceLabelOf(v);
+  const meta = [pickField(v, ['gender']), pickField(v, ['language', 'languageCode']), pickField(v, ['primary_category', 'category'])]
+    .filter(Boolean).join(' · ');
+  const img = pickImage(v);
+  const voiceId = name || label;
+
+  const card = document.createElement('div');
+  card.className = 'voice-card';
+  if (voiceManual.value && voiceManual.value === voiceId) card.classList.add('selected');
+
+  const avatarRow = document.createElement('div');
+  avatarRow.className = 'avatar-row';
+
+  if (img) {
+    const imEl = document.createElement('img');
+    imEl.className = 'voice-avatar';
+    imEl.src = img;
+    imEl.alt = label || name || 'voice';
+    imEl.referrerPolicy = 'no-referrer';
+    imEl.addEventListener('error', () => { imEl.replaceWith(makePlaceholderAvatar(label || name)); }, { once: true });
+    avatarRow.appendChild(imEl);
+  } else {
+    avatarRow.appendChild(makePlaceholderAvatar(label || name));
+  }
+
+  const namesWrap = document.createElement('div');
+  const vname = document.createElement('div');
+  vname.className = 'vname';
+  vname.textContent = label || name || '(unnamed voice)';
+  namesWrap.appendChild(vname);
+  if (name && name !== label) {
+    const vid = document.createElement('div');
+    vid.className = 'vid';
+    vid.textContent = name;
+    namesWrap.appendChild(vid);
+  }
+  avatarRow.appendChild(namesWrap);
+  card.appendChild(avatarRow);
+
+  if (meta) {
+    const vmeta = document.createElement('div');
+    vmeta.className = 'vmeta';
+    vmeta.textContent = meta;
+    card.appendChild(vmeta);
+  }
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+
+  const testBtn = document.createElement('button');
+  testBtn.className = 'small ghost';
+  testBtn.textContent = '🔊 Test';
+  testBtn.title = 'Generate a short preview with this voice';
+  testBtn.addEventListener('click', () => testVoice(voiceId, testBtn));
+  actions.appendChild(testBtn);
+
+  const useBtn = document.createElement('button');
+  useBtn.className = 'small';
+  useBtn.textContent = 'Use this';
+  useBtn.addEventListener('click', () => selectVoice(voiceId, img));
+  actions.appendChild(useBtn);
+
+  card.appendChild(actions);
+  return card;
+}
+
+function renderVoiceGrid(list) {
+  voiceGrid.innerHTML = '';
+  if (!list.length) {
+    const empty = document.createElement('div');
+    empty.className = 'hint';
+    empty.textContent = voiceLibrary.length ? 'No voices match your search.' : 'No voices loaded yet.';
+    voiceGrid.appendChild(empty);
+    return;
+  }
+  list.forEach((v) => voiceGrid.appendChild(createVoiceCard(v)));
+}
+
+function applyModalFilter() {
+  const q = modalVoiceSearch.value.trim();
+  const filtered = voiceLibrary.filter((v) => voiceMatchesQuery(v, q));
+  renderVoiceGrid(filtered);
+  if (voiceLibrary.length) {
+    modalStatus.textContent = `${filtered.length} of ${voiceLibrary.length} voices${q ? ` match "${q}"` : ''}.`;
+  }
+}
+
+// ---------------------------------------------------------------------
+// Voice modal open/close
+// ---------------------------------------------------------------------
+function openVoiceModal() {
+  voiceModalOverlay.classList.add('open');
+  if (voiceLibrary.length) applyModalFilter();
+  else loadVoiceLibrary().catch(() => {});
+  modalVoiceSearch.focus();
+}
+
+function closeVoiceModal() {
+  voiceModalOverlay.classList.remove('open');
+}
+
+openVoiceModalBtn.addEventListener('click', openVoiceModal);
+voiceModalCloseBtn.addEventListener('click', closeVoiceModal);
+voiceModalOverlay.addEventListener('click', (e) => { if (e.target === voiceModalOverlay) closeVoiceModal(); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && voiceModalOverlay.classList.contains('open')) closeVoiceModal();
+});
+modalVoiceSearch.addEventListener('input', applyModalFilter);
+modalRefreshBtn.addEventListener('click', () => loadVoiceLibrary());
+
+// ---------------------------------------------------------------------
+// Numbered text boxes (one box = one audio file; a box can hold a full
+// paragraph, not just a single line)
+// ---------------------------------------------------------------------
+let boxIdSeq = 0;
+let lastFocusedTextarea = null;
+
+function createTextBox(initialValue) {
+  boxIdSeq++;
+  const item = document.createElement('div');
+  item.className = 'textbox-item';
+  item.dataset.boxId = String(boxIdSeq);
+
+  const top = document.createElement('div');
+  top.className = 'top';
+
+  const num = document.createElement('span');
+  num.className = 'num';
+  top.appendChild(num);
+
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'small ghost';
+  removeBtn.textContent = 'Remove';
+  removeBtn.addEventListener('click', () => {
+    if (textBoxesEl.children.length <= 1) return; // always keep at least one box
+    item.remove();
+    renumberBoxes();
+  });
+  top.appendChild(removeBtn);
+
+  const ta = document.createElement('textarea');
+  ta.placeholder = 'Text for this audio file… (can be a full paragraph)\nTip: prefix with an emotion tag like [happy] or [whispering] to control tone.';
+  ta.value = initialValue || '';
+  ta.addEventListener('input', updateCounter);
+  ta.addEventListener('focus', () => { lastFocusedTextarea = ta; });
+
+  const charcount = document.createElement('div');
+  charcount.className = 'charcount';
+  const updateCharcount = () => { charcount.textContent = `${ta.value.length} chars`; };
+  ta.addEventListener('input', updateCharcount);
+  updateCharcount();
+
+  item.appendChild(top);
+  item.appendChild(ta);
+  item.appendChild(charcount);
+  return item;
+}
+
+function renumberBoxes() {
+  const items = Array.from(textBoxesEl.children);
+  items.forEach((item, idx) => {
+    item.querySelector('.num').textContent = `#${idx + 1}`;
+  });
+  addBoxBtn.disabled = items.length >= MAX_LINES;
+  boxNote.textContent = items.length >= MAX_LINES ? `Max ${MAX_LINES} boxes reached.` : '';
+  updateCounter();
+}
+
+addBoxBtn.addEventListener('click', () => {
+  if (textBoxesEl.children.length >= MAX_LINES) return;
+  const item = createTextBox('');
+  textBoxesEl.appendChild(item);
+  renumberBoxes();
+  item.querySelector('textarea').focus();
+});
+
+function initTextBoxes(n) {
+  textBoxesEl.innerHTML = '';
+  for (let i = 0; i < n; i++) textBoxesEl.appendChild(createTextBox(''));
+  renumberBoxes();
+}
+
+// ---------------------------------------------------------------------
+// Emotion tag insert (targets whichever box textarea was last focused)
+// ---------------------------------------------------------------------
+insertTagBtn.addEventListener('click', () => {
+  const tag = emotionTag.value;
+  if (!tag) return;
+  const ta = (lastFocusedTextarea && textBoxesEl.contains(lastFocusedTextarea))
+    ? lastFocusedTextarea
+    : textBoxesEl.querySelector('textarea');
+  if (!ta) return;
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  const before = ta.value.slice(0, start);
+  const after = ta.value.slice(end);
+  ta.value = `${before}${tag} ${after}`;
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = start + tag.length + 1;
+  ta.dispatchEvent(new Event('input'));
+});
+
+// ---------------------------------------------------------------------
+// Script lines / filenames
+// ---------------------------------------------------------------------
+function getLines() {
+  return Array.from(textBoxesEl.querySelectorAll('textarea'))
+    .map((ta) => ta.value.trim())
+    .filter((t) => t.length > 0)
+    .slice(0, MAX_LINES);
+}
+
+function updateCounter() {
+  const total = textBoxesEl.children.length;
+  const filled = getLines().length;
+  counter.textContent = `${total} / ${MAX_LINES} boxes (${filled} with text)`;
+  counter.classList.toggle('over', total > MAX_LINES);
+  updateFilenamePreview();
+}
+
+function padNumber(n) {
+  const pad = parseInt(zeroPadInput.value, 10);
+  return pad > 0 ? String(n).padStart(pad, '0') : String(n);
+}
+
+function filenameFor(index) {
+  const start = parseInt(startNumInput.value, 10) || 0;
+  const prefix = (prefixInput.value || 'line').trim();
+  return `${prefix}${padNumber(start + index)}.mp3`;
+}
+
+function updateFilenamePreview() {
+  const n = Math.max(1, Math.min(3, getLines().length || 3));
+  const examples = [];
+  for (let i = 0; i < n; i++) examples.push(filenameFor(i));
+  filenamePreview.textContent = `Example: ${examples.join(', ')} …`;
+}
+[prefixInput, startNumInput, zeroPadInput].forEach((el) => el.addEventListener('input', updateFilenamePreview));
+updateFilenamePreview();
+
+// ---------------------------------------------------------------------
+// Batch generation
+// ---------------------------------------------------------------------
+async function fetchAsBlob(url) {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    return await res.blob();
+  } catch (e) {
+    return null;
+  }
+}
+
+function renderRow(i) {
+  const r = rowsState[i];
+  let el = document.getElementById(`row-${i}`);
+  if (!el) {
+    el = document.createElement('div');
+    el.className = 'file-row';
+    el.id = `row-${i}`;
+    rowsEl.appendChild(el);
+  }
+
+  const statusClass = { queued: 'queued', submitting: 'working', processing: 'working', downloading: 'working', done: 'done', failed: 'failed' }[r.status] || 'queued';
+
+  el.innerHTML = `
+    <div class="top">
+      <span class="fname">${r.filename}</span>
+      <span class="text" title="${r.text.replace(/"/g, '&quot;')}">${r.text}</span>
+      <span class="status ${statusClass}">${r.status}</span>
+    </div>
+  `;
+
+  if (r.status === 'done') {
+    const player = document.createElement('div');
+    player.className = 'player';
+    const audio = document.createElement('audio');
+    audio.controls = true;
+    audio.src = r.blob ? URL.createObjectURL(r.blob) : r.url;
+    player.appendChild(audio);
+
+    const link = document.createElement('a');
+    if (r.blob) {
+      link.href = URL.createObjectURL(r.blob);
+      link.download = r.filename;
+      link.textContent = 'Download';
+    } else {
+      link.href = r.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = 'Open file (right-click → Save As)';
+    }
+    player.appendChild(link);
+    el.appendChild(player);
+  } else if (r.status === 'failed') {
+    const err = document.createElement('div');
+    err.className = 'err';
+    err.textContent = r.error || 'Unknown error';
+    el.appendChild(err);
+  }
+}
+
+async function generateOne(i, key, voice) {
+  const r = rowsState[i];
+  r.status = 'submitting';
+  renderRow(i);
+
+  try {
+    r.status = 'processing';
+    const url = await synthesize(voice, r.text, key);
+    r.status = 'downloading';
+    renderRow(i);
+    r.url = url;
+    r.blob = await fetchAsBlob(url);
+    r.status = 'done';
+    renderRow(i);
+  } catch (err) {
+    r.status = 'failed';
+    r.error = err.message;
+    renderRow(i);
+  }
+}
+
+async function runPool(count, worker, concurrency) {
+  let idx = 0;
+  async function next() {
+    while (idx < count) {
+      const i = idx++;
+      await worker(i);
+      progressNote.textContent = `${rowsState.filter((r) => r.status === 'done' || r.status === 'failed').length} / ${rowsState.length} finished`;
+    }
+  }
+  const workers = Array.from({ length: Math.min(concurrency, count) }, next);
+  await Promise.all(workers);
+}
+
+generateBtn.addEventListener('click', async () => {
+  const key = getApiKey();
+  const voice = voiceManual.value.trim();
+  const lines = getLines();
+
+  if (!key) { alert('Enter and save your API key first.'); return; }
+  if (!voice) { alert('Pick or type a voice name/ID first.'); return; }
+  if (!lines.length) { alert('Add at least one line of text.'); return; }
+
+  rowsEl.innerHTML = '';
+  rowsState = lines.map((text, i) => ({ text, filename: filenameFor(i), status: 'queued', url: null, blob: null, error: null }));
+  rowsState.forEach((_, i) => renderRow(i));
+
+  generateBtn.disabled = true;
+  downloadZipBtn.disabled = true;
+  progressNote.textContent = `0 / ${rowsState.length} finished`;
+
+  const concurrency = parseInt(concurrencyInput.value, 10) || 3;
+  await runPool(rowsState.length, (i) => generateOne(i, key, voice), concurrency);
+
+  generateBtn.disabled = false;
+  const doneCount = rowsState.filter((r) => r.status === 'done').length;
+  progressNote.textContent = `Done: ${doneCount} / ${rowsState.length} succeeded`;
+  downloadZipBtn.disabled = !rowsState.some((r) => r.blob);
+});
+
+downloadZipBtn.addEventListener('click', async () => {
+  const zip = new JSZip();
+  let any = false;
+  rowsState.forEach((r) => {
+    if (r.blob) { zip.file(r.filename, r.blob); any = true; }
+  });
+  if (!any) { alert('No files with a downloadable copy yet (some may only have opened links due to CORS).'); return; }
+
+  const content = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(content);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(prefixInput.value || 'finevoice-batch').trim()}-batch.zip`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+});
+
+initTextBoxes(3);
+</script>
+</body>
+</html>
