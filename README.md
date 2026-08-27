@@ -1,6 +1,6 @@
 # 🏙️ MNC Mega Mod Dump
 
-[![License: MNC](https://img.shields.io/badge/License-MNC__LICENSE__NDFTEAU-purple.svg)](MNC)
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Resources](https://img.shields.io/badge/Resources-71-brightgreen.svg)]()
@@ -9,7 +9,7 @@
 
 ## 🌟 Overview
 
-**MNC Mega Mod Dump** is a large collection of 71 independent QBCore/FiveM resources — vehicle ownership and logistics tools, handling and cosmetic vehicle mods, job and economy systems, HUDs, admin utilities, and assorted roleplay scripts — built and maintained by **Stan Leigh of MnCLosSantos**. Every resource in this dump has its own dedicated README covering installation, configuration, controls, and troubleshooting; this root README is the index that ties them all together.
+**MNC Mega Mod Dump** is a large collection of 71 independent QBCore/FiveM resources — vehicle ownership and logistics tools, handling and cosmetic vehicle mods, job and economy systems, HUDs, admin utilities, and assorted roleplay scripts — built and maintained by **MnC Los Santos**. Every resource in this dump has its own dedicated README covering installation, configuration, controls, and troubleshooting; this root README is the index that ties them all together.
 
 A handful of tools in this dump ship in **more than one build** (a `-v1`/`-v2`/`-v3` naming pattern, or two differently-named builds of the same script). Where that's the case, **install only ONE build of that tool** — running two builds of the same resource at once means duplicate command/export registrations and, in some cases, corrupted shared database tables. The [Choosing Between Versions](#-choosing-between-versions) section below lists every one of these groups explicitly, and each affected resource's own README repeats the same warning with a side-by-side comparison table.
 
@@ -205,24 +205,21 @@ These resources exist in more than one build in this dump. **Install only one bu
 
 ## 📝 Credits & License
 
-**Author**: Stan Leigh
+**Author**: Stan Leigh/MnC Los Santos
+**Collection Version**: 71 resources
 
-**Collection Amount**: 71 resources
-
-
-
-This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — Every individual resource in this dump is covered by the same license.
+This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text. Every individual resource in this dump is covered by the same license.
 
 - ✅ Use and edit any resource in this dump freely on your own personal or paid server(s)
 - ✅ Modify the code however you need to fit your server
 - ❌ Do not redistribute, resell, or re-upload this dump or any individual resource from it (modified or not) as your own work
-- ❌ Do not publish forks or copies of this dump outside of channels authorized by MnCLosSantos / Stan Leigh
+- ❌ Do not publish forks or copies of this dump outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
 ## 📞 Support & Community
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) 
 - 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
 - 📖 Each resource's own README covers its configuration and troubleshooting in depth — check there first
 
@@ -236,3 +233,6 @@ This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distributi
 4. **Compatibility**: this entire collection targets QBCore — none of it is guaranteed compatible with ESX
 5. **Legal**: For use on FiveM servers only, respect Rockstar's Terms of Service
 
+---
+
+**71 resources, one collection, one license. Pick what fits your server. 🏙️**
