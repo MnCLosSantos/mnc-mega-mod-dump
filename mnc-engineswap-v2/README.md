@@ -1,8 +1,11 @@
 # 🔧 MNC Engine Swap System
 
+[![License: MNC](https://img.shields.io/badge/License-MNC-purple.svg)](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md)
 [![FiveM](https://img.shields.io/badge/FiveM-Ready-green.svg)](https://fivem.net/)
 [![QBCore](https://img.shields.io/badge/Framework-QBCore-blue.svg)](https://github.com/qbcore-framework)
 [![Version](https://img.shields.io/badge/Version-1.9.4-brightgreen.svg)]()
+
+> ⚠️ **Multiple versions of this script exist in this dump — install only ONE.** `mnc-engineswap-v2` is one of several builds of this tool alongside `mnc-engineswap-v1`. Running more than one at the same time will register the same commands/exports twice and can corrupt shared data. Both create the same vehicle_engines table and register identical shop markers/blips at the same coordinates - running both doubles every shop interaction. See "Choosing a Version" below.
 
 ---
 
@@ -11,6 +14,23 @@
 A **feature-rich engine swap system** for QBCore FiveM servers. Players can purchase high-performance engine sounds and handling profiles from specialized mechanic shops, have them delivered, and install them with immersive progress-based mechanics. Features persistent per-plate saving, model-level defaults, admin tools, and full database integration.
 
 Perfect for roleplay servers wanting deeper vehicle customization and mechanic job enhancement.
+
+---
+
+## 🔀 Choosing a Version
+
+This dump contains two builds of the engine swap system. **Install only one.**
+
+| | `mnc-engineswap-v1` | `mnc-engineswap-v2` (this one) |
+|---|---|---|
+| Player shop, purchase, delivery, install flow | ✅ | ✅ |
+| Per-plate saved engine sound | ✅ | ✅ |
+| Admin free instant engine-swap menu (`/engineswap`) | ❌ | ✅ |
+| Per-vehicle-model default sound overrides (`/vehsoundmeta`) | ❌ | ✅ |
+| Broadcasts the new sound to nearby bystanders | ❌ | ✅ |
+| Version | 1.9.3 | 1.9.4 |
+
+Both versions use identical `Config.EngineShops` coordinates and both auto-create a `vehicle_engines` table, so running them side by side means two resources fighting over the same shop markers and the same database rows. **v2 is a strict superset of v1** — pick it unless you deliberately want the smaller, admin-tool-free build.
 
 ---
 
@@ -183,6 +203,14 @@ Engines are defined in `Config.EngineSounds` with categories, names, sound hashe
 
 ---
 
+## 📞 Support & Community
+
+- 💬 **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Server-7289da?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/aTBsSZe5C6) — join for support, bug reports, and update announcements
+- 🐛 **Issues**: open an issue on the [mnc-mega-mod-dump GitHub repo](https://github.com/MnCLosSantos/mnc-mega-mod-dump/issues)
+- 📖 Check this README's Configuration Guide and Troubleshooting sections first — most questions are answered above
+
+---
+
 ## ⚠️ Important Notes
 
 - Vehicles must have **valid license plates**
@@ -218,11 +246,17 @@ Engines are defined in `Config.EngineSounds` with categories, names, sound hashe
 
 ## 📝 Credits & License
 
-**Author**: Stan Leigh  
-**Version**: 1.9.4  
+**Author**: Stan Leigh/MnC Los Santos
+**Version**: 1.9.4
+**Framework**: QBCore
+**Collection**: part of the [MNC Mega Mod Dump](https://github.com/MnCLosSantos/mnc-mega-mod-dump)
 
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+This resource is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text.
+
+- ✅ Use and edit this resource freely on your own personal or paid server(s)
+- ✅ Modify the code however you need to fit your server
+- ❌ Do not redistribute, resell, or re-upload this resource (modified or not) as your own work
+- ❌ Do not publish forks or copies of this resource outside of channels authorized by MnCLosSantos / carrot
 
 ---
 
-**Enhance your server's vehicle roleplay with realistic engine swaps!** 🔥
