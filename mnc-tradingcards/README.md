@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **fully-featured collectible trading card system** for QBCore-based FiveM servers. Players can open randomised card packs, collect cards across themed sets, store them in binders, and sell them to the in-world card dealer. Complete with a polished NUI, holographic rarity effects, misprint mechanics, a persistent database, and a set-completion bonus system.
 
 ---
