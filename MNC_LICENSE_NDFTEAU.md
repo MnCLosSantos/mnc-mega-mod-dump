@@ -1,4 +1,4 @@
-# MnC Los Santos — Resource Library
+# MnC Los Santos — Resources
 
 > © 2026 carrot / MnCLosSantos  
 > Licensed under **MNC_LICENSE_NDFTEAU** — free to use and modify for personal or server use.  
