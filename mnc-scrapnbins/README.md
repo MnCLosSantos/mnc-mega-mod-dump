@@ -6,8 +6,9 @@
 [![ ox_lib ](https://img.shields.io/badge/ox__lib-Required-orange)](https://overextended.dev/ox_lib)
 [![Version](https://img.shields.io/badge/Version-2.0.0-brightgreen.svg)]()
 
-Dynamic **bin diving** & **scrap searching** system for modern QBCore/QBX servers.
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 
+Dynamic **bin diving** & **scrap searching** system for modern QBCore/QBX servers.
 Search trash bins, dumpsters, trash bags and vehicle wrecks with immersive animations, directional sounds, optional minigames, entity cooldowns, needle prick risk, and a weighted tiered loot table.
 
 ---
