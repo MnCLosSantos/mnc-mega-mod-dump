@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 An **admin/developer diagnostic tool**, not a player-facing job: it automatically spawns every vehicle model registered in `QBCore.Shared.Vehicles`, one at a time, checks its skeleton for tow-hitch bones (`tow_arm`, `attach_female`, `hook`, and related names), and writes out a ready-to-use Lua table of every model that actually supports towing or being towed. Instead of manually test-driving dozens of vehicles to find which ones have a tow bar or hitch, run one scan and get a categorized, bone-grouped list in seconds.
 
 ---
