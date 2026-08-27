@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A dash-mounted tablet music unit players install into their own vehicle: pick from 15 physical skins, wire up YouTube/SoundCloud-style URLs into personal playlists, and play music through a synced, radius-based audio system that everyone in and around the car actually hears together — not just the local client. Doors closed muffle it for anyone outside, and it comes right back off with a reusable removal tool whenever you want to relocate or uninstall it.
 
 ---
