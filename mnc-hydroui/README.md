@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A standalone hydraulics control HUD that automatically appears the moment you get behind the wheel of a lowrider-class vehicle (or any vehicle with the native hydraulics mod installed). Bounce each corner independently with the arrow keys, engage a full lift with **O**, or trigger a scripted 3-wheel lean with the numpad — all controlled through direct force application tuned corner-by-corner, since GTA's hydraulics natives can't reliably isolate a single wheel on their own.
 
 ---
