@@ -7,7 +7,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A powerful **automatic vehicle screenshot tool** for FiveM servers. Capture high-quality images of any vehicle with full camera control, Discord webhook integration, local PNG saving, and smart chunked processing to prevent entity pool crashes.
 
 Built for developers and server owners who need clean, consistent vehicle images for documentation, websites, or in-game menus.
