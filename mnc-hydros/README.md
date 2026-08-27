@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **hydraulic handbrake system** for QBCore-based FiveM servers. Mechanics install **Street** or **Competition** hydraulic kits that raise a vehicle's `fHandBrakeForce` handling value, giving a much snappier, harder-locking rear handbrake — perfect for e-brake drift entries and hydraulic-style stunts. Kits are tiered, job-restricted, fully persistent by license plate, and wear out after a set amount of in-vehicle playtime, just like the rest of the MNC handling-mod line-up (`mnc-diffs`, `mnc-drivelines`, `mnc-anglekit`).
 
 ---
