@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 An **admin-authored polygon safe-zone system** for QBCore-based FiveM servers. Admins draw irregular, straight-edged zones (not just circles) with adjustable vertical height, either by walking to each corner and capturing their position or by flying a built-in freecam and dropping points remotely. Players get an on-screen indicator whenever they enter a defined zone, along with awareness of whether their current job is exempt from it — all managed through a single NUI admin panel with no server restart required to add, edit, or delete a zone.
 
 ---
