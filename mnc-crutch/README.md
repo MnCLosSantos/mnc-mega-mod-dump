@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **realistic mobility aid system** for QBCore-based FiveM servers.  
 This script provides **immersive EMS tools** for applying and managing mobility aids (crutches and canes) with **prop-based animations**, **movement restrictions**, and **persistent timers**. Fully optimized for **qb-target**, **ox_lib**, **qb-menu**, and **qb-core** frameworks, it enhances roleplay with medical realism.
 
