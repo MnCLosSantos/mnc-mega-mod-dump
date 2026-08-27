@@ -8,7 +8,7 @@
 ---
 
 ## 🌟 Overview
-
+<img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 A **feature-rich turbo boost gauge system** for QBCore-based FiveM servers.  
 This script provides **40 unique gauge styles**, **20 bezels**, **20 preset combinations**, **remap-aware PSI scaling**, **persistent vehicle customization**, **realistic boost physics (no perfomance changes)**, **needle sweep animations**, and **vehicle lighting effects**.  
 Fully optimized for **ox_lib**, **oxmysql**, **qb-core**, and **mnc-performanceparts** integration.
