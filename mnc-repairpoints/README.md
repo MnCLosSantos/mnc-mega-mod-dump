@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 **MNC Repair Points** is a clean, lightweight pay-to-repair system for QBCore servers.  
 Players can repair their vehicles at public repair stations (when no mechanics are on duty), emergency vehicles get **free repairs** at designated bays, and job-restricted repair points (police, EMS, etc.) stay private.
 
