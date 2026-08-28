@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **robust persistent vehicle parking system** for QBCore-based FiveM servers. Features realistic parking mechanics with physical parking locks, vehicle covering with tarps, dynamic blips, state synchronization, and full integration with qb-garages and qb-vehiclekeys. Includes an advanced vehicle cover system that persists across restarts and player reconnects.
 
 Built with performance, realism, and compatibility in mind.
