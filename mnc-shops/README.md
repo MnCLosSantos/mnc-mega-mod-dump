@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **dynamic shop system** for QBCore-based FiveM servers.  
 This script provides a **modern shop interface** with categorized items, stock management, payment options (cash/bank), and proximity-based or target-based interactions. It includes **customizable shop zones**, **ped spawners**, and a **responsive UI** with search functionality. Fully optimized for **ox_lib**, **ox_inventory** or **qb-inventory**, and **qb-target** (optional).
 
