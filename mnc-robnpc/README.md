@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **realistic pedestrian robbery system** for QBCore-based FiveM servers featuring weapon requirements, immersive animations, police notifications with GPS tracking, and anti-exploit protections. Built for roleplay servers prioritizing realism and balance.
 
 ---
