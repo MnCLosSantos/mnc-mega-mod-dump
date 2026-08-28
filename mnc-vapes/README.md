@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **comprehensive vaping system** for QBCore-based FiveM servers featuring craftable vape devices, customizable juices, realistic puffing animations with particle effects, persistent device management, portable crafting tables, and job-restricted stations. Built with performance and immersion in mind.
 
 ---
