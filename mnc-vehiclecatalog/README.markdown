@@ -10,7 +10,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A multi-dealership vehicle browsing UI for QBCore. Each configured zone (dealership location) shows an NUI catalog listing only the vehicles assigned to that shop — matched by `qb-core`'s `shop` field on each vehicle entry — with its own visual theme, custom title, and category grouping pulled straight from `QBCore.Shared.Vehicles`. An admin command can also open a catalog showing every vehicle in the game regardless of shop.
 
 ---
