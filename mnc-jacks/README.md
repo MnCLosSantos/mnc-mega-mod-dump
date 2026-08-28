@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A realistic per-side car jack and axle stand system: use a floor jack to raise one side of a vehicle, then slot two axle stands underneath to hold it there safely, freezing the vehicle in place at the raised height for as long as the stands stay in. Pulls the stands back out (or the jack back off) to lower it again.
 
 ---
