@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A small, standalone fix for a long-standing GTA V bug: certain trailer models visually deform or glitch out for **every client except the one who toggled the extra** whenever one of their "extras" is switched on or off. `mnc-extrafix` polls tracked vehicles on every client, detects the moment an extra changes state, silently repairs the vehicle locally, and then broadcasts the fix through the server so every other player's streamed copy of that same vehicle gets fixed too — not just the player who caused it.
 
 ---
