@@ -7,7 +7,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 The cinematic build of MnC Free Cam keeps the original fly-cam, mouse look, roll, zoom, and 30-filter cycling from v1, and adds a set of cinematography tools: depth of field, camera shake, cinematic letterbox bars, and adjustable timecycle strength — all controlled with modifier-key + scroll-wheel combos so nothing needs a menu.
 
 ---
