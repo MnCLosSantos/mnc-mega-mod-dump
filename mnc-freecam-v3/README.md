@@ -10,7 +10,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 The full cinematic suite build of MnC Free Cam. It keeps every camera and cinematography tool from v1/v2 (fly cam, mouse look, 30 filters, depth of field, camera shake, cinematic letterbox bars, timecycle strength) and adds a completely new layer on top: a **per-vehicle camera customization system** with 8 built-in view modes and per-model saved offsets, a **keyframe-based cinematic sequence editor** with recording, looped/ping-pong playback and a 4-word share-code system so players can trade their cinematics, a **20-slot freecam preset system**, custom camera slots, and full database persistence via `oxmysql` — everything is saved per-`citizenid` and survives restarts.
 
 ---
