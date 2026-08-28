@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 An **ID checking system** for FiveM servers (QBCore compatible).  
 Players can press a key (default **Z**) to show their **server ID** above their head and notify nearby players with a ui saying ids are being checked.  
 Includes a **cooldown system**, **duration timer**, and **NUI notifications**.
