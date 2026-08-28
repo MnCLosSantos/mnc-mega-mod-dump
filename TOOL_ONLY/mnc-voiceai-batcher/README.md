@@ -7,7 +7,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 MNC Voice AI Batcher is a single self-contained HTML page that turns a script into a batch of ready-to-use audio files through the [FineVoice API](https://api.finevoice.ai/). Paste in an API key, pick a voice, drop up to 25 numbered lines or paragraphs into the numbered text boxes, and generate up to 25 separate `.mp3` files in one pass — each playable, individually downloadable, or grab everything at once as a `.zip`. There's no server, no framework, and nothing to install; it's a plain HTML/JS file that talks directly to FineVoice from the browser.
 
 ---
