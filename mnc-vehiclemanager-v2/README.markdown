@@ -10,7 +10,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A comprehensive vehicle-data editor for QBCore, extended with full-server vehicle discovery. Sit in any vehicle, run `/vehiclelua`, and get an in-game UI that auto-populates model, name, brand, category, type, and shop, with dynamic dropdowns and an auto-pricing calculator — but unlike the base version, v2 can also find and list **every vehicle model that exists on your server but isn't yet registered** in `QBCore.Shared.Vehicles`, and bulk-export all of them to a ready-to-merge `vehiclesaves.lua` in one pass.
 
 ---
