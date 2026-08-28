@@ -201,6 +201,14 @@ These resources exist in more than one build in this dump. **Install only one bu
 | [`mnc-scratchcards`](mnc-scratchcards) | 5-tier scratch card minigame with server-validated rewards |
 | [`mnc-tradingcards`](mnc-tradingcards) | Collectible card packs, binders, holographic rarities, and an in-world dealer |
 
+
+## 🧰 Standalone Tools (Not FiveM Resources)
+These live under [`TOOL_ONLY/`](TOOL_ONLY) rather than in the resource list above — they're not QBCore/FiveM resources, don't get `ensure`d in `server.cfg`, and aren't counted in the "71 resources" badge at the top of this README. Each is a self-contained utility with its own README.
+
+| Tool | Description |
+|---|---|
+| [`mnc-voiceai-batcher`](TOOL_ONLY/mnc-voiceai-batcher) | Standalone HTML/JS batch text-to-speech tool — paste in script text and generate up to 25 MP3s at once via the FineVoice API. Includes a searchable voice library browser with sample playback, emotion tags (e.g. `[happy]`, `[whispering]`), configurable filename prefix/numbering/concurrency, live per-file progress tracking, and bulk ZIP download. Opens directly in a browser — no FiveM install, server, or build step needed; the API key stays in local browser storage. |
+
 ---
 
 ## 📝 Credits & License
