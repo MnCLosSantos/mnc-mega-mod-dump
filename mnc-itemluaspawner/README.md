@@ -10,7 +10,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 MnC Item Spawner gives authorized staff a themed NUI browser that auto-populates with **every** item defined in `QBCore.Shared.Items`, grouped by item type, so they can spawn any item — or a whole cart of items — straight into their inventory for testing or support purposes.
 
 ---
