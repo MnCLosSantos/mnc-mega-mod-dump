@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **comprehensive job clothing system** for QBCore-based FiveM servers featuring multi-location locker rooms, persistent outfit saving, grade-based permissions, duty requirements, and immersive changing animations. Built with performance, customization, and realism in mind.
 
 ---
