@@ -9,7 +9,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 This script automatically **mutes players when they are dead or in last stand** using **QBCore** metadata and **pma-voice**.  
 It ensures that players cannot talk while incapacitated, improving RP immersion.
 
