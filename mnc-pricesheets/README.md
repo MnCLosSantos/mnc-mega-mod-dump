@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A configurable, catalog-style price sheet board for any business location — mechanic shops, restaurants, pharmacies, armories, stores, anything with a menu of items and prices. Players press E at a marked location to view a themed, categorized catalog with item images and descriptions; authorized job members can apply live discounts and post special-offer bundles that everyone sees instantly.
 
 ---
