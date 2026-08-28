@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **fully-featured custom license plate system** for QBCore-based FiveM servers. Players can personalize their vehicle plates using a consumable item, with a live USA-style plate preview UI, duplicate plate protection checked directly against the `player_vehicles` database, optional job locking, and an admin command bypass. Built with immersion and server safety in mind.
 
 ---
