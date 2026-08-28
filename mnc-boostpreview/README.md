@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A companion gallery for [`mnc-boostgauge`](../mnc-boostgauge): a `/boostpreview` (or press-E at a shop counter) browser that shows every one of that resource's 40 gauge styles, 20 bezels, and 20 curated presets before a player spends an item on one. It borrows `mnc-boostgauge`'s own CSS at runtime via `nui://`, so every preview looks pixel-identical to the real installed gauge — nothing is duplicated or hand-recreated.
 
 ---
