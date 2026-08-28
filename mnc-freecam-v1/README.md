@@ -10,7 +10,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 MnC Free Cam is a lightweight, standalone free/spectator camera tool. A single command toggles a fly-around camera with full mouse look, adjustable zoom, roll, and the ability to cycle through 30 built-in screen-effect and timecycle filters, all mirrored to a small NUI overlay.
 
 ---
