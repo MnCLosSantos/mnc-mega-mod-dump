@@ -10,7 +10,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 MNC Vehicle Placer spawns a fixed, persistent set of "static" decoration vehicles (car meets, police fleet, dealership display cars, etc.) at exact coordinates defined in config, on server start. It watches for missing or deleted vehicles and automatically respawns them, keeping the placed vehicles present for players at all times without any player interaction required.
 
 ---
