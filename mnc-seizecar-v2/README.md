@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 **MNC SeizeCar** is a lightweight yet powerful administrative and law-enforcement tool for QBCore FiveM servers. It provides clean, user-friendly commands to remove or seize individual vehicles, wipe all vehicles from a specific player, or perform a full server-wide vehicle database wipe.
 
 Built with **ox_lib** for modern dialogs and notifications, and fully integrated with **oxmysql**, this script offers both admin-level destructive tools and job-restricted seizure functionality for police/mechanic roles.
