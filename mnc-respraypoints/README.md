@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 **MNC Respray Points** is a lightweight, highly configurable vehicle respray system for QBCore servers.
 
 Players can pay to fully customize their vehicle at public respray stations, while mechanics on duty automatically hide the public points (forcing players to visit actual mechanic shops). Job-restricted and emergency-only bays (police, ambulance, etc.) offer **free resprays** for official vehicles.
