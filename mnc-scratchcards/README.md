@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **polished scratch card minigame** for QBCore-based FiveM servers featuring 5 unique card tiers, a fully interactive canvas-based scratch mechanic, per-card win tables with configurable odds, and themed NUI with animated effects. Players buy and use scratch cards from their inventory to reveal prizes — all validated server-side to prevent exploitation.
 
 ---
