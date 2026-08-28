@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 An admin-only, **model-based** vehicle handling editor for QBCore. Tune a vehicle's speed, acceleration, braking, traction, suspension, and damage live in-game with sliders, and save the result to SQL — no `.meta` file edits, no server restart required. Because the change is stored per **model**, it instantly applies to every vehicle of that model on the server, existing spawns and all future ones.
 
 ---
