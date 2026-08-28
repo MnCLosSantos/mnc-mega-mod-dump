@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A **highly customizable job/bank/cash HUD system** for QBCore-based FiveM servers.  
 This script provides **25 unique visual styles**, **persistent player preferences**, **dynamic money tracking with visual effects**, and a **fully configurable display system**.  
 Optimized for **ox_lib**, **oxmysql**, and **qb-core** with smooth animations and modern UI design.
