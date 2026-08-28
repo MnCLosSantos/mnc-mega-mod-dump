@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 A proper pink-slip style ownership transfer system for QBCore. Instead of a bare `/givecar`-style handoff, the seller fills out a document (buyer, sale amount) through an NUI form, the buyer has to actually review and digitally sign it, and both parties end up holding a permanent, reviewable `vehicletransdocument` item recording the sale — price, date, signature, and payment method included. Money and ownership only change hands once the buyer accepts.
 
 ---
