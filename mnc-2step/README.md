@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster" src="https://github.com/user-attachments/assets/929794ad-c6b3-4b91-813d-d7f11cdf4c60" />
+
 A **fully-featured 2-step and launch control system** for QBCore-based FiveM servers. Mechanics can install tiered 2-step kits onto turbo-equipped vehicles, unlocking three distinct behaviours — rev-limiter bouncing on the spot, rolling anti-lag on the move, and a launch boost burst on key release. Flames spray from every exhaust bone, sounds play through a pooled NUI audio engine, and all kit data persists by license plate across sessions.
 
 ---
