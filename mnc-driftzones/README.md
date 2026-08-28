@@ -8,7 +8,9 @@
 ---
 
 ## 🌟 Overview
+
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
+
 An admin zone editor that maps out polygon drift zones and automatically toggles [`mnc-driftscore`](../mnc-driftscore)'s HUD on for players the moment they enter one — and off again once they leave the last overlapping zone. Zones are drawn freehand with a built-in freecam point-placement tool, not typed in as raw coordinates, and persist to SQL so they survive restarts.
 
 ---
