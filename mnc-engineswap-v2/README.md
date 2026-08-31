@@ -17,6 +17,9 @@ A **feature-rich engine swap system** for QBCore FiveM servers. Players can purc
 
 Perfect for roleplay servers wanting deeper vehicle customization and mechanic job enhancement.
 
+Engines can be downloaded here - `https://drive.google.com/file/d/1iB2lXQN4O5ZIExfgCpvVE7WqYnR08yaP/view?usp=drive_link`
+
+
 ---
 
 ## 🔀 Choosing a Version
