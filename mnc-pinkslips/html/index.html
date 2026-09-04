@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>mnc-pinkslips</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <!-- ============================== RACE HUD ============================== -->
+    <div id="raceHud" class="hidden">
+        <div class="panel">
+            <div class="row">
+                <span class="label" id="raceTypeLabel">PINKSLIP RACE</span>
+                <span id="stakeValue">-</span>
+            </div>
+            <div class="row">
+                <span class="label">TIME REMAINING</span>
+                <span id="raceTimeValue">00:00</span>
+            </div>
+            <div class="bar-bg">
+                <div id="raceTimeBar" class="bar-fill time"></div>
+            </div>
+            <div class="hint">BACKSPACE to forfeit the race.</div>
+        </div>
+    </div>
+
+    <div id="raceCountdown" class="hidden">
+        <span id="raceCountdownValue">3</span>
+    </div>
+
+    <!-- ============================== PINKSLIP MENU ============================== -->
+    <div id="pinkslipMenu" class="hidden">
+        <div class="menu-panel">
+            <div class="setup-header">
+                <h2 id="menuLabel">Pinkslip Races</h2>
+                <div class="header-actions">
+                    <span class="class-chip" id="menuClassChip">class</span>
+                    <button type="button" id="menuCloseBtn" class="icon-btn">&times;</button>
+                </div>
+            </div>
+
+            <div class="menu-body">
+                <div class="progress-block">
+                    <div class="progress-row">
+                        <span>Pinkslip attempts</span>
+                        <span id="slipsProgressText">0 / 1</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div id="slipsProgressBar" class="bar-fill slips"></div>
+                    </div>
+                </div>
+
+                <div class="progress-block" id="potProgressBlock">
+                    <div class="progress-row">
+                        <span>Pot races until next unlock</span>
+                        <span id="potProgressText">0 / 10</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div id="potProgressBar" class="bar-fill pot"></div>
+                    </div>
+                </div>
+
+                <span class="group-title">Cars on the line</span>
+                <ul id="stockList"></ul>
+
+                <button type="button" id="potRaceBtn" class="save-btn pot-btn">Buy in for Pot Race</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================== ADMIN: LOCATION BUILDER ============================== -->
+    <div id="setup" class="hidden">
+        <div class="setup-panel">
+            <div class="setup-header">
+                <h2>Pinkslip Location Builder</h2>
+                <div class="header-actions">
+                    <button type="button" id="viewRoutesBtn" class="header-btn">View Locations</button>
+                    <button type="button" id="setupCloseBtn" class="icon-btn">&times;</button>
+                </div>
+            </div>
+
+            <div class="setup-body">
+                <form id="setupForm">
+                    <div class="editing-banner hidden" id="editingBanner">
+                        <span>Editing <b id="editingLabel"></b></span>
+                        <button type="button" id="cancelEditBtn" class="icon-btn">&times;</button>
+                    </div>
+
+                    <label>Location label
+                        <input type="text" id="f_label" maxlength="50" placeholder="e.g. Vinewood Muscle Pinks" required />
+                    </label>
+
+                    <label>Vehicle class (must match a QBCore.Shared.Vehicles category)
+                        <select id="f_class" required>
+                            <option value="" disabled selected>Select a class&hellip;</option>
+                        </select>
+                    </label>
+
+                    <div class="coord-group">
+                        <span class="group-title">Start point</span>
+                        <div class="coord-row">
+                            <input type="number" step="any" id="f_start_x" placeholder="X" required />
+                            <input type="number" step="any" id="f_start_y" placeholder="Y" required />
+                            <input type="number" step="any" id="f_start_z" placeholder="Z" required />
+                            <input type="number" step="any" id="f_start_w" placeholder="Heading" required />
+                            <button type="button" class="use-pos-btn pos-btn" data-target="start">Use my position</button>
+                            <button type="button" class="use-pos-btn placement-btn" data-target="start">Place with camera</button>
+                        </div>
+                    </div>
+
+                    <div class="coord-group">
+                        <span class="group-title">Finish point</span>
+                        <div class="coord-row">
+                            <input type="number" step="any" id="f_finish_x" placeholder="X" required />
+                            <input type="number" step="any" id="f_finish_y" placeholder="Y" required />
+                            <input type="number" step="any" id="f_finish_z" placeholder="Z" required />
+                            <button type="button" class="use-pos-btn pos-btn" data-target="finish">Use my position</button>
+                            <button type="button" class="use-pos-btn placement-btn" data-target="finish">Place with camera</button>
+                        </div>
+                    </div>
+
+                    <label>Radius (m)
+                        <input type="number" step="any" id="f_radius" value="10" required />
+                    </label>
+
+                    <div class="coord-group">
+                        <span class="group-title">Lot vehicles (same class as above)</span>
+                        <input type="hidden" id="f_vehicles" />
+                        <ul id="vehicleChipList" class="chip-list"></ul>
+                        <button type="button" id="browseVehiclesBtn" class="use-pos-btn" disabled>Browse Vehicles&hellip;</button>
+                        <div class="hint" id="vehiclesNote"></div>
+                    </div>
+
+                    <div class="inline-row">
+                        <label>Pinkslip buy-in ($)
+                            <input type="number" step="1" id="f_buyin_pinkslip" placeholder="15000" required />
+                        </label>
+                        <label>Pot race buy-in ($)
+                            <input type="number" step="1" id="f_buyin_pot" placeholder="2500" required />
+                        </label>
+                    </div>
+
+                    <div class="coord-group">
+                        <span class="group-title">Race time</span>
+                        <label>Time limit (sec)
+                            <input type="number" step="1" id="f_time" placeholder="Drive the route to set this" readonly required />
+                        </label>
+                        <button type="button" id="startTestDriveBtn" class="use-pos-btn">Drive to set race time</button>
+                        <div class="hint" id="timerNote"></div>
+                    </div>
+
+                    <div class="coord-group">
+                        <span class="group-title">Vehicle spawn points (<span id="spawnCountLabel">0</span> / <span id="spawnMinLabel">6</span> min)</span>
+                        <ul id="spawnList"></ul>
+                        <div class="coord-row spawn-actions">
+                            <button type="button" id="addSpawnPosBtn" class="use-pos-btn pos-btn" data-target="spawnpoint">Add spawn point (my position)</button>
+                            <button type="button" id="addSpawnCamBtn" class="use-pos-btn placement-btn" data-target="spawnpoint">Add spawn point (camera)</button>
+                        </div>
+                        <div class="hint" id="spawnNote"></div>
+                    </div>
+
+                    <button type="submit" class="save-btn" id="saveBtn" disabled>Save location</button>
+                </form>
+
+                <div class="setup-list">
+                    <span class="group-title">Locations</span>
+                    <ul id="setupList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================== ADMIN: VEHICLE PICKER ============================== -->
+    <div id="vehicleGallery" class="hidden">
+        <div class="gallery-panel">
+            <div class="setup-header">
+                <h2>Browse Vehicles <span class="class-chip" id="galleryClassChip"></span></h2>
+                <div class="header-actions">
+                    <button type="button" id="galleryCloseBtn" class="icon-btn">&times;</button>
+                </div>
+            </div>
+
+            <div class="menu-body">
+                <input type="text" id="galleryFilter" placeholder="Search vehicles..." />
+                <div class="hint" id="gallerySubtitle"></div>
+
+                <div id="galleryGrid" class="gallery-grid"></div>
+
+                <div class="gallery-custom-row">
+                    <input type="text" id="galleryCustomInput" placeholder="Add a custom spawn name not listed above" />
+                    <button type="button" id="galleryCustomAddBtn" class="use-pos-btn">Add</button>
+                </div>
+
+                <div class="gallery-footer">
+                    <span id="gallerySelectedCount">0 selected</span>
+                    <button type="button" id="galleryDoneBtn" class="save-btn">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="placementHUD" class="hidden">
+        <div class="panel">
+            <div class="row">
+                <span class="label">CAMERA PLACEMENT</span>
+            </div>
+            <div class="hint" id="placementHintText">Flying - ENTER to drop the car here.</div>
+            <ul class="placement-controls">
+                <li><b>WASD</b> move &middot; <b>Mouse</b> look</li>
+                <li><b>Space</b> up &middot; <b>Ctrl</b> down &middot; <b>Shift</b> fast</li>
+                <li><b>Left</b> / <b>Right</b> rotate car</li>
+                <li><b>Enter</b> drop / confirm &middot; <b>R</b> re-fly &middot; <b>Backspace</b> cancel</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="testDriveHUD" class="hidden">
+        <div class="panel">
+            <div class="row">
+                <span class="label">TEST DRIVE</span>
+                <span id="testDriveValue">00:00</span>
+            </div>
+            <div class="hint">Drive the vehicle to the marker to set the time limit. <b>BACKSPACE</b> to cancel.</div>
+        </div>
+    </div>
+
+    <audio id="soundPlayer"></audio>
+    <script src="app.js"></script>
+</body>
+</html>

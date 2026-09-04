@@ -1,0 +1,869 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    overflow: hidden;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.panel {
+    background: rgba(15, 17, 21, 0.78);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+}
+
+.row:not(:first-child) {
+    margin-top: 12px;
+}
+
+.label {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 600;
+}
+
+.row span:last-child {
+    font-size: 13px;
+    font-weight: 700;
+    color: #f2f2f2;
+}
+
+.bar-bg {
+    width: 100%;
+    height: 9px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #3ddc71;
+    border-radius: 6px;
+    transition: width 0.3s ease, background 0.3s ease;
+}
+
+.bar-fill.time {
+    background: #4aa3ff;
+}
+
+.bar-fill.slips {
+    background: #ff9c4a;
+}
+
+.bar-fill.pot {
+    background: #9c6bff;
+}
+
+.hint {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 4px;
+}
+
+/* ===================================================================
+   RACE HUD
+   =================================================================== */
+#raceHud {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    width: 300px;
+}
+
+#raceCountdown {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+#raceCountdownValue {
+    font-size: 96px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 18px rgba(0, 0, 0, 0.8), 0 0 40px rgba(74, 163, 255, 0.6);
+}
+
+/* ===================================================================
+   PINKSLIP MENU
+   =================================================================== */
+#pinkslipMenu {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.menu-panel {
+    width: 420px;
+    max-height: 86vh;
+    overflow-y: auto;
+    background: rgba(18, 20, 25, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: #f2f2f2;
+}
+
+.menu-body {
+    padding: 16px 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.class-chip {
+    background: rgba(255, 156, 74, 0.15);
+    border: 1px solid rgba(255, 156, 74, 0.4);
+    color: #ffc99c;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.progress-block {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.progress-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+}
+
+.progress-row span:last-child {
+    color: #f2f2f2;
+}
+
+#stockList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#stockList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 12px;
+}
+
+.race-btn {
+    background: rgba(255, 156, 74, 0.15);
+    border: 1px solid rgba(255, 156, 74, 0.4);
+    color: #ffc99c;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.race-btn:hover:not(:disabled) {
+    background: rgba(255, 156, 74, 0.28);
+}
+
+.race-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pot-btn {
+    background: #9c6bff;
+    color: #16121f;
+}
+
+.pot-btn:hover {
+    background: #ac82ff;
+}
+
+/* ===================================================================
+   ADMIN: LOCATION BUILDER (/setuppinkslips)
+   =================================================================== */
+#setup {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.setup-panel {
+    width: 440px;
+    max-height: 86vh;
+    overflow-y: auto;
+    background: rgba(18, 20, 25, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: #f2f2f2;
+}
+
+/* Every scrollable container in the NUI shares one scrollbar look - listed together here so
+   a new scrollable element (like the vehicle gallery/chip list below) can't drift out of sync
+   with the rest by accident. Also applied to the class <select> itself: recent CEF/Chromium
+   respects scrollbar-width/scrollbar-color on a <select>'s own dropdown popup, so this is what
+   makes that popup's scrollbar match everything else too (older builds will just ignore it and
+   fall back to their native look, harmlessly). */
+.setup-panel, .menu-panel, .gallery-panel,
+#setupList, #stockList, #spawnList, .gallery-grid, .chip-list, #setupForm select {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.05);
+}
+
+.setup-panel::-webkit-scrollbar, .menu-panel::-webkit-scrollbar, .gallery-panel::-webkit-scrollbar,
+#setupList::-webkit-scrollbar, #stockList::-webkit-scrollbar, #spawnList::-webkit-scrollbar,
+.gallery-grid::-webkit-scrollbar, .chip-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.setup-panel::-webkit-scrollbar-track, .menu-panel::-webkit-scrollbar-track, .gallery-panel::-webkit-scrollbar-track,
+#setupList::-webkit-scrollbar-track, #stockList::-webkit-scrollbar-track, #spawnList::-webkit-scrollbar-track,
+.gallery-grid::-webkit-scrollbar-track, .chip-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+.setup-panel::-webkit-scrollbar-thumb, .menu-panel::-webkit-scrollbar-thumb, .gallery-panel::-webkit-scrollbar-thumb,
+#setupList::-webkit-scrollbar-thumb, #stockList::-webkit-scrollbar-thumb, #spawnList::-webkit-scrollbar-thumb,
+.gallery-grid::-webkit-scrollbar-thumb, .chip-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.setup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.setup-header h2 {
+    font-size: 15px;
+    letter-spacing: 0.02em;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-btn {
+    background: rgba(74, 163, 255, 0.15);
+    border: 1px solid rgba(74, 163, 255, 0.4);
+    color: #9cc8ff;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.header-btn:hover {
+    background: rgba(74, 163, 255, 0.28);
+}
+
+.header-btn.active {
+    background: rgba(74, 163, 255, 0.4);
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    color: #fff;
+}
+
+.setup-body {
+    padding: 16px 18px 20px;
+}
+
+#setupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#setupForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 600;
+}
+
+#setupForm input,
+#setupForm select {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: #f2f2f2;
+    font-size: 13px;
+}
+
+#setupForm select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%239cc8ff' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 7px;
+    padding-right: 28px;
+    cursor: pointer;
+}
+
+#setupForm select option {
+    background: #14161b;
+    color: #f2f2f2;
+}
+
+#setupForm input:focus,
+#setupForm select:focus {
+    outline: none;
+    border-color: #4aa3ff;
+}
+
+#setupForm input[readonly] {
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.7);
+    cursor: not-allowed;
+}
+
+#setupForm.hidden {
+    display: none;
+}
+
+.group-title {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.coord-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.coord-row input {
+    min-width: 0;
+}
+
+.coord-row.spawn-actions {
+    grid-template-columns: 1fr 1fr;
+}
+
+.use-pos-btn {
+    grid-column: 1 / -1;
+    background: rgba(74, 163, 255, 0.15);
+    border: 1px solid rgba(74, 163, 255, 0.4);
+    color: #9cc8ff;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.use-pos-btn:hover {
+    background: rgba(74, 163, 255, 0.28);
+}
+
+#startTestDriveBtn {
+    background: rgba(61, 220, 113, 0.15);
+    border-color: rgba(61, 220, 113, 0.4);
+    color: #8ff0ae;
+}
+
+#startTestDriveBtn:hover:not(:disabled) {
+    background: rgba(61, 220, 113, 0.28);
+}
+
+.use-pos-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.save-btn:disabled {
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.4);
+    cursor: not-allowed;
+}
+
+#timerNote:empty, #spawnNote:empty {
+    display: none;
+}
+
+.placement-btn {
+    background: rgba(255, 178, 74, 0.15) !important;
+    border-color: rgba(255, 178, 74, 0.4) !important;
+    color: #ffcf9c !important;
+}
+
+.placement-btn:hover {
+    background: rgba(255, 178, 74, 0.28) !important;
+}
+
+#placementHUD {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 340px;
+}
+
+.placement-controls {
+    list-style: none;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.placement-controls li {
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.placement-controls b {
+    color: #f2f2f2;
+    font-weight: 700;
+}
+
+.editing-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(74, 163, 255, 0.12);
+    border: 1px solid rgba(74, 163, 255, 0.35);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #9cc8ff;
+}
+
+.editing-banner.hidden {
+    display: none;
+}
+
+.editing-banner .icon-btn {
+    font-size: 16px;
+    color: #9cc8ff;
+}
+
+.route-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.edit-btn {
+    background: rgba(74, 163, 255, 0.15);
+    border: 1px solid rgba(74, 163, 255, 0.4);
+    color: #9cc8ff;
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background: rgba(74, 163, 255, 0.28);
+}
+
+.disabled-tag {
+    color: rgba(255, 255, 255, 0.35);
+    font-weight: 400;
+}
+
+.inline-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.save-btn {
+    background: #3ddc71;
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f1115;
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.save-btn:hover {
+    background: #4fe483;
+}
+
+.setup-list {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.setup-list.hidden {
+    display: none;
+}
+
+#setupList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+#setupList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+}
+
+#setupList li > span {
+    overflow-wrap: anywhere;
+}
+
+#spawnList {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 140px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+}
+
+#spawnList li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 11px;
+}
+
+.delete-btn {
+    background: rgba(224, 71, 63, 0.15);
+    border: 1px solid rgba(224, 71, 63, 0.4);
+    color: #ff9d97;
+    border-radius: 5px;
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: rgba(224, 71, 63, 0.28);
+}
+
+#testDriveHUD {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+}
+
+/* ===================================================================
+   ADMIN: LOT VEHICLE CHIPS  (selections made via the vehicle gallery)
+   =================================================================== */
+.chip-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 6px;
+    margin-top: 2px;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.chip-list li {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 4px 6px 4px 10px;
+    font-size: 11px;
+}
+
+.chip-list li.chip-list-empty {
+    border-style: dashed;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    padding: 6px 10px;
+}
+
+.chip-list .delete-btn {
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 10px;
+}
+
+/* ===================================================================
+   ADMIN: VEHICLE PICKER  (Browse Vehicles gallery, opened from the
+   location builder - mirrors mnc-tradingcards' card creator image
+   gallery: a class-filtered grid of thumbnails pulled through the
+   same FiveM/GitHub image fallback chain)
+   =================================================================== */
+#vehicleGallery {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.gallery-panel {
+    width: 620px;
+    max-height: 86vh;
+    overflow-y: auto;
+    background: rgba(18, 20, 25, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    color: #f2f2f2;
+}
+
+#galleryFilter {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: #f2f2f2;
+    font-size: 13px;
+}
+
+#galleryFilter:focus {
+    outline: none;
+    border-color: #4aa3ff;
+}
+
+.gallery-grid {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 8px;
+    max-height: 320px;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.gallery-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 24px 10px;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 12px;
+}
+
+.gallery-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.04);
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.gallery-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.gallery-item.selected {
+    border-color: #3ddc71;
+    background: rgba(61, 220, 113, 0.12);
+}
+
+.gallery-item.hidden {
+    display: none;
+}
+
+.gallery-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.gallery-thumb.broken {
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+.gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.gallery-thumb-placeholder {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
+    text-align: center;
+    padding: 0 4px;
+}
+
+.gallery-item-check {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #3ddc71;
+    color: #0f1115;
+    font-size: 10px;
+    font-weight: 800;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-item.selected .gallery-item-check {
+    display: flex;
+}
+
+.gallery-item-label {
+    width: 100%;
+    font-size: 10px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.gallery-custom-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+}
+
+.gallery-custom-row input {
+    flex: 1;
+    min-width: 0;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 8px 10px;
+    color: #f2f2f2;
+    font-size: 12px;
+}
+
+.gallery-custom-row input:focus {
+    outline: none;
+    border-color: #4aa3ff;
+}
+
+.gallery-custom-row .use-pos-btn {
+    grid-column: unset;
+    white-space: nowrap;
+}
+
+.gallery-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gallery-footer span {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 600;
+}
+
+.gallery-footer .save-btn {
+    margin-top: 0;
+    padding: 8px 18px;
+}
