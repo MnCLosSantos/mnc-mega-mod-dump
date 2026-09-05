@@ -11,7 +11,7 @@
 
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
 
-**Mega Mod Dump** is a large collection of 73 independent QBCore/FiveM resources — vehicle ownership and logistics tools, handling and cosmetic vehicle mods, job and economy systems, HUDs, admin utilities, and assorted roleplay scripts — built and maintained by **Stan Leigh/MnC Los Santos**. Every resource in this dump has its own dedicated README covering installation, configuration, controls, and troubleshooting; this root README is the index that ties them all together.
+This is a large collection of 73 independent QBCore/FiveM resources — vehicle ownership and logistics tools, handling and cosmetic vehicle mods, job and economy systems, HUDs, admin utilities, and assorted roleplay scripts — built and maintained by **carrot/ Stan Leigh/ MnC Los Santos**. Every resource in this dump has its own dedicated README covering installation, configuration, controls, and troubleshooting; this root README is the index that ties them all together.
 
 A handful of tools in this dump ship in **more than one build** (a `-v1`/`-v2`/`-v3` naming pattern, or two differently-named builds of the same script). Where that's the case, **install only ONE build of that tool** — running two builds of the same resource at once means duplicate command/export registrations and, in some cases, corrupted shared database tables. The [Choosing Between Versions](#-choosing-between-versions) section below lists every one of these groups explicitly, and each affected resource's own README repeats the same warning with a side-by-side comparison table.
 
@@ -246,7 +246,7 @@ These live under [`TOOL_ONLY/`](TOOL_ONLY) rather than in the resource list abov
 
 ## 📝 Credits & License
 
-**Author**: Stan Leigh/MnC Los Santos
+**Authors**: carrot / Stan Leigh / MnC Los Santos
 
 This entire collection is licensed under **MNC_LICENSE_NDFTEAU** (*No Distribution, Free To Edit And Use*) — see the [MNC_LICENSE_NDFTEAU license](https://github.com/MnCLosSantos/MNC_LICENSE_NDFTEAU/blob/main/LICENSE.md) for the full text. Every individual resource in this dump is covered by the same license.
 
