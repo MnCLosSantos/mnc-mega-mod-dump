@@ -67,7 +67,7 @@ Clone or extract this dump into your resources folder — either as one folder c
 
 ### 2️⃣ Pick What You Actually Want
 
-You do not need to run all 72 resources. Go through the category tables below, decide which tools fit your server, and **for any tool listed in [Choosing Between Versions](#-choosing-between-versions), pick exactly one build.**
+You do not need to run all 73 resources. Go through the category tables below, decide which tools fit your server, and **for any tool listed in [Choosing Between Versions](#-choosing-between-versions), pick exactly one build.**
 
 ### 3️⃣ Install Dependencies First
 
