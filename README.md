@@ -16,7 +16,7 @@
 - [Resource Index](#-resource-index)
   - [Vehicle Ownership & Transfer](#-vehicle-ownership--transfer)
   - [Racing & Wagering](#-racing--wagering)
-  - [Vehicle Logistics & Delivery](#-vehicle-logistics--delivery)
+  - [Vehicle Logistics](#-vehicle-logistics--delivery)
   - [Vehicle Catalog, Spawner & Data Tools (Admin/Dev)](#-vehicle-catalog-spawner--data-tools-admindev)
   - [Vehicle Customization & Handling Mods](#-vehicle-customization--handling-mods)
   - [Vehicle HUDs & In-Car Media](#-vehicle-huds--in-car-media)
@@ -138,7 +138,7 @@ These resources exist in more than one build in this dump. **Install only one bu
 | [`mnc-pinkslips`](mnc-pinkslips) | Class-locked, point-to-point pinkslip racing — grind buy-in pot races to unlock winner-takes-the-car races against a fully-built lot vehicle, with an in-game admin location builder and drive-to-time race timing |
 | [`mnc-cardelivery`](mnc-cardelivery) | Timed vehicle delivery job with damage-scaled payout and an in-game admin route builder |
 
-### 🚚 Vehicle Logistics & Delivery
+### 🚚 Vehicle Logistics
 | Resource | Description |
 |---|---|
 | [`mnc-cartransporter`](mnc-cartransporter) | Two-level flatbed trailer loading system carrying up to 6 vehicles at once, fully network-synced |
