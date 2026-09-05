@@ -386,7 +386,7 @@ local function cycleFilter(dir)
 end
 
 -- ─────────────────────────────────────────────
--- Wheel turn
+-- Wheel turn radius via turn on vector
 -- ─────────────────────────────────────────────
 local function resetWheelAngle()
     local ped = PlayerPedId()
