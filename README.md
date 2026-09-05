@@ -7,6 +7,32 @@
 
 ---
 
+## 📖 Directory
+
+- [Overview](#-overview)
+- [Requirements](#-requirements)
+- [Installation](#-installation)
+- [Choosing Between Versions](#-choosing-between-versions)
+- [Resource Index](#-resource-index)
+  - [Vehicle Ownership & Transfer](#-vehicle-ownership--transfer)
+  - [Racing & Wagering](#-racing--wagering)
+  - [Vehicle Logistics & Delivery](#-vehicle-logistics--delivery)
+  - [Vehicle Catalog, Spawner & Data Tools (Admin/Dev)](#-vehicle-catalog-spawner--data-tools-admindev)
+  - [Vehicle Customization & Handling Mods](#-vehicle-customization--handling-mods)
+  - [Vehicle HUDs & In-Car Media](#-vehicle-huds--in-car-media)
+  - [Camera & World Tools](#-camera--world-tools)
+  - [Jobs & Economy](#-jobs--economy)
+  - [Vehicle Maintenance & Garage Tools](#-vehicle-maintenance--garage-tools)
+  - [Admin & Item Tools](#-admin--item-tools)
+  - [Roleplay & Immersion](#-roleplay--immersion)
+  - [Gambling & Collectibles](#-gambling--collectibles)
+- [Standalone Tools (Not FiveM Resources)](#-standalone-tools-not-fivem-resources)
+- [Credits & License](#-credits--license)
+- [Support & Community](#-support--community)
+- [Important Notes](#-important-notes)
+
+---
+
 ## 🌟 Overview
 
 <img width="1919" height="1079" alt="script_poster_4" src="https://github.com/user-attachments/assets/c2ab147e-dfc0-41a7-9366-acef8d8d57a7" />
@@ -41,7 +67,7 @@ Clone or extract this dump into your resources folder — either as one folder c
 
 ### 2️⃣ Pick What You Actually Want
 
-You do not need to run all 71 resources. Go through the category tables below, decide which tools fit your server, and **for any tool listed in [Choosing Between Versions](#-choosing-between-versions), pick exactly one build.**
+You do not need to run all 72 resources. Go through the category tables below, decide which tools fit your server, and **for any tool listed in [Choosing Between Versions](#-choosing-between-versions), pick exactly one build.**
 
 ### 3️⃣ Install Dependencies First
 
@@ -106,10 +132,15 @@ These resources exist in more than one build in this dump. **Install only one bu
 | [`mnc-callcar`](mnc-callcar) | Valet service — call a garaged vehicle for NPC-driven delivery with dynamic fees |
 | [`mnc-takeatrip`](mnc-takeatrip) | Configurable teleport system with job/item restrictions, payment, and optional vehicle support |
 
+### 🏁 Racing & Wagering
+| Resource | Description |
+|---|---|
+| [`mnc-pinkslips`](mnc-pinkslips) | Class-locked, point-to-point pinkslip racing — grind buy-in pot races to unlock winner-takes-the-car races against a fully-built lot vehicle, with an in-game admin location builder and drive-to-time race timing |
+| [`mnc-cardelivery`](mnc-cardelivery) | Timed vehicle delivery job with damage-scaled payout and an in-game admin route builder |
+
 ### 🚚 Vehicle Logistics & Delivery
 | Resource | Description |
 |---|---|
-| [`mnc-cardelivery`](mnc-cardelivery) | Timed vehicle delivery job with damage-scaled payout and an in-game admin route builder |
 | [`mnc-cartransporter`](mnc-cartransporter) | Two-level flatbed trailer loading system carrying up to 6 vehicles at once, fully network-synced |
 | [`mnc-towfinder`](mnc-towfinder) | Admin/dev diagnostic tool that scans every vehicle model for tow-hitch bones and outputs a ready-to-use Lua table |
 | [`mnc-forkliftfix`](mnc-forkliftfix) | Network-synced forklift lifting, a lift-platform mode, and a vehicle-stacking system |
